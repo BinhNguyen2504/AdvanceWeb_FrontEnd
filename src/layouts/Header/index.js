@@ -6,10 +6,11 @@ const Header = () => {
     { label: 'Home', key: 'home', url: '/' },
     { label: 'Login', key: 'login', url: '/login' }
   ];
+
   return (
     <header>
       <div className='logo' />
-      <Menu theme='dark' mode='horizontal' defaultSelectedKeys={['/home']}>
+      <Menu theme='dark' mode='horizontal' defaultSelectedKeys={['home']}>
         {items.map((item) => (
           <Menu.Item key={item.key}>
             <Link to={item.url}>{item.label}</Link>
