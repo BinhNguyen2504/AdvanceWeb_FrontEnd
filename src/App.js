@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unresolved */
 import { useRoutes } from 'react-router-dom';
 
 import HomePage from './pages/Home';
