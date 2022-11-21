@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -12,6 +13,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.39.4",
+    "react-redux": "^8.0.5",
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4",
@@ -22,14 +24,14 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "_lint": "eslint --config ./.eslintrc.json --ext js --ext jsx --ext tsx --ext ts",
+    "_lint": "eslint --config ./.eslintrc.json --ext js --ext jsx",
     "lint": "npm run _lint -- ./src/",
     "lint:fix": "npm run _lint -- --fix ./src/",
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,scss,md,json}' --config ./.prettierrc"
   },
   "lint-staged": {
     "src/**/*.{js,ts,jsx,tsx}": [
-      "eslint --config ./.eslintrc.json --ext js --ext ts --ext jsx --ext tsx"
+      "eslint --config ./.eslintrc.json --ext js --ext jsx"
     ]
   },
   "eslintConfig": {
