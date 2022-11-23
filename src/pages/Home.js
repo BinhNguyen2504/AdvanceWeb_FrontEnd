@@ -1,10 +1,15 @@
-import Header from '../layouts/Header/index';
+import { Layout } from 'antd';
+
+import MainLayout from '../layouts/MainLayout';
+
+const { Content } = Layout;
 
 const HomePage = () => (
-  <main>
-    <Header />
-    <h1>Home Page</h1>
-  </main>
+  <Content>
+    <MainLayout>
+      <h1>Home Page</h1>
+    </MainLayout>
+  </Content>
 );
 
 export default HomePage;

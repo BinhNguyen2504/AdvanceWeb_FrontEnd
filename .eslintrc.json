@@ -28,6 +28,7 @@
     "object-curly-newline": "off",
     "no-console": "off",
     "react/react-in-jsx-scope": "off",
+    "react/prop-types": 0,
     "react/jsx-props-no-spreading": 0,
     "react/function-component-definition": 0,
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]

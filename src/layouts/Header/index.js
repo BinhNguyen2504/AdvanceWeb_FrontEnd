@@ -1,5 +1,8 @@
-import { Menu } from 'antd';
+import { Menu, Layout } from 'antd';
 import { Link } from 'react-router-dom';
+import './styles.css';
+
+const { Header: HeaderAnt } = Layout;
 
 const Header = () => {
   const items = [
@@ -8,16 +11,17 @@ const Header = () => {
   ];
 
   return (
-    <header>
+    <HeaderAnt className='header'>
       <div className='logo' />
-      <Menu theme='dark' mode='horizontal' defaultSelectedKeys={['home']}>
-        {items.map((item) => (
-          <Menu.Item key={item.key}>
-            <Link to={item.url}>{item.label}</Link>
-          </Menu.Item>
-        ))}
-      </Menu>
-    </header>
+      <Menu
+        mode='horizontal'
+        defaultSelectedKeys={['home']}
+        items={items.map((item) => ({
+          key: item.key,
+          label: <Link to={item.url}>{item.label}</Link>
+        }))}
+      />
+    </HeaderAnt>
   );
 };
 export default Header;

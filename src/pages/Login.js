@@ -1,12 +1,11 @@
 import LoginForm from '../components/LoginForm';
-import Header from '../layouts/Header/index';
+import MainLayout from '../layouts/MainLayout';
 
 const LoginPage = () => (
-  <main>
-    <Header />
+  <MainLayout>
     <h1>Login Page</h1>
     <LoginForm />
-  </main>
+  </MainLayout>
 );
 
 export default LoginPage;
