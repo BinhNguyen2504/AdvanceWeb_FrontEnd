@@ -1,16 +1,13 @@
-import './styles.css';
+import { Layout } from 'antd';
+
+const { Header: HeaderAnt } = Layout;
 
 const Header = () => (
-  <div className='header'>
+  <HeaderAnt className='header'>
     <section className='flex'>
-      <a href='home.html' className='logo'>
-        Educa.
+      <a href='/' className='logo'>
+        Kahoot
       </a>
-
-      <form action='search.html' method='post' className='search-form'>
-        <input type='text' name='search_box' required placeholder='search courses...' />
-        <div type='submit' className='fas fa-search' />
-      </form>
 
       <div className='icons'>
         <div id='menu-btn' className='fas fa-bars' />
@@ -21,8 +18,8 @@ const Header = () => (
 
       <div className='profile'>
         <img src='images/pic-1.jpg' className='image' alt='' />
-        <h3 className='name'>shaikh anas</h3>
-        <p className='role'>studen</p>
+        <h3 className='name'>Binh nguyen</h3>
+        <p className='role'>students</p>
         <a href='profile.html' className='btn'>
           view profile
         </a>
@@ -36,7 +33,7 @@ const Header = () => (
         </div>
       </div>
     </section>
-  </div>
+  </HeaderAnt>
 );
 
 export default Header;

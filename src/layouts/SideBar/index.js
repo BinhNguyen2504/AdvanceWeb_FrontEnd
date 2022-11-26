@@ -6,8 +6,8 @@ const SideBar = () => (
 
     <div className='profile'>
       <img src='images/pic-1.jpg' className='image' alt='' />
-      <h3 className='name'>shaikh anas</h3>
-      <p className='role'>studen</p>
+      <h3 className='name'>Binh Nguyen</h3>
+      <p className='role'>Student</p>
       <a href='profile.html' className='btn'>
         view profile
       </a>

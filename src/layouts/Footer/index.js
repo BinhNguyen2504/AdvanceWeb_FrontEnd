@@ -1,8 +1,12 @@
+import { Layout } from 'antd';
+
+const { Footer: FooterAnt } = Layout;
+
 const Footer = () => (
-  <footer className='footer'>
-    &copy; copyright @ 2022 by
-    <span>mr. web designer</span>
-  </footer>
+  <FooterAnt className='footer'>
+    &copy; Copyright @ 2022
+    <span> Advance Web Project</span>
+  </FooterAnt>
 );
 
 export default Footer;
