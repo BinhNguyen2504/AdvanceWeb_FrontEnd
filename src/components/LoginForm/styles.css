@@ -1,0 +1,27 @@
+/* .ant-form-item {
+  margin-bottom: 0px !important;
+} */
+.divider {
+  padding: 14px 0;
+  display: flex;
+  align-items: center;
+}
+.divider span {
+  font-size: 2rem !important;
+  color: #ccc;
+  padding: 0 16px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+.divider-left {
+  height: 1px;
+  width: 100%;
+  background-color: #dbdbdb;
+  flex: 1;
+}
+.divider-right {
+  height: 1px;
+  width: 100%;
+  background-color: #dbdbdb;
+  flex: 1;
+}

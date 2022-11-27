@@ -8,6 +8,7 @@ import GroupList from './pages/GroupList';
 
 import './variables.css';
 import './index.css';
+import './App.css';
 
 const App = () => {
   const pages = useRoutes([

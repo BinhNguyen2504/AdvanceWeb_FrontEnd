@@ -1,5 +1,7 @@
 import { Layout } from 'antd';
 
+import './styles.css';
+
 const { Header: HeaderAnt } = Layout;
 
 const Header = () => (

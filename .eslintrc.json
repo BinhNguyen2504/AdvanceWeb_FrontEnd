@@ -27,6 +27,7 @@
     "import/no-unresolved": 2,
     "object-curly-newline": "off",
     "no-console": "off",
+    "no-param-reassign": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": 0,
     "react/jsx-props-no-spreading": 0,

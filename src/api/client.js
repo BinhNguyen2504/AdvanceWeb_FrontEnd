@@ -1,6 +1,5 @@
+import axios from 'axios';
 import { BASE_URL } from '../constants/index';
-
-const axios = require('axios');
 
 const axiosClient = axios.create({
   baseURL: BASE_URL,
