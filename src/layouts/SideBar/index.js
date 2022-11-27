@@ -5,16 +5,20 @@ const SideBar = () => (
     </div>
 
     <div className='profile'>
-      <img src='images/pic-1.jpg' className='image' alt='' />
+      <img
+        src='https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1200px-Image_created_with_a_mobile_phone.png'
+        className='image'
+        alt=''
+      />
       <h3 className='name'>Binh Nguyen</h3>
       <p className='role'>Student</p>
-      <a href='profile.html' className='btn'>
+      <a href='/profile' className='btn'>
         view profile
       </a>
     </div>
 
     <nav className='navbar'>
-      <a href='home.html'>
+      <a href='/'>
         <i className='fas fa-home' />
         <span>home</span>
       </a>
@@ -22,9 +26,9 @@ const SideBar = () => (
         <i className='fas fa-question' />
         <span>about</span>
       </a>
-      <a href='courses.html'>
+      <a href='/groups'>
         <i className='fas fa-graduation-cap' />
-        <span>courses</span>
+        <span>groups</span>
       </a>
       <a href='teachers.html'>
         <i className='fas fa-chalkboard-user' />
