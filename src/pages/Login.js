@@ -3,7 +3,6 @@ import MainLayout from '../layouts/MainLayout';
 
 const LoginPage = () => (
   <MainLayout>
-    <h1>Login Page</h1>
     <LoginForm />
   </MainLayout>
 );
