@@ -26,6 +26,8 @@
     "comma-dangle": "off",
     "import/no-unresolved": 2,
     "object-curly-newline": "off",
+    "operator-linebreak": 0,
+    "max-len": 0,
     "no-console": "off",
     "no-param-reassign": "off",
     "react/react-in-jsx-scope": "off",
