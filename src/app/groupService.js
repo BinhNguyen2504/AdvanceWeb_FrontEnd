@@ -7,14 +7,15 @@ export const groupServices = createApi({
   refetchOnReconnect: true,
   baseQuery: axiosBaseQuery({ baseUrl: '' }),
   endpoints: (build) => ({
+    // header: Bearer <token>
     getListGroup: build.query({
-      query: () => ({ url: '/groups', method: 'get' })
+      query: () => ({ url: '/group', method: 'get' })
     }),
     getGroupDetail: build.query({
-      query: () => ({ url: '/groups/:id', method: 'get' })
+      query: () => ({ url: '/group/:id', method: 'get' })
     }),
     createGroup: build.mutation({
-      query: (body) => ({ url: '/groups', method: 'post', data: body })
+      query: (body) => ({ url: '/group', method: 'post', data: body })
     })
   })
 });
