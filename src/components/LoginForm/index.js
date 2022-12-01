@@ -1,14 +1,18 @@
 import { Button, Form, Input, Spin } from 'antd';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../app/authService';
 import { loginUser } from '../../app/authSlice';
+import { BASE_URL } from '../../constants';
 import useFetch from '../../hooks/useFetch';
+import setAuthHeader from '../../utils';
 import './styles.css';
 
 const LoginForm = () => {
   const [login, loginResult] = useLoginMutation();
   const { handleGoogle, loading, error } = useFetch('http://localhost:5001/login');
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { isLoading } = loginResult;
@@ -33,13 +37,21 @@ const LoginForm = () => {
   }, [handleGoogle]);
 
   const onFinish = async (values) => {
-    const user = await login(values).unwrap();
-    if (user) {
-      await dispatch(loginUser(user.data));
+    const result = await login(values).unwrap();
+
+    if (result) {
+      const { email, username, _id } = result.data.user;
+      setAuthHeader(result.data.token);
+      localStorage.setItem('token', result.data.token);
+      await dispatch(loginUser({ email, username, _id }));
+      navigate('/');
     }
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
+  };
+  const googleAuth = () => {
+    window.open(`${BASE_URL}/user/auth/google`, '_self');
   };
 
   return (
@@ -58,7 +70,7 @@ const LoginForm = () => {
         </Form.Item>
         <Form.Item>
           <Button type='primary' htmlType='submit' className='btn'>
-            {isLoading ? <Spin /> : 'Register new'}
+            {isLoading ? <Spin /> : 'Login'}
           </Button>
         </Form.Item>
         <div className='divider'>
@@ -67,8 +79,11 @@ const LoginForm = () => {
           <div className='divider-right' />
         </div>
         <Form.Item>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-          {loading ? <div>Loading....</div> : <div id='loginDiv' data-text='signin_with' />}
+          {/* {error && <p style={{ color: 'red' }}>{error}</p>}
+          {loading ? <div>Loading....</div> : <div id='loginDiv' data-text='signin_with' />} */}
+          <Button className='btn' onClick={googleAuth}>
+            Login with Google
+          </Button>
         </Form.Item>
       </Form>
     </section>

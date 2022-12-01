@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useRoutes } from 'react-router-dom';
 
 import HomePage from './pages/Home';
@@ -12,6 +13,7 @@ import Profile from './pages/Profile';
 import './variables.css';
 import './index.css';
 import './App.css';
+import setAuthHeader from './utils';
 
 const App = () => {
   const pages = useRoutes([
@@ -25,6 +27,12 @@ const App = () => {
     { path: '*', element: <ErrorPage /> }
   ]);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setAuthHeader(token);
+    }
+  }, []);
   return <main>{pages}</main>;
 };
 

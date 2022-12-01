@@ -3,7 +3,7 @@ import { axiosBaseQuery } from '../api/client';
 
 export const authServices = createApi({
   reducerPath: 'authServices',
-  refetchOnFocus: false,
+  refetchOnFocus: true,
   refetchOnReconnect: true,
   baseQuery: axiosBaseQuery({ baseUrl: '' }),
   endpoints: (build) => ({
@@ -11,8 +11,9 @@ export const authServices = createApi({
       query: (body) => ({ url: '/auth/signup', method: 'post', data: body })
     }),
     login: build.mutation({
-      query: (body) => ({ url: '/user/login', method: 'post', data: body })
+      query: (body) => ({ url: '/auth/login', method: 'post', data: body })
     })
+    // login
   })
 });
 

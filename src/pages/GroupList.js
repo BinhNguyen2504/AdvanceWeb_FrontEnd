@@ -7,9 +7,9 @@ import MainLayout from '../layouts/MainLayout';
 const { Content } = Layout;
 
 const GroupList = () => {
-  const { data, isLoading, isFetching } = useGetListGroupQuery();
+  const { data } = useGetListGroupQuery();
+  // const { groups, ownGroup } = data;
   console.log(data);
-
   return (
     <Content>
       <MainLayout>
@@ -21,11 +21,16 @@ const GroupList = () => {
             Create group
           </Link>
           <br />
-          <div className='box-container'>
-            <GroupItem />
-            <GroupItem />
-            <GroupItem />
+          {/* <div className='box-container'>
+            {groups.map((group) => (
+              <GroupItem key={group.id} name={group.name} id={group.id} />
+            ))}
           </div>
+          <div className='box-container'>
+            {ownGroup.map((group) => (
+              <GroupItem key={group.id} name={group.name} id={group.id} />
+            ))}
+          </div> */}
         </section>
       </MainLayout>
     </Content>

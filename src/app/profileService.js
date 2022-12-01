@@ -3,12 +3,12 @@ import { axiosBaseQuery } from '../api/client';
 
 export const profileServices = createApi({
   reducerPath: 'profileServices',
-  refetchOnFocus: false,
+  refetchOnFocus: true,
   refetchOnReconnect: true,
   baseQuery: axiosBaseQuery({ baseUrl: '' }),
   endpoints: (build) => ({
     getProfile: build.query({
-      query: () => ({ url: '/profile', method: 'get' })
+      query: () => ({ url: '/user/profile', method: 'get' })
     })
   })
 });
