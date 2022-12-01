@@ -1,15 +1,31 @@
 import { Layout } from 'antd';
+import Title from 'antd/es/typography/Title';
+import { useState } from 'react';
 
 import MainLayout from '../layouts/MainLayout';
 
 const { Content } = Layout;
 
-const HomePage = () => (
-  <Content>
-    <MainLayout>
-      <h1>Home Page</h1>
-    </MainLayout>
-  </Content>
-);
+const HomePage = () => {
+  const [title, setTitle] = useState('home');
+  const handleChangeTitle = (data) => {
+    setTitle(data);
+  };
+
+  return (
+    <Content>
+      <MainLayout>
+        <Title
+          editable={{
+            text: title,
+            onChange: handleChangeTitle
+          }}
+        >
+          {title}
+        </Title>
+      </MainLayout>
+    </Content>
+  );
+};
 
 export default HomePage;

@@ -10,9 +10,11 @@ const { Header: HeaderAnt } = Layout;
 
 const Header = () => {
   const { username, email } = useSelector((state) => state.auth);
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  const [toggleProfile, setToggleProfile] = useState(false);
+  const [theme, setTheme] = useState('light');
   useEffect(() => {
-    if (theme === 'light') {
+    const mode = localStorage.getItem('theme');
+    if (!mode) {
       localStorage.setItem('theme', JSON.stringify('light'));
     }
     if (theme === 'dark') {
@@ -27,9 +29,6 @@ const Header = () => {
     localStorage.setItem('theme', JSON.stringify(theme === 'dark' ? 'light' : 'dark'));
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
-
-  const [toggleProfile, setToggleProfile] = useState(true);
-
   return (
     <HeaderAnt className='header'>
       <section className='flex'>

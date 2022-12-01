@@ -6,6 +6,7 @@ import RegisterPage from './pages/Register';
 import ErrorPage from './pages/404';
 import GroupList from './pages/GroupList';
 import GroupDetail from './pages/GroupDetail';
+import GroupForm from './pages/GroupForm';
 import Profile from './pages/Profile';
 
 import './variables.css';
@@ -19,6 +20,7 @@ const App = () => {
     { path: '/register', element: <RegisterPage /> },
     { path: '/profile', element: <Profile /> },
     { path: '/groups/:id', element: <GroupDetail /> },
+    { path: '/groups/create', element: <GroupForm /> },
     { path: '/groups', element: <GroupList /> },
     { path: '*', element: <ErrorPage /> }
   ]);

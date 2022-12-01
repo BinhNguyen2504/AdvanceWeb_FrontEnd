@@ -12,7 +12,9 @@ const store = configureStore({
     [profileServices.reducerPath]: profileServices.reducer,
     [groupServices.reducerPath]: groupServices.reducer
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(authServices.middleware)
+  middleware: (getDefaultMiddleware) =>
+    // eslint-disable-next-line implicit-arrow-linebreak
+    getDefaultMiddleware().concat(authServices.middleware, groupServices.middleware, profileServices.middleware)
 });
 
 setupListeners(store.dispatch);
