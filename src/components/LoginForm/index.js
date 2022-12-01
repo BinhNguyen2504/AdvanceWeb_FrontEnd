@@ -1,40 +1,18 @@
 import { Button, Form, Input, Spin } from 'antd';
-import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../app/authService';
 import { loginUser } from '../../app/authSlice';
 import { BASE_URL } from '../../constants';
-import useFetch from '../../hooks/useFetch';
 import setAuthHeader from '../../utils';
 import './styles.css';
 
 const LoginForm = () => {
   const [login, loginResult] = useLoginMutation();
-  const { handleGoogle, loading, error } = useFetch('http://localhost:5001/login');
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { isLoading } = loginResult;
-  useEffect(() => {
-    /* global google */
-    if (window.google) {
-      google.accounts.id.initialize({
-        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        callback: handleGoogle
-      });
-
-      google.accounts.id.renderButton(document.getElementById('loginDiv'), {
-        type: 'standard',
-        theme: 'filled_black',
-        size: 'large',
-        text: 'signin_with',
-        shape: 'pill'
-      });
-
-      // google.accounts.id.prompt();
-    }
-  }, [handleGoogle]);
 
   const onFinish = async (values) => {
     const result = await login(values).unwrap();
@@ -79,8 +57,6 @@ const LoginForm = () => {
           <div className='divider-right' />
         </div>
         <Form.Item>
-          {/* {error && <p style={{ color: 'red' }}>{error}</p>}
-          {loading ? <div>Loading....</div> : <div id='loginDiv' data-text='signin_with' />} */}
           <Button className='btn' onClick={googleAuth}>
             Login with Google
           </Button>

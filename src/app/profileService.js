@@ -3,7 +3,7 @@ import { axiosBaseQuery } from '../api/client';
 
 export const profileServices = createApi({
   reducerPath: 'profileServices',
-  refetchOnFocus: true,
+  refetchOnFocus: false,
   refetchOnReconnect: true,
   baseQuery: axiosBaseQuery({ baseUrl: '' }),
   endpoints: (build) => ({

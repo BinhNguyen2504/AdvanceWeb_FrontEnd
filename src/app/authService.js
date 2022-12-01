@@ -12,9 +12,11 @@ export const authServices = createApi({
     }),
     login: build.mutation({
       query: (body) => ({ url: '/auth/login', method: 'post', data: body })
+    }),
+    logout: build.mutation({
+      query: () => ({ url: '/auth/logout', method: 'post' })
     })
-    // login
   })
 });
 
-export const { useLoginMutation, useRegisterMutation } = authServices;
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = authServices;

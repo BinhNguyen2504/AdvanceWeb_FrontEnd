@@ -1,35 +1,12 @@
 import { Button, Form, Input, notification, Spin } from 'antd';
 import { SmileOutlined } from '@ant-design/icons';
-import { useEffect } from 'react';
 import { useRegisterMutation } from '../../app/authService';
-import useFetch from '../../hooks/useFetch';
 import './styles.css';
 
 const RegisterForm = () => {
   const [api, contextHolder] = notification.useNotification();
   const [register, registerResult] = useRegisterMutation();
-  const { handleGoogle, loading, error } = useFetch('http://localhost:5001/register');
   const { isLoading } = registerResult;
-  useEffect(() => {
-    /* global google */
-    if (window.google) {
-      google.accounts.id.initialize({
-        client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-        callback: handleGoogle
-      });
-
-      google.accounts.id.renderButton(document.getElementById('signUpDiv'), {
-        type: 'standard',
-        theme: 'filled_black',
-        size: 'large',
-        text: 'continue_with',
-        shape: 'pill'
-      });
-
-      // google.accounts.id.prompt()
-    }
-  }, [handleGoogle]);
-
   const openNotification = () => {
     api.open({
       message: 'Register successfully',
@@ -68,13 +45,7 @@ const RegisterForm = () => {
         >
           <Input.Password type='password' placeholder='enter your password' required className='box' />
         </Form.Item>
-        {/* <Form.Item
-          label='Confirm password'
-          name='c_password'
-          rules={[{ required: true, message: 'Please input your username!' }]}
-        >
-          <Input.Password type='password' placeholder='confirm your password' required className='box' />
-        </Form.Item> */}
+
         <Form.Item>
           <Button type='primary' htmlType='submit' className='btn'>
             {isLoading ? <Spin /> : 'Register new'}
@@ -85,10 +56,6 @@ const RegisterForm = () => {
           <span>OR</span>
           <div className='divider-right' />
         </div>
-        <Form.Item>
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-          {loading ? <div>Loading....</div> : <div id='signUpDiv' />}
-        </Form.Item>
       </Form>
     </section>
   );

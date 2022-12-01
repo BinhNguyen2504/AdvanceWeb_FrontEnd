@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useLogoutMutation } from '../../app/authService';
 
 import './styles.css';
 
@@ -12,6 +13,8 @@ const Header = () => {
   const { username, email } = useSelector((state) => state.auth);
   const [toggleProfile, setToggleProfile] = useState(false);
   const [theme, setTheme] = useState('light');
+  const [logout] = useLogoutMutation();
+
   useEffect(() => {
     const mode = localStorage.getItem('theme');
     if (!mode) {
@@ -29,6 +32,11 @@ const Header = () => {
     localStorage.setItem('theme', JSON.stringify(theme === 'dark' ? 'light' : 'dark'));
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
+  const handleLogout = async () => {
+    await logout().unwrap();
+    localStorage.removeItem('token');
+  };
+
   return (
     <HeaderAnt className='header'>
       <section className='flex'>
@@ -63,7 +71,7 @@ const Header = () => {
           <img src='img/ava.jpg' className='image' alt='' />
           <h3 className='name'>{username}</h3>
           <p className='role'>{email}</p>
-          <button type='button' className='btn'>
+          <button type='button' className='btn' onClick={handleLogout}>
             Logout
           </button>
         </div>

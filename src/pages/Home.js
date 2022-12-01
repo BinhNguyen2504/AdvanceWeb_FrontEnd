@@ -7,7 +7,7 @@ import MainLayout from '../layouts/MainLayout';
 const { Content } = Layout;
 
 const HomePage = () => {
-  const [title, setTitle] = useState('home');
+  const [title, setTitle] = useState('Advance Web Project');
   const handleChangeTitle = (data) => {
     setTitle(data);
   };

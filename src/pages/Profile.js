@@ -8,51 +8,54 @@ const { Content } = Layout;
 
 const Profile = () => {
   const { data } = useGetProfileQuery();
-  const { groups, ownGroup, role, username } = data.data;
 
   return (
     <Content>
       <MainLayout>
-        <section className='user-profile'>
-          <h1 className='heading'>your profile</h1>
-          <div className='info'>
-            <div className='user'>
-              <img src='/img/ava.jpg' alt='' />
-              <h3>{username || ''}</h3>
-              <p>{role || ''}</p>
-              {/* <a href='update.html' className='inline-btn'>
+        {data ? (
+          <section className='user-profile'>
+            <h1 className='heading'>your profile</h1>
+            <div className='info'>
+              <div className='user'>
+                <img src='/img/ava.jpg' alt='' />
+                <h3>{data.data.username}</h3>
+                <p>{data.data.role}</p>
+                {/* <a href='update.html' className='inline-btn'>
               update profile
             </a> */}
-            </div>
+              </div>
 
-            <div className='box-container'>
-              <div className='box'>
-                <div className='flex'>
-                  <i className='fas fa-user-group' />
-                  <div>
-                    <span>{groups.length || 0}</span>
-                    <p>joined group</p>
+              <div className='box-container'>
+                <div className='box'>
+                  <div className='flex'>
+                    <i className='fas fa-user-group' />
+                    <div>
+                      <span>{data.data.groups.length}</span>
+                      <p>joined group</p>
+                    </div>
                   </div>
+                  <Link to='/groups' className='inline-btn'>
+                    view groups
+                  </Link>
                 </div>
-                <Link to='/groups' className='inline-btn'>
-                  view groups
-                </Link>
-              </div>
-              <div className='box'>
-                <div className='flex'>
-                  <i className='fas fa-user-group' />
-                  <div>
-                    <span>{ownGroup.length || 0}</span>
-                    <p>owner group</p>
+                <div className='box'>
+                  <div className='flex'>
+                    <i className='fas fa-user-group' />
+                    <div>
+                      <span>{data.data.ownGroup.length}</span>
+                      <p>owner group</p>
+                    </div>
                   </div>
+                  <Link to='/groups' className='inline-btn'>
+                    view groups
+                  </Link>
                 </div>
-                <Link to='/groups' className='inline-btn'>
-                  view groups
-                </Link>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        ) : (
+          'Loading...'
+        )}
       </MainLayout>
     </Content>
   );
