@@ -55,7 +55,8 @@
   color: var(--main-color);
 }
 
-.header .flex .icons div {
+.header .flex .icons div,
+.header .flex .icons button {
   font-size: 2rem;
   color: var(--black);
   background-color: var(--light-bg);
