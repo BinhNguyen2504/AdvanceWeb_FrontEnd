@@ -1,12 +1,17 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Spin } from 'antd';
 import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useLoginMutation } from '../../app/authService';
+import { loginUser } from '../../app/authSlice';
 import useFetch from '../../hooks/useFetch';
 import './styles.css';
 
 const LoginForm = () => {
   const [login, loginResult] = useLoginMutation();
   const { handleGoogle, loading, error } = useFetch('http://localhost:5001/login');
+  const dispatch = useDispatch();
+
+  const { isLoading } = loginResult;
   useEffect(() => {
     /* global google */
     if (window.google) {
@@ -16,9 +21,9 @@ const LoginForm = () => {
       });
 
       google.accounts.id.renderButton(document.getElementById('loginDiv'), {
-        // type: "standard",
+        type: 'standard',
         theme: 'filled_black',
-        // size: "small",
+        size: 'large',
         text: 'signin_with',
         shape: 'pill'
       });
@@ -28,9 +33,10 @@ const LoginForm = () => {
   }, [handleGoogle]);
 
   const onFinish = async (values) => {
-    console.log('Success:', values);
-    await login(values).unwrap();
-    console.log(loginResult);
+    const user = await login(values).unwrap();
+    if (user) {
+      await dispatch(loginUser(user.data));
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -40,11 +46,7 @@ const LoginForm = () => {
     <section className='form-container'>
       <Form name='login' layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete='off'>
         <h3>Login to your account</h3>
-        <Form.Item
-          label='Username'
-          name='username'
-          rules={[{ required: true, message: 'Please input your username!' }]}
-        >
+        <Form.Item label='Email' name='email' rules={[{ required: true, message: 'Please input your email address!' }]}>
           <Input placeholder='Username' type='text' required className='box' />
         </Form.Item>
         <Form.Item
@@ -56,7 +58,7 @@ const LoginForm = () => {
         </Form.Item>
         <Form.Item>
           <Button type='primary' htmlType='submit' className='btn'>
-            Submit
+            {isLoading ? <Spin /> : 'Register new'}
           </Button>
         </Form.Item>
         <div className='divider'>
@@ -65,9 +67,6 @@ const LoginForm = () => {
           <div className='divider-right' />
         </div>
         <Form.Item>
-          {/* <Button type='primary' htmlType='submit' className='btn'>
-            Continue with Google
-          </Button> */}
           {error && <p style={{ color: 'red' }}>{error}</p>}
           {loading ? <div>Loading....</div> : <div id='loginDiv' data-text='signin_with' />}
         </Form.Item>

@@ -8,10 +8,10 @@ export const authServices = createApi({
   baseQuery: axiosBaseQuery({ baseUrl: '' }),
   endpoints: (build) => ({
     register: build.mutation({
-      query: (body) => ({ url: '/auth/register', method: 'post', data: body })
+      query: (body) => ({ url: '/auth/signup', method: 'post', data: body })
     }),
     login: build.mutation({
-      query: (body) => ({ url: '/auth/login', method: 'post', data: body })
+      query: (body) => ({ url: '/user/login', method: 'post', data: body })
     })
   })
 });

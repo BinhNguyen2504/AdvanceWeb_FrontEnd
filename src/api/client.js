@@ -6,8 +6,7 @@ import { BASE_URL } from '../constants/index';
 
 const axiosClient = axios.create({
   baseURL: BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
-  timeout: 1000
+  headers: { 'Content-Type': 'application/json' }
 });
 
 const axiosBaseQuery =
@@ -18,11 +17,11 @@ const axiosBaseQuery =
       return { data: result.data };
     } catch (axiosError) {
       const err = axiosError;
-      console.log(err);
+      console.log('Axios error: ', err);
       return {
         error: {
-          status: err.response.status,
-          data: err.response.data || err.message
+          code: err.code,
+          data: err.message
         }
       };
     }
