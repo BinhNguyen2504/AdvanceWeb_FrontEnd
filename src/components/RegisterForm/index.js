@@ -1,4 +1,5 @@
 import { Button, Form, Input, Spin } from 'antd';
+import { Link } from 'react-router-dom';
 
 import './styles.css';
 
@@ -30,6 +31,9 @@ const RegisterForm = ({ onFinish, onFinishFailed, isLoading }) => (
         <span>OR</span>
         <div className='divider-right' />
       </div>
+      <Form.Item>
+        <Link to='/login'>Already have account</Link>
+      </Form.Item>
     </Form>
   </section>
 );

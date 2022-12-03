@@ -1,9 +1,10 @@
 import { Layout } from 'antd';
 import classNames from 'classnames';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../../app/authService';
+import { logoutUser } from '../../app/authSlice';
 import setAuthHeader from '../../utils';
 
 import './styles.css';
@@ -16,6 +17,7 @@ const Header = () => {
   const [theme, setTheme] = useState('light');
   const [logout] = useLogoutMutation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const mode = localStorage.getItem('theme');
@@ -37,6 +39,7 @@ const Header = () => {
   const handleLogout = async () => {
     await logout().unwrap();
     localStorage.removeItem('token');
+    dispatch(logoutUser());
     navigate('/login');
     setAuthHeader(null);
   };

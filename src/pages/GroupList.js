@@ -7,12 +7,12 @@ import MainLayout from '../layouts/MainLayout';
 const { Content } = Layout;
 
 const GroupList = () => {
-  const { data } = useGetListGroupQuery();
+  const { data, isLoading } = useGetListGroupQuery();
 
   return (
     <Content>
       <MainLayout>
-        {data ? (
+        {!isLoading ? (
           <section className='courses'>
             <h1 className='heading' span={12}>
               Group List

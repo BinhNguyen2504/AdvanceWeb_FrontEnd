@@ -1,4 +1,5 @@
 import { Button, Form, Input, Spin } from 'antd';
+import { Link } from 'react-router-dom';
 import { BASE_URL } from '../../constants';
 import './styles.css';
 
@@ -35,6 +36,14 @@ const LoginForm = ({ onFinish, onFinishFailed, isLoading }) => {
           <Button className='btn' onClick={googleAuth}>
             Login with Google
           </Button>
+        </Form.Item>
+        <div className='divider'>
+          <div className='divider-left' />
+          <span>OR</span>
+          <div className='divider-right' />
+        </div>
+        <Form.Item>
+          <Link to='/signup'>Do not have account</Link>
         </Form.Item>
       </Form>
     </section>
