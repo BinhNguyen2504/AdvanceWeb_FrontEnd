@@ -3,8 +3,8 @@ import { axiosBaseQuery } from '../api/client';
 
 export const groupServices = createApi({
   reducerPath: 'groupServices',
-  refetchOnFocus: true,
-  refetchOnReconnect: true,
+  refetchOnFocus: false,
+  refetchOnReconnect: false,
   baseQuery: axiosBaseQuery({ baseUrl: '' }),
   endpoints: (build) => ({
     getListGroup: build.query({

@@ -1,33 +1,8 @@
 import { Button, Form, Input, Spin } from 'antd';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { useLoginMutation } from '../../app/authService';
-import { loginUser } from '../../app/authSlice';
 import { BASE_URL } from '../../constants';
-import setAuthHeader from '../../utils';
 import './styles.css';
 
-const LoginForm = () => {
-  const [login, loginResult] = useLoginMutation();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const { isLoading } = loginResult;
-
-  const onFinish = async (values) => {
-    const result = await login(values).unwrap();
-
-    if (result) {
-      const { email, username, _id } = result.data.user;
-      setAuthHeader(result.data.token);
-      localStorage.setItem('token', result.data.token);
-      await dispatch(loginUser({ email, username, _id }));
-      navigate('/');
-    }
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+const LoginForm = ({ onFinish, onFinishFailed, isLoading }) => {
   const googleAuth = () => {
     window.open(`${BASE_URL}/user/auth/google`, '_self');
   };
