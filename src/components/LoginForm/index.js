@@ -9,7 +9,7 @@ const LoginForm = ({ onFinish, onFinishFailed, isLoading }) => {
   };
 
   return (
-    <section className='form-container'>
+    <section className='form-container container'>
       <Form name='login' layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete='off'>
         <h3>Login to your account</h3>
         <Form.Item label='Email' name='email' rules={[{ required: true, message: 'Please input your email address!' }]}>

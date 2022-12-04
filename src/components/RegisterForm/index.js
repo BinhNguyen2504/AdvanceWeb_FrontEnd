@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import './styles.css';
 
 const RegisterForm = ({ onFinish, onFinishFailed, isLoading }) => (
-  <section className='form-container'>
+  <section className='form-container container'>
     <Form name='register' autoComplete='off' layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed}>
       <h3>Register now</h3>
       <Form.Item label='Your name' name='username' rules={[{ required: true, message: 'Please input your username!' }]}>

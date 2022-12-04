@@ -8,12 +8,12 @@ const { Content } = Layout;
 
 const GroupList = () => {
   const { data, isLoading } = useGetListGroupQuery();
-  console.log(data.data.groups);
+
   return (
     <Content>
       <MainLayout>
         {!isLoading ? (
-          <section className='courses'>
+          <section className='courses container'>
             <Link className='btn' to='/groups/create'>
               Create group
             </Link>

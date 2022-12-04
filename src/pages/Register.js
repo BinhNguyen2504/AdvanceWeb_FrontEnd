@@ -14,7 +14,7 @@ const RegisterPage = () => {
   const { id } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (id) navigate('/');
+    if (id) navigate('/dashboard');
   }, [id]);
 
   const openNotification = () => {

@@ -18,7 +18,7 @@ const SideBar = () => {
         </Link>
       </div>
       <nav className='navbar'>
-        <Link to='/'>
+        <Link to='/dashboard'>
           <i className='fas fa-home' />
           <span>Dashboard</span>
         </Link>

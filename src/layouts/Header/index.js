@@ -47,13 +47,13 @@ const Header = () => {
   return (
     <HeaderAnt className='header'>
       <section className='flex'>
-        <Link to='/' className='logo'>
-          Kahoot
+        <Link to='/dashboard' className='logo'>
+          Quizz
         </Link>
 
         <div className='icons'>
-          <div id='menu-btn' className='fas fa-bars' />
-          <div id='search-btn' className='fas fa-search' />
+          {/* <div id='menu-btn' className='fas fa-bars' />
+          <div id='search-btn' className='fas fa-search' /> */}
           <button
             id='user-btn'
             className='fas fa-user'
@@ -78,9 +78,15 @@ const Header = () => {
           <img src='img/ava.jpg' className='image' alt='' />
           <h3 className='name'>{username}</h3>
           <p className='role'>{email}</p>
-          <button type='button' className='btn' onClick={handleLogout}>
-            Logout
-          </button>
+          {username ? (
+            <button type='button' className='btn' onClick={handleLogout}>
+              Logout
+            </button>
+          ) : (
+            <Link to='/login' className='btn'>
+              Login
+            </Link>
+          )}
         </div>
       </section>
     </HeaderAnt>

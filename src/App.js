@@ -19,6 +19,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import PresentEdit from './pages/PresentEdit';
 import PresentItem from './pages/PresentItem';
 import PresentList from './pages/PresentList';
+import JoinGame from './pages/JoinGame';
+import WaitingRoom from './pages/WaitingRoom';
 
 import './variables.css';
 import './index.css';
@@ -26,16 +28,15 @@ import './App.css';
 
 const App = () => {
   const user = localStorage.getItem('token');
+  const dispatch = useDispatch();
   if (user) {
     setAuthHeader(user);
   }
-  const dispatch = useDispatch();
   const { data, isLoading } = useGetProfileQuery(user, {
     skip: !user
   });
   useEffect(() => {
     async function loadUser() {
-      // console.log('Loading info of user...');
       if (data) {
         const { email, username, _id } = data.data;
         await dispatch(loginUser({ email, username, id: _id }));
@@ -43,7 +44,7 @@ const App = () => {
         setAuthHeader(null);
       }
     }
-    loadUser(user);
+    loadUser();
   }, [isLoading, data]);
 
   return (
@@ -52,10 +53,11 @@ const App = () => {
         <h1>Loading user info...</h1>
       ) : (
         <Routes>
+          <Route index element={<JoinGame />} />
+          <Route path='/waiting' element={<WaitingRoom />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<RegisterPage />} />
           <Route element={<ProtectedRoute />}>
-            <Route index element={<Dashboard />} />
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/groups' element={<GroupList />} />
@@ -63,6 +65,7 @@ const App = () => {
             <Route path='/groups/create' element={<GroupForm />} />
 
             <Route path='/presentation' element={<PresentList />} />
+            <Route path='/presentation/create' element={<PresentEdit />} />
             <Route path='/presentation/:id' element={<PresentItem />} />
             <Route path='/presentation/:id/edit' element={<PresentEdit />} />
 

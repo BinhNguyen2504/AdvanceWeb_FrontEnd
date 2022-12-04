@@ -14,7 +14,7 @@ const LoginPage = () => {
   const { id } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (id) navigate('/');
+    if (id) navigate('/dashboard');
   }, [id]);
   const { isLoading } = loginResult;
   const onFinish = async (values) => {
@@ -24,7 +24,7 @@ const LoginPage = () => {
       setAuthHeader(result.data.token);
       localStorage.setItem('token', result.data.token);
       await dispatch(loginUser({ email, username, id: _id }));
-      navigate('/');
+      navigate('/dashboard');
     }
   };
   const onFinishFailed = (errorInfo) => {
