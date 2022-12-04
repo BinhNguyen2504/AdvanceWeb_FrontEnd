@@ -13,9 +13,9 @@ const GroupItem = ({ name, id }) => (
       <img src='/img/thumbnail.jpg' alt='' />
       {/* <span>10 videos</span> */}
     </div>
-    <h3 className='title'>complete react tutorial</h3>
+    <h3 className='title'>{name}</h3>
     <Link to={`/groups/${id}`} className='inline-btn'>
-      view playlist
+      view group
     </Link>
   </div>
 );

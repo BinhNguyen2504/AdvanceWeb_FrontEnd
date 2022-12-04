@@ -8,27 +8,31 @@ const { Content } = Layout;
 
 const GroupList = () => {
   const { data, isLoading } = useGetListGroupQuery();
-
+  console.log(data.data.groups);
   return (
     <Content>
       <MainLayout>
         {!isLoading ? (
           <section className='courses'>
-            <h1 className='heading' span={12}>
-              Group List
-            </h1>
             <Link className='btn' to='/groups/create'>
               Create group
             </Link>
             <br />
+            <h1 className='heading' span={12}>
+              Joined groups
+            </h1>
             <div className='box-container'>
               {data.data.groups.map((group) => (
-                <GroupItem key={group.id} name={group.name} id={group.id} />
+                <GroupItem key={group.id} name={group.groupName} id={group.id} />
               ))}
             </div>
+            <br />
+            <h1 className='heading' span={12}>
+              Owner groups
+            </h1>
             <div className='box-container'>
               {data.data.ownGroup.map((group) => (
-                <GroupItem key={group.id} name={group.name} id={group.id} />
+                <GroupItem key={group.id} name={group.groupName} id={group.id} />
               ))}
             </div>
           </section>

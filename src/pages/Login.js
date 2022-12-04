@@ -12,7 +12,6 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const [login, loginResult] = useLoginMutation();
   const { id } = useSelector((state) => state.auth);
-  console.log(id);
 
   useEffect(() => {
     if (id) navigate('/');
@@ -20,7 +19,6 @@ const LoginPage = () => {
   const { isLoading } = loginResult;
   const onFinish = async (values) => {
     const result = await login(values).unwrap();
-
     if (result) {
       const { email, username, _id } = result.data.user;
       setAuthHeader(result.data.token);

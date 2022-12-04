@@ -7,12 +7,12 @@ import MainLayout from '../layouts/MainLayout';
 const { Content } = Layout;
 
 const Profile = () => {
-  const { data } = useGetProfileQuery();
+  const { data, isLoading } = useGetProfileQuery();
 
   return (
     <Content>
       <MainLayout>
-        {data ? (
+        {!isLoading ? (
           <section className='user-profile'>
             <h1 className='heading'>your profile</h1>
             <div className='info'>

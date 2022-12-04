@@ -6,7 +6,7 @@ import MainLayout from '../layouts/MainLayout';
 
 const { Content } = Layout;
 
-const PresentForm = () => {
+const PresentItem = () => {
   const [title, setTitle] = useState('Advance Web Project');
   const handleChangeTitle = (data) => {
     setTitle(data);
@@ -28,4 +28,4 @@ const PresentForm = () => {
   );
 };
 
-export default PresentForm;
+export default PresentItem;
