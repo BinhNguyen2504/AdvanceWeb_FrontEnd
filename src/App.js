@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-
+import { io } from 'socket.io-client';
 import setAuthHeader from './utils';
 import { useGetProfileQuery } from './app/profileService';
 import { loginUser } from './app/authSlice';
@@ -25,6 +25,11 @@ import WaitingRoom from './pages/WaitingRoom';
 import './variables.css';
 import './index.css';
 import './App.css';
+import GamePage from './pages/Game/Game';
+import JoinGameClient from './pages/Game/JoinGame';
+import PlayerScreen from './pages/Game/ScreenPlayer';
+import PresentListPage from './pages/toanPage/PresentListPage';
+import PresentPreviewPage from './pages/toanPage/PresentPreviewPage';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -47,6 +52,14 @@ const App = () => {
     loadUser();
   }, [isLoading, data]);
 
+  // add connect socket io
+  // useEffect(() => {
+  //   const socket = io('http://localhost:3001');
+  //   dispatch(createSocket(socket));
+
+  //   return () => socket.disconnect();
+  // }, [dispatch]);
+
   return (
     <main>
       {isLoading ? (
@@ -57,6 +70,11 @@ const App = () => {
           <Route path='/waiting' element={<WaitingRoom />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<RegisterPage />} />
+          <Route path='/game/:id' element={<GamePage />} />
+          <Route path='/join' element={<JoinGameClient />} />
+          <Route path='/game/player/:pin/:userid' element={<PlayerScreen />} />
+          <Route path='/toan/presentation' element={<PresentListPage />} />
+          <Route path='/toan/presentation/preview/:id' element={<PresentPreviewPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/profile' element={<Profile />} />
@@ -68,7 +86,6 @@ const App = () => {
             <Route path='/presentation/create' element={<PresentEdit />} />
             <Route path='/presentation/:id' element={<PresentItem />} />
             <Route path='/presentation/:id/edit' element={<PresentEdit />} />
-
             <Route path='/report' element={<ReportSlide />} />
           </Route>
           <Route path='*' element={<ErrorPage />} />

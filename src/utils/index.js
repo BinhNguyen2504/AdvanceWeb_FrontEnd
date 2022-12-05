@@ -9,3 +9,12 @@ const setAuthHeader = (token) => {
   }
 };
 export default setAuthHeader;
+
+export const getNotNullList = (list) => {
+  if (list === undefined) return [];
+  if (!Array.isArray(list)) return [];
+  if (!list.length || list.length <= 0) {
+    return [];
+  }
+  return list;
+};
