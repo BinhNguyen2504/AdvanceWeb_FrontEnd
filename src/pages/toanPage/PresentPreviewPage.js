@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import MainLayout from '../../layouts/MainLayout';
 import SlicePreview from '../../components/toanntt/SlicePreview';
 import { MyPresent } from './mock';
+import './carousel.css';
 
 const contentStyle = {
   margin: 0,
@@ -27,8 +28,20 @@ const PresentPreviewPage = () => {
   return (
     <MainLayout>
       <section className='courses container'>
-        <p className='btn'>PIN: APTX-4869</p>
+        <p className='btn'>Title: Presentation number 1</p>
         <Carousel afterChange={onChange}>
+          <div>
+            <SlicePreview content={present} />
+          </div>
+          <div>
+            <SlicePreview content={present} />
+          </div>
+          <div>
+            <SlicePreview content={present} />
+          </div>
+          <div>
+            <SlicePreview content={present} />
+          </div>
           <div>
             <SlicePreview content={present} />
           </div>
@@ -43,7 +56,7 @@ const PresentPreviewPage = () => {
           </div>
         </Carousel>
         <Button type='primary' htmlType='submit' className='btn'>
-          Start Game
+          Create Game
         </Button>
       </section>
     </MainLayout>

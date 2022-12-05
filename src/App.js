@@ -30,6 +30,8 @@ import JoinGameClient from './pages/Game/JoinGame';
 import PlayerScreen from './pages/Game/ScreenPlayer';
 import PresentListPage from './pages/toanPage/PresentListPage';
 import PresentPreviewPage from './pages/toanPage/PresentPreviewPage';
+import WaitingHostPage from './pages/toanPage/WaitingHostPage';
+import HostLivePage from './pages/toanPage/HostLivePage';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -75,6 +77,8 @@ const App = () => {
           <Route path='/game/player/:pin/:userid' element={<PlayerScreen />} />
           <Route path='/toan/presentation' element={<PresentListPage />} />
           <Route path='/toan/presentation/preview/:id' element={<PresentPreviewPage />} />
+          <Route path='/toan/presentation/host/waiting' element={<WaitingHostPage />} />
+          <Route path='/toan/presentation/host/live' element={<HostLivePage />} />
           <Route element={<ProtectedRoute />}>
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/profile' element={<Profile />} />
