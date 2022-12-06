@@ -32,6 +32,7 @@ import PresentListPage from './pages/toanPage/PresentListPage';
 import PresentPreviewPage from './pages/toanPage/PresentPreviewPage';
 import WaitingHostPage from './pages/toanPage/WaitingHostPage';
 import HostLivePage from './pages/toanPage/HostLivePage';
+import { createSocket } from './app/socketSlice';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -55,12 +56,15 @@ const App = () => {
   }, [isLoading, data]);
 
   // add connect socket io
-  // useEffect(() => {
-  //   const socket = io('http://localhost:3001');
-  //   dispatch(createSocket(socket));
+  useEffect(() => {
+    const socket = io('http://localhost:3001');
+    dispatch(createSocket(socket));
+    return () => socket.disconnect();
+  }, [dispatch]);
 
-  //   return () => socket.disconnect();
-  // }, [dispatch]);
+  // ? Usage:
+  // import { useSelector } from 'react-redux';
+  // const { socket } = useSelector((state) => state.socket);
 
   return (
     <main>

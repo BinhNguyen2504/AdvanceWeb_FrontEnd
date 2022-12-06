@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { axiosBaseQuery } from '../api/client';
 
-export const profileServices = createApi({
+export const profileService = createApi({
   reducerPath: 'profileServices',
   refetchOnFocus: false,
   refetchOnReconnect: true,
@@ -13,4 +13,4 @@ export const profileServices = createApi({
   })
 });
 
-export const { useGetProfileQuery } = profileServices;
+export const { useGetProfileQuery } = profileService;

@@ -1,8 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { axiosBaseQuery } from '../api/client';
 
-export const presentServices = createApi({
-  reducerPath: 'presentServices',
+export const presentationService = createApi({
+  reducerPath: 'presentationService',
   refetchOnFocus: false,
   refetchOnReconnect: false,
   baseQuery: axiosBaseQuery({ baseUrl: '' }),
@@ -31,4 +31,4 @@ export const {
   useDeletePresentMutation,
   useUpdatePresentMutation,
   useGetPresentQuery
-} = presentServices;
+} = presentationService;
