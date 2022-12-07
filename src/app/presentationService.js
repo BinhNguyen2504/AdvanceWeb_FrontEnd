@@ -7,6 +7,9 @@ export const presentationService = createApi({
   refetchOnReconnect: false,
   baseQuery: axiosBaseQuery({ baseUrl: '' }),
   endpoints: (build) => ({
+    getAllMyPresent: build.query({
+      query: () => ({ url: '/presentation/mypresentation', method: 'get' })
+    }),
     getListPresent: build.query({
       query: () => ({ url: '/user/profile', method: 'get' })
     }),
@@ -26,6 +29,7 @@ export const presentationService = createApi({
 });
 
 export const {
+  useGetAllMyPresentQuery,
   useGetListPresentQuery,
   useCreatePresentMutation,
   useDeletePresentMutation,

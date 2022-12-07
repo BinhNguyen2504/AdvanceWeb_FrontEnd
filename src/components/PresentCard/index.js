@@ -1,16 +1,17 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import { Card } from 'antd';
 
 const PresentCard = ({ content, handleClick }) => (
   <div className='site-card-border-less-wrapper'>
-    <Card title={content.title} bordered={false} hoverable onClick={() => handleClick(content.id)}>
+    <Card title={content.name} bordered={false} hoverable onClick={() => handleClick(content._id)}>
       <p>
         Number question:
-        {content.numberQuestion}
+        {content.numberOfQuestion}
       </p>
       <p>
         ID:
-        {content.id}
+        {content._id}
       </p>
     </Card>
   </div>

@@ -57,7 +57,7 @@ const App = () => {
 
   // add connect socket io
   useEffect(() => {
-    const socket = io('http://localhost:3001');
+    const socket = io('http://localhost:5001');
     dispatch(createSocket(socket));
     return () => socket.disconnect();
   }, [dispatch]);

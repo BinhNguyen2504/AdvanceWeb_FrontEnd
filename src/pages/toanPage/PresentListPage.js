@@ -1,26 +1,43 @@
+/* eslint-disable no-underscore-dangle */
 import { Link, useNavigate } from 'react-router-dom';
 import { Row, Col } from 'antd';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import MainLayout from '../../layouts/MainLayout';
-import { MyPresentList } from './mock';
+// import { MyPresentList } from './mock';
 import { getNotNullList } from '../../utils';
 import PresentCard from '../../components/PresentCard';
+// import { useGetAllMyPresentQuery } from '../../app/presentationService';
 
 const PresentListPage = () => {
+  const token = localStorage.getItem('token');
+  const API = axios.create({
+    baseURL: 'http://localhost:5001/api',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
+  const getMyPresentation = () => API.get('presentation/mypresentation');
+
+  // const { myPresentList, isLoading } = useGetAllMyPresentQuery();
+  // console.log('my present list: ', myPresentList);
   const [presents, setPresents] = useState([]);
   const navigate = useNavigate();
-  useEffect(() => {
-    setPresents(MyPresentList);
-  });
+  useEffect(async () => {
+    const { data } = await getMyPresentation();
+    // setPresents(MyPresentList);
+    console.log('response data: ', data);
+    setPresents(data.data);
+  }, []);
 
   const handleClickCard = (id) => {
     console.log('click card: ', id);
-    navigate(`/toan/presentation/preview/${id}`, { replace: true });
+    navigate(`/toan/presentation/preview/${id}`, { replace: false });
   };
 
   const presentCardList = getNotNullList(presents).map((present) => (
     <Col span={8}>
-      <PresentCard key={present.id} content={present} handleClick={handleClickCard} />
+      <PresentCard key={present._id} content={present} handleClick={handleClickCard} />
     </Col>
   ));
 
@@ -35,6 +52,7 @@ const PresentListPage = () => {
           Presentation List
         </h1>
         <Row gutter={[16, 16]}>{presentCardList}</Row>
+        {/* {!isLoading ? <Row gutter={[16, 16]}>{presentCardList}</Row> : <p>Loading</p>} */}
       </section>
     </MainLayout>
   );

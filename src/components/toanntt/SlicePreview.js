@@ -6,7 +6,7 @@ import { Button, Card, Col, Row } from 'antd';
 const SlicePreview = ({ content }) => (
   <div className='site-card-border-less-wrapper'>
     <Card
-      title={content.title}
+      title={content.content}
       bordered={false}
       extra={<Button>Next</Button>}
       style={{
@@ -22,16 +22,16 @@ const SlicePreview = ({ content }) => (
           <Button>Next</Button>
         </Col>
         <Col span={12}>
-          <Button block>Cau A</Button>
+          <Button block>{content.ansA}</Button>
         </Col>
         <Col span={12}>
-          <Button block>Cau B</Button>
+          <Button block>{content.ansB}</Button>
         </Col>
         <Col span={12}>
-          <Button block>Cau C</Button>
+          <Button block>{content.ansC}</Button>
         </Col>
         <Col span={12}>
-          <Button block>Cau D</Button>
+          <Button block>{content.ansD}</Button>
         </Col>
       </Row>
     </Card>
