@@ -24,22 +24,22 @@ export default function StudentPage() {
   }, []);
 
   const join = async () => {
-    //check isOpen => true + tên không tồn tại => trả về presentation
+    // check isOpen => true + tên không tồn tại => trả về presentation
     const { data } = await getPresentationByPin(pin);
 
     socket.current.emit('join-room', {
       name: 'Studentoan',
-      room: pin,
+      room: pin
     });
     questions.current = data.data.questions;
     setInfo(JSON.stringify(questions.current));
   };
 
   const sendi = () => {
-    //gửi câu trả lời tới teacher
+    // gửi câu trả lời tới teacher
     socket.current.emit('teacher-sender', {
       room: pin,
-      msg: { username: 'Studentoan', ans: 'A' }, //msg tự custom
+      msg: { username: 'Studentoan', ans: 'A' } // msg tự custom
     });
     setMessage('dasdasdadad');
   };

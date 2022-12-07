@@ -23,11 +23,18 @@ const PresentListPage = () => {
   // console.log('my present list: ', myPresentList);
   const [presents, setPresents] = useState([]);
   const navigate = useNavigate();
-  useEffect(async () => {
-    const { data } = await getMyPresentation();
-    // setPresents(MyPresentList);
-    console.log('response data: ', data);
-    setPresents(data.data);
+  useEffect(() => {
+    const fetchData = async () => {
+      // const { data } = await API.get(`presentation/mypresentation/${id}`);
+      const { data } = await getMyPresentation();
+      // setPresents(MyPresentList);
+      console.log('response data: ', data);
+      setPresents(data.data);
+    };
+    fetchData();
+    return () => {
+      console.log('This will be logged on unmount');
+    };
   }, []);
 
   const handleClickCard = (id) => {

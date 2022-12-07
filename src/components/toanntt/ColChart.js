@@ -70,16 +70,19 @@ const ColChart = () => {
     }
   };
   const resetData = () => {
-    let newArr = [...data]; // copying the old datas array
+    const newArr = [...data]; // copying the old datas array
     // a deep copy is not needed as we are overriding the whole object below, and not setting a property of it. this does not mutate the state.
-    
-    console.log("data[0].sales: ", data[0].sales)
+
+    console.log('data[0].sales: ', data[0].sales);
     newArr[0].sales = data[0].sales + 5; // replace e.target.value with whatever you want to change it to
 
     setData([...newArr]);
-  }
+  };
   return (
-  <><Column {...config} height={300} /><Button onClick={resetData}>Change Data</Button></>
+    <>
+      <Column {...config} height={300} />
+      <Button onClick={resetData}>Change Data</Button>
+    </>
   );
 };
 

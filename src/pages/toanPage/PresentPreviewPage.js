@@ -32,12 +32,19 @@ const PresentPreviewPage = () => {
   const [present, setPresent] = useState({});
   const navigate = useNavigate();
 
-  useEffect(async () => {
+  useEffect(() => {
+    const fetchData = async (id) => {
+      // const { data } = await API.get(`presentation/mypresentation/${id}`);
+      const { data } = await getPresentationByID(id);
+      console.log('response data: ', data);
+      console.log('question: ', data.data.questions);
+      setPresent(data.data);
+    };
     console.log('present id: ', presentid);
-    const { data } = await getPresentationByID(presentid);
-    console.log('response data: ', data.data);
-    console.log('question: ', data.data.questions);
-    setPresent(data.data);
+    fetchData(presentid);
+    return () => {
+      console.log('This will be logged on unmount');
+    };
   }, []);
 
   // const [present, setPresent] = useState({});
@@ -49,9 +56,14 @@ const PresentPreviewPage = () => {
     console.log('click card: ', id);
   };
 
+  const handleCreateGame = (id) => {
+    console.log('click card: ', id);
+    navigate(`/toan/presentation/host/waiting/${id}`, { replace: false });
+  };
+
   const questionCardList = getNotNullList(present.questions).map((question) => (
-    <div>
-      <SlicePreview key={question._id} content={question} />
+    <div key={question._id}>
+      <SlicePreview content={question} />
     </div>
   ));
 
@@ -89,7 +101,7 @@ const PresentPreviewPage = () => {
           </div>
         </Carousel> */}
         <Carousel afterChange={onChange}>{questionCardList}</Carousel>
-        <Button type='primary' htmlType='submit' className='btn'>
+        <Button type='primary' htmlType='submit' className='btn' onClick={handleCreateGame(presentid)}>
           Create Game
         </Button>
       </section>
