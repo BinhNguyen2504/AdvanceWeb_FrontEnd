@@ -80,7 +80,7 @@ const App = () => {
           <Route path='/join' element={<JoinGameClient />} />
           <Route path='/game/player/:pin/:userid' element={<PlayerScreen />} />
           <Route path='/toan/presentation' element={<PresentListPage />} />
-          <Route path='/toan/presentation/preview/:id' element={<PresentPreviewPage />} />
+          <Route path='/toan/presentation/preview/:presentid' element={<PresentPreviewPage />} />
           <Route path='/toan/presentation/host/waiting' element={<WaitingHostPage />} />
           <Route path='/toan/presentation/host/live' element={<HostLivePage />} />
           <Route element={<ProtectedRoute />}>
