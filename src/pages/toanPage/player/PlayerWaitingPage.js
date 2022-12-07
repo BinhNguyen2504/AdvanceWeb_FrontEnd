@@ -38,6 +38,9 @@ const PlayerWaitingPage = () => {
 
   const [present, setPresent] = useState({});
   const gameDataRef = useRef({});
+  const userInfo = {
+    username: `name_${socketRef.current.id}`
+  };
   //   const [gameData, setGameData] = useState({});
 
   const join = async () => {
@@ -49,7 +52,7 @@ const PlayerWaitingPage = () => {
     // setGameData(data.data);
     gameDataRef.current = data.data;
     socketRef.current.emit('join-room', {
-      name: 'Studentoan',
+      name: `Studentoan_${socketRef.current.id}`,
       room: gamepin
     });
   };
@@ -61,7 +64,7 @@ const PlayerWaitingPage = () => {
     socketRef.current.on('student-receiver', (msg) => {
       console.log('game in socket listen: ', gameDataRef.current);
       if (msg === '0' || msg === 0) {
-        navigate(`/toan/presentation/player/live/${gamepin}`, { state: { game: gameDataRef.current } });
+        navigate(`/toan/presentation/player/live/${gamepin}`, { state: { game: gameDataRef.current, userInfo } });
       }
     });
   }, []);

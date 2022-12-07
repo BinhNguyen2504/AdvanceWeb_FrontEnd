@@ -2,48 +2,50 @@ import React, { useState } from 'react';
 import { Column } from '@ant-design/plots';
 import { Button } from 'antd';
 
-const ColChart = () => {
-  const [data, setData] = useState([
-    {
-      type: 'A',
-      sales: 38
-    },
-    {
-      type: 'B',
-      sales: 52
-    },
-    {
-      type: 'C',
-      sales: 61
-    },
-    {
-      type: 'D',
-      sales: 145
-    }
-  ]);
+const ColChart = ({ ansData }) => {
+  // const [data, setData] = useState([
+  //   {
+  //     type: 'A',
+  //     num: 38
+  //   },
+  //   {
+  //     type: 'B',
+  //     num: 52
+  //   },
+  //   {
+  //     type: 'C',
+  //     num: 61
+  //   },
+  //   {
+  //     type: 'D',
+  //     num: 145
+  //   }
+  // ]);
+  const data = ansData;
+  console.log('data chart: ', data);
 
   //   const data = [
   //     {
   //       type: 'A',
-  //       sales: 38
+  //       num: 38
   //     },
   //     {
   //       type: 'B',
-  //       sales: 52
+  //       num: 52
   //     },
   //     {
   //       type: 'C',
-  //       sales: 61
+  //       num: 61
   //     },
   //     {
   //       type: 'D',
-  //       sales: 145
+  //       num: 145
   //     }
   //   ];
   const config = {
     data,
     xField: 'type',
-    yField: 'sales',
+    yField: 'num',
     label: {
       // 可手动配置 label 数据标签位置
       position: 'middle',
@@ -64,8 +66,8 @@ const ColChart = () => {
       type: {
         alias: 'type alias'
       },
-      sales: {
-        alias: 'sales alias'
+      num: {
+        alias: 'num alias'
       }
     }
   };
@@ -73,10 +75,10 @@ const ColChart = () => {
     const newArr = [...data]; // copying the old datas array
     // a deep copy is not needed as we are overriding the whole object below, and not setting a property of it. this does not mutate the state.
 
-    console.log('data[0].sales: ', data[0].sales);
-    newArr[0].sales = data[0].sales + 5; // replace e.target.value with whatever you want to change it to
+    console.log('data[0].num: ', data[0].num);
+    newArr[0].num = data[0].num + 5; // replace e.target.value with whatever you want to change it to
 
-    setData([...newArr]);
+    // setData([...newArr]);
   };
   return (
     <>

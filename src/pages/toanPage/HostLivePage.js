@@ -41,7 +41,25 @@ const HostLivePage = () => {
 
   const [indexQuestion, setIndexQuestion] = useState(0);
   const [question, setQuestion] = useState({});
-
+  const initAnsData = [
+    {
+      type: 'A',
+      num: 0
+    },
+    {
+      type: 'B',
+      num: 0
+    },
+    {
+      type: 'C',
+      num: 0
+    },
+    {
+      type: 'D',
+      num: 0
+    }
+  ];
+  const [ansData, setAnsData] = useState(initAnsData);
   const start = async () => {
     // update game. isOpen =  false
     const { data } = await updateRoom(gameDataRef.current.pin, false);
@@ -52,18 +70,55 @@ const HostLivePage = () => {
       room: gameDataRef.current.pin,
       msg: indexQuestion
     });
+
+    const updateData = (ans) => {
+      console.log('ans: ', ans);
+      console.log('ansData: ', ansData);
+      const newArr = [...ansData];
+      if (ans === 'A') {
+        newArr[0].num = 10;
+      } else if (ans === 'B') {
+        newArr[1].num = ansData[1].num + 1;
+      } else if (ans === 'C') {
+        newArr[2].num = ansData[2].num + 1;
+      } else if (ans === 'D') {
+        newArr[3].num = ansData[3].num + 1;
+      }
+      console.log('newArr: ', newArr);
+      setAnsData([...newArr]);
+    };
+
+    socketRef.current.on('teacher-receiver', (msg) => {
+      console.log('receive answer from player: ', msg);
+      updateData(msg.ans);
+      // setAnsData(current =>
+      //   current.map(ans => {
+      //     if (ans.type === msg) {
+      //       return {...ans,
+      //         num: ans.num + 1
+      //       };
+      //     }
+      //     return ans;
+      //   }),
+      // );
+    });
+
     console.log('gameRef: ', gameDataRef.current);
     setQuestion(gameDataRef.current.presentation.questions[indexQuestion]);
 
     // socket.current.emit('start-room', '638b150d3e3d7cf25e187ef2');
   };
 
+  const counting = useRef(0);
   useEffect(() => {
+    counting.current += 1;
+    console.log('COUNTING: ', counting.current);
     start();
-  });
+  }, []);
 
   const next = () => {
     setIndexQuestion(indexQuestion + 1);
+    setAnsData(initAnsData);
     if (indexQuestion < gameDataRef.current.presentation.questions.length - 1) {
       setQuestion(gameDataRef.current.presentation.questions[indexQuestion + 1]);
 
@@ -88,7 +143,7 @@ const HostLivePage = () => {
               width: '100%'
             }}
           >
-            <ColChart />
+            <ColChart ansData={ansData} />
             <Row gutter={[16, 16]}>
               <Col span={12}>
                 <Button block>

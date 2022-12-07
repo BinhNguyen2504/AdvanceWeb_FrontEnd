@@ -21,6 +21,9 @@ const PlayerJoinPage = () => {
           <Form.Item label='PIN code' name='pin' rules={[{ required: true, message: 'Please input PIN!' }]}>
             <Input placeholder='Enter PIN' type='text' required className='box' />
           </Form.Item>
+          <Form.Item label='nickname' name='nickname' rules={[{ required: true, message: 'Please input nickname!' }]}>
+            <Input placeholder='Enter NICKNAME' type='text' required className='box' />
+          </Form.Item>
           <Form.Item>
             <Button type='primary' htmlType='submit' className='btn'>
               Submit
