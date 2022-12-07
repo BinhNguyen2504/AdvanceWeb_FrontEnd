@@ -13,16 +13,13 @@ const Profile = () => {
     <Content>
       <MainLayout>
         {!isLoading ? (
-          <section className='user-profile'>
+          <section className='user-profile container'>
             <h1 className='heading'>your profile</h1>
             <div className='info'>
               <div className='user'>
                 <img src='/img/ava.jpg' alt='' />
                 <h3>{data.data.username}</h3>
                 <p>{data.data.role}</p>
-                {/* <a href='update.html' className='inline-btn'>
-              update profile
-            </a> */}
               </div>
 
               <div className='box-container'>
@@ -42,7 +39,7 @@ const Profile = () => {
                   <div className='flex'>
                     <i className='fas fa-user-group' />
                     <div>
-                      <span>{data.data.ownGroup.length}</span>
+                      <span>{data.data.ownGroups.length}</span>
                       <p>owner group</p>
                     </div>
                   </div>

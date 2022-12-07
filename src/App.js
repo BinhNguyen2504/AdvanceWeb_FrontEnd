@@ -21,22 +21,23 @@ import PresentEdit from './pages/PresentEdit';
 import PresentItem from './pages/PresentItem';
 import PresentList from './pages/PresentList';
 import JoinGame from './pages/JoinGame';
-import WaitingRoom from './pages/WaitingRoom';
+import PlayerWaitingRoom from './pages/PlayerWaitingRoom';
+import PresentPreview from './pages/PresentPreview';
+import JoinGameClient from './pages/Game/JoinGame';
+// import HostWaitingRoom from './pages/HostWaitingRoom';
 
 import './variables.css';
 import './index.css';
 import './App.css';
-import GamePage from './pages/Game/Game';
-import JoinGameClient from './pages/Game/JoinGame';
-import PlayerScreen from './pages/Game/ScreenPlayer';
-import PresentListPage from './pages/toanPage/PresentListPage';
-import PresentPreviewPage from './pages/toanPage/PresentPreviewPage';
-import WaitingHostPage from './pages/toanPage/WaitingHostPage';
-import HostLivePage from './pages/toanPage/HostLivePage';
+// import GamePage from './pages/Game/Game';
+// import PlayerScreen from './pages/Game/ScreenPlayer';
+// import PresentListPage from './pages/PresentList';
+// import WaitingHostPage from './pages/toanPage/WaitingHostPage';
+// import HostLivePage from './pages/toanPage/HostLivePage';
 // import { createSocket } from './app/socketSlice';
-import TestNaviPage from './pages/toanPage/testPassNavigationPage';
-import PlayerWaitingPage from './pages/toanPage/player/PlayerWaitingPage';
-import PlayerLivePage from './pages/toanPage/player/PlayerLivePage';
+// import TestNaviPage from './pages/toanPage/testPassNavigationPage';
+// import PlayerWaitingPage from './pages/toanPage/player/PlayerWaitingPage';
+// import PlayerLivePage from './pages/toanPage/player/PlayerLivePage';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -78,19 +79,17 @@ const App = () => {
         ) : (
           <Routes>
             <Route index element={<JoinGame />} />
-            <Route path='/waiting' element={<WaitingRoom />} />
+            <Route path='/player/waiting' element={<PlayerWaitingRoom />} />
             <Route path='/login' element={<LoginPage />} />
             <Route path='/signup' element={<RegisterPage />} />
-            <Route path='/game/:id' element={<GamePage />} />
+            {/* <Route path='/game/:id' element={<GamePage />} /> */}
             <Route path='/join' element={<JoinGameClient />} />
-            <Route path='/game/player/:pin/:userid' element={<PlayerScreen />} />
-            <Route path='/toan/presentation' element={<PresentListPage />} />
-            <Route path='/toan/presentation/preview/:presentid' element={<PresentPreviewPage />} />
-            <Route path='/toan/presentation/host/waiting/:presentid' element={<WaitingHostPage />} />
-            <Route path='/toan/presentation/host/live/:presentid' element={<HostLivePage />} />
-            <Route path='/toan/presentation/player/waiting/:gamepin' element={<PlayerWaitingPage />} />
-            <Route path='/toan/presentation/player/live/:gamepin' element={<PlayerLivePage />} />
-            <Route path='/toan/test/navi' element={<TestNaviPage />} />
+            {/* <Route path='/game/player/:pin/:userid' element={<PlayerScreen />} /> */}
+            {/* <Route path='/toan/presentation/host/waiting/:presentid' element={<WaitingHostPage />} /> */}
+            {/* <Route path='/toan/presentation/host/live/:presentid' element={<HostLivePage />} /> */}
+            {/* <Route path='/toan/presentation/player/waiting/:gamepin' element={<PlayerWaitingPage />} /> */}
+            {/* <Route path='/toan/presentation/player/live/:gamepin' element={<PlayerLivePage />} /> */}
+            {/* <Route path='/toan/test/navi' element={<TestNaviPage />} /> */}
             <Route element={<ProtectedRoute />}>
               <Route path='/dashboard' element={<Dashboard />} />
               <Route path='/profile' element={<Profile />} />
@@ -100,8 +99,10 @@ const App = () => {
 
               <Route path='/presentation' element={<PresentList />} />
               <Route path='/presentation/create' element={<PresentEdit />} />
+              <Route path='/presentation/preview/:id' element={<PresentPreview />} />
               <Route path='/presentation/:id' element={<PresentItem />} />
               <Route path='/presentation/:id/edit' element={<PresentEdit />} />
+              {/* <Route path='/host/waiting' element={<HostWaitingRoom />} /> */}
               <Route path='/report' element={<ReportSlide />} />
             </Route>
             <Route path='*' element={<ErrorPage />} />

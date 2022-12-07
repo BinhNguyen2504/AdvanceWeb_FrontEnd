@@ -1,17 +1,12 @@
-/* eslint-disable no-underscore-dangle */
-import React from 'react';
 import { Card } from 'antd';
+import { Link } from 'react-router-dom';
 
-const PresentCard = ({ content, handleClick }) => (
+const PresentCard = ({ name, num, id }) => (
   <div className='site-card-border-less-wrapper'>
-    <Card title={content.name} bordered={false} hoverable onClick={() => handleClick(content._id)}>
+    <Card title={name} bordered={false} hoverable extra={<Link to={`/presentation/preview/${id}`}>Detail</Link>}>
       <p>
         Number question:
-        {content.numberOfQuestion}
-      </p>
-      <p>
-        ID:
-        {content._id}
+        {num}
       </p>
     </Card>
   </div>

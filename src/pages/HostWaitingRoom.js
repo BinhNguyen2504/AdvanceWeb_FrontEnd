@@ -1,38 +1,19 @@
-/* eslint-disable no-unused-vars */
-import axios from 'axios';
-
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Button, Carousel, message, Space, Spin } from 'antd';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import MainLayout from '../../layouts/MainLayout';
 import { SocketContext } from '../../context/socket';
 import SlicePreview from '../../components/toanntt/SlicePreview';
 import { MyPresent } from './mock';
-import './carousel.css';
 import { getNotNullList } from '../../utils';
+import MainLayout from '../layouts/MainLayout';
 
-const contentStyle = {
-  margin: 0,
-  //   height: '460px',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: '#364d79'
-};
-const WaitingHostPage = () => {
+const HostWaitingRoom = () => {
   const navigate = useNavigate();
   // const { socket } = useSelector((state) => state.socket);
   // const socketRef = useRef(socket);
   const socketRef = useRef(useContext(SocketContext));
   const { presentid } = useParams();
-  const token = localStorage.getItem('token');
-  const API = axios.create({
-    baseURL: 'http://localhost:5001/api',
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
 
   const createGame = (body) => API.post('http://localhost:5001/api/game/creategame', body);
 
@@ -137,4 +118,4 @@ const WaitingHostPage = () => {
     </MainLayout>
   );
 };
-export default WaitingHostPage;
+export default HostWaitingRoom;

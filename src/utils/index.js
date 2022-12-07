@@ -11,7 +11,6 @@ const setAuthHeader = (token) => {
 export default setAuthHeader;
 
 export const getNotNullList = (list) => {
-  console.log('list: ', list);
   if (list === undefined) return [];
   if (!Array.isArray(list)) return [];
   if (!list.length || list.length <= 0) {

@@ -31,7 +31,7 @@ const GroupList = () => {
               Owner groups
             </h1>
             <div className='box-container'>
-              {data.data.ownGroup.map((group) => (
+              {data.data.ownGroups.map((group) => (
                 <GroupItem key={group.id} name={group.groupName} id={group.id} />
               ))}
             </div>

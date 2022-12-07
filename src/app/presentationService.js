@@ -5,34 +5,34 @@ export const presentationService = createApi({
   reducerPath: 'presentationService',
   refetchOnFocus: false,
   refetchOnReconnect: false,
-  baseQuery: axiosBaseQuery({ baseUrl: '' }),
+  baseQuery: axiosBaseQuery({ baseUrl: '/presentation' }),
   endpoints: (build) => ({
-    getAllMyPresent: build.query({
-      query: () => ({ url: '/presentation/mypresentation', method: 'get' })
-    }),
     getListPresent: build.query({
-      query: () => ({ url: '/user/profile', method: 'get' })
+      query: () => ({ url: '/mypresentation', method: 'get' })
     }),
     getPresent: build.query({
-      query: () => ({ url: '/group/:id', method: 'get' })
+      query: (id) => ({ url: `/mypresentation/${id}`, method: 'get' })
     }),
     createPresent: build.mutation({
-      query: (body) => ({ url: '/group', method: 'post', data: body })
+      query: (body) => ({ url: '/', method: 'post', data: body })
     }),
     updatePresent: build.mutation({
-      query: (body) => ({ url: '/group', method: 'post', data: body })
+      query: (body) => ({ url: '/', method: 'post', data: body })
     }),
     deletePresent: build.mutation({
-      query: (body) => ({ url: '/group', method: 'delete', data: body })
+      query: (body) => ({ url: '/', method: 'delete', data: body })
+    }),
+    joinPresent: build.mutation({
+      query: (body) => ({ url: `/join/${body.username}/${body.pin}`, method: 'put' })
     })
   })
 });
 
 export const {
-  useGetAllMyPresentQuery,
   useGetListPresentQuery,
   useCreatePresentMutation,
   useDeletePresentMutation,
   useUpdatePresentMutation,
-  useGetPresentQuery
+  useGetPresentQuery,
+  useJoinPresentMutation
 } = presentationService;

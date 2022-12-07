@@ -1,5 +1,3 @@
-/* eslint-disable react/button-has-type */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import { Button, Card, Col, Row } from 'antd';
 
@@ -10,17 +8,15 @@ const SlicePreview = ({ content }) => (
       bordered={false}
       extra={<Button>Next</Button>}
       style={{
-        height: 600,
+        height: '400px',
         width: '100%'
       }}
     >
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Button ce>Count down</Button>
+          <Button>{`Time: ${content.time}s`}</Button>
         </Col>
-        <Col span={12}>
-          <Button>Next</Button>
-        </Col>
+        <Col span={12}>{/* <Button>Next</Button> */}</Col>
         <Col span={12}>
           <Button block>{content.ansA}</Button>
         </Col>
