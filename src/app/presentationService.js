@@ -14,7 +14,7 @@ export const presentationService = createApi({
       query: (id) => ({ url: `/mypresentation/${id}`, method: 'get' })
     }),
     createPresent: build.mutation({
-      query: (body) => ({ url: '/', method: 'post', data: body })
+      query: (body) => ({ url: '/create', method: 'post', data: body })
     }),
     updatePresent: build.mutation({
       query: (body) => ({ url: '/', method: 'post', data: body })

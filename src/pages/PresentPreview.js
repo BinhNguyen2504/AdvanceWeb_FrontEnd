@@ -46,9 +46,9 @@ const PresentPreview = () => {
               </div>
             ))}
           </Carousel>
-          <Button type='primary' htmlType='submit' className='btn'>
+          {/* <Button type='primary' htmlType='submit' className='btn'>
             <Link to={`/presentation/edit/${id}`}>Update presentation</Link>
-          </Button>
+          </Button> */}
           <Button type='primary' htmlType='submit' className='btn' onClick={handleCreateGame}>
             Start presentation
           </Button>

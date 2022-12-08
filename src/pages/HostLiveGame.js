@@ -23,25 +23,27 @@ const HostLiveGame = () => {
       room: pin,
       msg: currentQuestion
     });
-    setChartData(initChart);
   }, [currentQuestion]);
   useEffect(() => {
     // TODO: Lắng nghe đáp án student
     socket.on('teacher-receiver', (msg) => {
       const index = chartData.findIndex((item) => item.type === msg.ans);
       const newData = [...chartData];
-      console.log(index);
       if ([0, 1, 2, 3].includes(index)) {
         newData[index].answers = chartData[index].answers + 1;
       }
       setChartData([...newData]);
     });
-  }, []);
+  }, [currentQuestion]);
 
   const handleMoveQuestion = () => {
     if (currentQuestion < numberOfQuestion - 1) {
       dispatch(nextQuestion({ id: currentQuestion + 1 }));
+      setChartData(initChart);
     }
+  };
+  const handleFinishGame = () => {
+    console.log('Done');
   };
 
   const config = {
@@ -83,7 +85,7 @@ const HostLiveGame = () => {
               currentQuestion < numberOfQuestion - 1 ? (
                 <Button onClick={handleMoveQuestion}>Next</Button>
               ) : (
-                <Button>Endgame</Button>
+                <Button onClick={handleFinishGame}>Endgame</Button>
               )
             }
             style={{

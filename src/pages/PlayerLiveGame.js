@@ -13,7 +13,7 @@ const PlayerLiveGame = () => {
 
   useEffect(() => {
     socket.on('student-receiver', (msg) => {
-      if (msg < numberOfQuestion - 1) {
+      if (msg < numberOfQuestion) {
         dispatch(nextQuestion({ id: msg }));
       }
     });

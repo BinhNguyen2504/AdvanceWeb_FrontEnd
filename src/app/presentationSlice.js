@@ -1,23 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  title: '',
-  questions: [
-    {
-      question: '',
-      answers: [],
-      answer: ''
-    }
-  ],
-  id: ''
+  presentId: ''
 };
 
 const presentationSlice = createSlice({
   name: 'presentation',
   initialState,
-  reducers: {}
+  reducers: {
+    startEditPresent: (state, action) => {
+      state.presentId = action.payload;
+    },
+    cancelEditPresent: (state) => {
+      state.presentId = '';
+    }
+  }
 });
 
 const presentationReducer = presentationSlice.reducer;
-// export const { loginUser, logoutUser } = presentationSlice.actions;
+export const { startEditPresent, cancelEditPresent } = presentationSlice.actions;
 export default presentationReducer;
