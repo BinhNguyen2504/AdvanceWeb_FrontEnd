@@ -5,7 +5,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Button, Card, Carousel, Col, Row, Space } from 'antd';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import MainLayout from '../../layouts/MainLayout';
+
 import SlicePreview from '../../components/toanntt/SlicePreview';
 import { MyPresent } from './mock';
 import './carousel.css';
@@ -123,56 +123,7 @@ const HostLivePage = () => {
   };
 
   return (
-    <MainLayout>
-      <section className='courses container'>
-        <p className='btn'>Title: Presentation number 1</p>
-        <div className='site-card-border-less-wrapper'>
-          <Card
-            title={question.content}
-            bordered={false}
-            extra={
-              indexQuestion < gameDataRef.current.presentation.questions.length - 1 ? (
-                <Button onClick={next}>Next</Button>
-              ) : (
-                <Button>Endgame</Button>
-              )
-            }
-            style={{
-              height: 600,
-              width: '100%'
-            }}
-          >
-            <ColChart ansData={ansData} />
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <Button block>
-                  A:
-                  {question.ansA}
-                </Button>
-              </Col>
-              <Col span={12}>
-                <Button block>
-                  B:
-                  {question.ansB}
-                </Button>
-              </Col>
-              <Col span={12}>
-                <Button block>
-                  C:
-                  {question.ansC}
-                </Button>
-              </Col>
-              <Col span={12}>
-                <Button block>
-                  D:
-                  {question.ansD}
-                </Button>
-              </Col>
-            </Row>
-          </Card>
-        </div>
-      </section>
-    </MainLayout>
+
   );
 };
 export default HostLivePage;

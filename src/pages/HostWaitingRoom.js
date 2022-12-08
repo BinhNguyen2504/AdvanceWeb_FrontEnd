@@ -46,6 +46,10 @@ const HostWaitingRoom = () => {
     const result = await startGame({ pin, isOpen: false });
     if (result) {
       console.log(result);
+      socket.emit('student-sender', {
+        room: pin,
+        msg: -1
+      });
       navigate('/host/live');
     }
   };

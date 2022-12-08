@@ -9,14 +9,6 @@ import '../carousel.css';
 import ColChart from '../../../components/toanntt/ColChart';
 import { SocketContext } from '../../../context/socket';
 
-const contentStyle = {
-  margin: 0,
-  //   height: '460px',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: '#364d79'
-};
 const PlayerLivePage = () => {
   const counting = useRef(0);
   const location = useLocation();
@@ -68,48 +60,7 @@ const PlayerLivePage = () => {
   }, []);
 
   return (
-    <MainLayout>
-      <section className='courses container'>
-        <p className='btn'>Title: Presentation number 1</p>
-        <div className='site-card-border-less-wrapper'>
-          <Card
-            title={question.content}
-            bordered={false}
-            style={{
-              height: 300,
-              width: '100%'
-            }}
-          >
-            <Row gutter={[16, 16]}>
-              <Col span={12}>
-                <Button block onClick={() => sendAnswer('A')}>
-                  A:
-                  {question.ansA}
-                </Button>
-              </Col>
-              <Col span={12}>
-                <Button block onClick={() => sendAnswer('B')}>
-                  B:
-                  {question.ansB}
-                </Button>
-              </Col>
-              <Col span={12}>
-                <Button block onClick={() => sendAnswer('C')}>
-                  C:
-                  {question.ansC}
-                </Button>
-              </Col>
-              <Col span={12}>
-                <Button block onClick={() => sendAnswer('D')}>
-                  D:
-                  {question.ansD}
-                </Button>
-              </Col>
-            </Row>
-          </Card>
-        </div>
-      </section>
-    </MainLayout>
+
   );
 };
 export default PlayerLivePage;

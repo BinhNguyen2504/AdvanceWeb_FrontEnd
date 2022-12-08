@@ -20,10 +20,13 @@ const authSlice = createSlice({
       state.id = '';
       state.email = '';
       state.username = '';
+    },
+    loginAnonymous: (state, action) => {
+      state.username = action.payload;
     }
   }
 });
 
 const authReducer = authSlice.reducer;
-export const { loginUser, logoutUser } = authSlice.actions;
+export const { loginUser, logoutUser, loginAnonymous } = authSlice.actions;
 export default authReducer;

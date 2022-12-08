@@ -2,6 +2,7 @@
 import { Button, Form, Input, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { loginAnonymous } from '../app/authSlice';
 import { initGame } from '../app/gameSlice';
 import { useJoinPresentMutation } from '../app/presentationService';
 import BasicLayout from '../layouts/BasicLayout';
@@ -20,6 +21,7 @@ const JoinGame = () => {
     if (result) {
       const { name, questions, numberOfQuestion } = result.data;
       await dispatch(initGame({ pin: values.pin, name, questions, numberOfQuestion }));
+      dispatch(loginAnonymous(values.username));
       socket.emit('join-room', {
         name: values.username,
         room: values.pin

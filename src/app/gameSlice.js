@@ -28,10 +28,13 @@ const gameSlice = createSlice({
       state.name = action.payload.name;
       state.questions = action.payload.questions;
       state.numberOfQuestion = action.payload.numberOfQuestion;
+    },
+    nextQuestion(state, action) {
+      state.currentQuestion = action.payload.id;
     }
   }
 });
 
 const gameReducer = gameSlice.reducer;
-export const { initGame } = gameSlice.actions;
+export const { initGame, nextQuestion } = gameSlice.actions;
 export default gameReducer;

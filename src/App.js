@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
@@ -7,7 +7,6 @@ import setAuthHeader from './utils';
 import { useGetProfileQuery } from './app/profileService';
 import { loginUser } from './app/authSlice';
 import { createSocket } from './app/socketSlice';
-// import { SocketContext } from './context/socket';
 
 import GameRoute from './components/GameRoute';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -18,7 +17,7 @@ import GroupList from './pages/GroupList';
 import GroupDetail from './pages/GroupDetail';
 import GroupForm from './pages/GroupForm';
 import Profile from './pages/Profile';
-import ReportSlide from './pages/ReportSlide';
+// import ReportSlide from './pages/ReportSlide';
 import Dashboard from './pages/Dashboard';
 import PresentEdit from './pages/PresentEdit';
 import PresentItem from './pages/PresentItem';
@@ -27,11 +26,12 @@ import JoinGame from './pages/JoinGame';
 import PlayerWaitingRoom from './pages/PlayerWaitingRoom';
 import PresentPreview from './pages/PresentPreview';
 import HostWaitingRoom from './pages/HostWaitingRoom';
+import HostLiveGame from './pages/HostLiveGame';
+import PlayerLiveGame from './pages/PlayerLiveGame';
 
 import './variables.css';
 import './index.css';
 import './App.css';
-import HostLiveGame from './pages/HostLiveGame';
 
 // import JoinGameClient from './pages/Game/JoinGame';
 // import GamePage from './pages/Game/Game';
@@ -45,7 +45,6 @@ import HostLiveGame from './pages/HostLiveGame';
 
 const App = () => {
   const user = localStorage.getItem('token');
-  // const socket = useRef();
   const dispatch = useDispatch();
   if (user) {
     setAuthHeader(user);
@@ -93,6 +92,7 @@ const App = () => {
           {/* <Route path='/toan/test/navi' element={<TestNaviPage />} /> */}
           <Route element={<GameRoute />}>
             <Route path='/player/waiting' element={<PlayerWaitingRoom />} />
+            <Route path='/player/live' element={<PlayerLiveGame />} />
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path='/dashboard' element={<Dashboard />} />
@@ -108,7 +108,7 @@ const App = () => {
             <Route path='/presentation/:id' element={<PresentItem />} />
             <Route path='/host/waiting' element={<HostWaitingRoom />} />
             <Route path='/host/live' element={<HostLiveGame />} />
-            <Route path='/report' element={<ReportSlide />} />
+            {/* <Route path='/report' element={<ReportSlide />} /> */}
           </Route>
           <Route path='*' element={<ErrorPage />} />
         </Routes>
