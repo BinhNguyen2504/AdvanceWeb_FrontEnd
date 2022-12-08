@@ -13,14 +13,6 @@ import ColChart from '../../components/toanntt/ColChart';
 import { SocketContext } from '../../context/socket';
 import axios from 'axios';
 
-const contentStyle = {
-  margin: 0,
-  //   height: '460px',
-  color: '#fff',
-  lineHeight: '160px',
-  textAlign: 'center',
-  background: '#364d79'
-};
 const HostLivePage = () => {
   const socketRef = useRef(useContext(SocketContext));
   const { presentid } = useParams();
@@ -31,7 +23,8 @@ const HostLivePage = () => {
       Authorization: `Bearer ${token}`
     }
   });
-  const updateRoom = (pin, status) => API.put('http://localhost:5001/api/game/updateStatus', {
+  const updateRoom = (pin, status) =>
+    API.put('http://localhost:5001/api/game/updateStatus', {
       pin,
       isOpen: status
     });
@@ -124,7 +117,7 @@ const HostLivePage = () => {
 
       socketRef.current.emit('student-sender', {
         room: gameDataRef.current.pin,
-        msg: indexQuestion + 1,
+        msg: indexQuestion + 1
       });
     }
   };
@@ -137,7 +130,13 @@ const HostLivePage = () => {
           <Card
             title={question.content}
             bordered={false}
-            extra={indexQuestion < gameDataRef.current.presentation.questions.length - 1 ? <Button onClick={next}>Next</Button> : <Button>Endgame</Button>}
+            extra={
+              indexQuestion < gameDataRef.current.presentation.questions.length - 1 ? (
+                <Button onClick={next}>Next</Button>
+              ) : (
+                <Button>Endgame</Button>
+              )
+            }
             style={{
               height: 600,
               width: '100%'

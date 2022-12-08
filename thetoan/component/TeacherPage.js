@@ -1,9 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {
-  teacherGetPresentation,
-  createGame,
-  updateRoom,
-} from '../../API/preRequest';
+import { teacherGetPresentation, createGame, updateRoom } from '../../API/preRequest';
 import { io } from 'socket.io-client';
 export default function TeacherPage() {
   const socket = useRef();
@@ -21,12 +17,12 @@ export default function TeacherPage() {
       socket.current = io('http://localhost:5001');
       socket.current.emit('add-user', 'tranthetoan');
 
-      //Lắng nghe đáp án student
+      //? Lắng nghe đáp án student
       socket.current.on('teacher-receiver', (msg) => {
         setReceive(JSON.stringify(msg));
       });
 
-      //Lắng nghe người tham gia
+      //? Lắng nghe người tham gia
       socket.current.on('join-room-receiver', (msg) => {
         setReceive(msg);
       });
@@ -35,21 +31,21 @@ export default function TeacherPage() {
   }, []);
 
   const create = async () => {
-    // tạo game : trả về
+    //? tạo game : trả về
     i.current = 0;
     const { data } = await createGame({
-      presentationId: presentId,
+      presentationId: presentId
     });
 
-    //danh sách các câu hỏi
+    //? danh sách các câu hỏi
     gameData.current = data.data;
     //setMessage(JSON.stringify(data.data));
 
-    //gọi lên socket tạo phòng
+    //? gọi lên socket tạo phòng
     socket.current.emit('create-room', {
       //  Tên định danh socket - duy nhất - có thể dùng id hoặc user name
       name: 'tranthetoan',
-      room: data.data.pin,
+      room: data.data.pin
     });
     questions.current = data.data.presentation.questions;
     setMessage(JSON.stringify(data.data.pin));
@@ -62,7 +58,7 @@ export default function TeacherPage() {
     //gửi message qua student số thứ tụ câu hỏi
     socket.current.emit('student-sender', {
       room: gameData.current.pin,
-      msg: i.current,
+      msg: i.current
     });
     setQuestion(questions.current[i.current]);
     setMessage(i.current);
@@ -78,7 +74,7 @@ export default function TeacherPage() {
       //
       socket.current.emit('student-sender', {
         room: gameData.current.pin,
-        msg: i.current,
+        msg: i.current
       });
     }
     setReceive('');
@@ -88,7 +84,7 @@ export default function TeacherPage() {
     // để test
     socket.current.emit('student-sender', {
       room: '638b150d3e3d7cf25e187ef2',
-      msg: Math.random(),
+      msg: Math.random()
     });
   };
 
@@ -99,12 +95,7 @@ export default function TeacherPage() {
     <div>
       <h1>Teacher</h1>
       <h1>
-        <input
-          id='username'
-          type='text'
-          value={presentId}
-          onChange={presentIdOnChange}
-        />
+        <input id='username' type='text' value={presentId} onChange={presentIdOnChange} />
       </h1>
       <h1>
         <button onClick={create}>Creat test</button>

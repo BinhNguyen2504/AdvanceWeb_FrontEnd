@@ -4,7 +4,8 @@ const initialState = {
   pin: null,
   name: null,
   questions: [],
-  numberOfQuestion: null
+  numberOfQuestion: null,
+  currentQuestion: 0
 };
 
 // ? Question type:
@@ -23,11 +24,14 @@ const gameSlice = createSlice({
   initialState,
   reducers: {
     initGame(state, action) {
-      // state.socket = action.payload;
+      state.pin = action.payload.pin;
+      state.name = action.payload.name;
+      state.questions = action.payload.questions;
+      state.numberOfQuestion = action.payload.numberOfQuestion;
     }
   }
 });
 
 const gameReducer = gameSlice.reducer;
-export const { intGame } = gameSlice.actions;
+export const { initGame } = gameSlice.actions;
 export default gameReducer;

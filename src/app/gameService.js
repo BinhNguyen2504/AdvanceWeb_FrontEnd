@@ -9,8 +9,11 @@ export const gameService = createApi({
   endpoints: (build) => ({
     createGame: build.mutation({
       query: (body) => ({ url: '/creategame', method: 'post', data: body })
+    }),
+    startGame: build.mutation({
+      query: (body) => ({ url: '/updateStatus', method: 'put', data: body })
     })
   })
 });
 
-export const { useCreateGameMutation } = gameService;
+export const { useCreateGameMutation, useStartGameMutation } = gameService;

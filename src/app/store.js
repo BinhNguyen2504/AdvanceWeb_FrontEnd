@@ -24,7 +24,9 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     // eslint-disable-next-line implicit-arrow-linebreak
-    getDefaultMiddleware().concat(
+    getDefaultMiddleware({
+      serializableCheck: false
+    }).concat(
       authServices.middleware,
       groupServices.middleware,
       profileService.middleware,

@@ -1,28 +1,38 @@
-import { Button, Form, Input } from 'antd';
-import { useSelector } from 'react-redux';
-// import { useNavigate } from 'react-router-dom';
+// import { SmileOutlined } from '@ant-design/icons';
+import { Button, Form, Input, notification } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { initGame } from '../app/gameSlice';
 import { useJoinPresentMutation } from '../app/presentationService';
 import BasicLayout from '../layouts/BasicLayout';
+// import { openNotification } from '../utils';
 
 const JoinGame = () => {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [joinGame, joinGameResult] = useJoinPresentMutation();
+  const [api, contextHolder] = notification.useNotification();
   const { username } = useSelector((state) => state.auth);
+  const { socket } = useSelector((state) => state.socket);
 
   const onFinish = async (values) => {
-    console.log(values);
     const result = await joinGame(values).unwrap();
     if (result) {
-      console.log(result);
-      // navigate('/waiting');
+      const { name, questions, numberOfQuestion } = result.data;
+      await dispatch(initGame({ pin: values.pin, name, questions, numberOfQuestion }));
+      socket.emit('join-room', {
+        name: values.username,
+        room: values.pin
+      });
+      navigate('/player/waiting');
     }
   };
-  const onFinishFailed = () => {};
 
   return (
     <BasicLayout>
+      {contextHolder}
       <section className='form-container'>
-        <Form name='login' layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete='off'>
+        <Form name='login' layout='vertical' onFinish={onFinish} autoComplete='off'>
           <h1>Please enter the code</h1>
           <Form.Item
             label='Nick name'

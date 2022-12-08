@@ -18,3 +18,11 @@ export const getNotNullList = (list) => {
   }
   return list;
 };
+
+export const openNotification = (api, message, description, icon) => {
+  api.open({
+    message,
+    description,
+    icon
+  });
+};
