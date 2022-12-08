@@ -4,15 +4,18 @@ import { useDispatch } from 'react-redux';
 
 import MainLayout from '../layouts/MainLayout';
 import SlicePreview from '../components/SlidePreview';
-import { useGetPresentQuery } from '../app/presentationService';
+import { useDeletePresentMutation, useGetPresentQuery } from '../app/presentationService';
 import { useCreateGameMutation } from '../app/gameService';
 import { initGame } from '../app/gameSlice';
+import { startEditPresent } from '../app/presentationSlice';
 
 const PresentPreview = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [createGame, createGameResult] = useCreateGameMutation();
+  const [createGame] = useCreateGameMutation();
+  const [deletePresent] = useDeletePresentMutation();
+
   const { data, isLoading } = useGetPresentQuery(id, {
     skip: !id
   });
@@ -31,7 +34,13 @@ const PresentPreview = () => {
       navigate('/host/waiting');
     }
   };
-
+  const handleDeletePresentation = async () => {
+    const result = await deletePresent({ id });
+    if (result) {
+      console.log(result);
+      navigate('/presentation');
+    }
+  };
   return (
     <MainLayout>
       {isLoading ? (
@@ -46,10 +55,13 @@ const PresentPreview = () => {
               </div>
             ))}
           </Carousel>
-          {/* <Button type='primary' htmlType='submit' className='btn'>
+          <Button type='primary' className='btn' onClick={() => dispatch(startEditPresent(id))}>
             <Link to={`/presentation/edit/${id}`}>Update presentation</Link>
-          </Button> */}
-          <Button type='primary' htmlType='submit' className='btn' onClick={handleCreateGame}>
+          </Button>
+          <Button type='primary' className='btn' onClick={handleDeletePresentation}>
+            Delete presentation
+          </Button>
+          <Button type='primary' className='btn' onClick={handleCreateGame}>
             Start presentation
           </Button>
         </section>

@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Title from 'antd/es/typography/Title';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
 import { useCreatePresentMutation, useGetPresentQuery } from '../app/presentationService';
 import BasicLayout from '../layouts/BasicLayout';
 import { useNavigate } from 'react-router-dom';
+import { cancelEditPresent } from '../app/presentationSlice';
 
 const initialState = {
   name: 'Presentation',
@@ -35,11 +36,19 @@ const PresentEdit = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const presentId = useSelector((state) => state.presentation.presentId);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [createPresent, createPresentResult] = useCreatePresentMutation();
 
   const { data, isLoading } = useGetPresentQuery(presentId, {
     skip: !presentId
   });
+  useEffect(() => {
+    if (data) {
+      const { name, questions } = data.data;
+      setFormData({ name, questions });
+    }
+    return () => dispatch(cancelEditPresent());
+  }, [data]);
 
   const handleChangeTitle = () => {
     setFormData((form) => ({

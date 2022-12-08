@@ -1,6 +1,7 @@
 import { Button, Card, Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { nextQuestion } from '../app/gameSlice';
 import BasicLayout from '../layouts/BasicLayout';
 
@@ -10,11 +11,14 @@ const PlayerLiveGame = () => {
   const { username } = useSelector((state) => state.auth);
   const [isDisable, setIsDisable] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     socket.on('student-receiver', (msg) => {
       if (msg < numberOfQuestion) {
         dispatch(nextQuestion({ id: msg }));
+      } else {
+        navigate('/');
       }
     });
     setIsDisable(false);

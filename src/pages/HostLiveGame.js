@@ -2,6 +2,7 @@ import { Column } from '@ant-design/plots';
 import { Button, Card, Col, Row } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { nextQuestion } from '../app/gameSlice';
 import BasicLayout from '../layouts/BasicLayout';
 
@@ -15,6 +16,7 @@ const HostLiveGame = () => {
   const { name, questions, currentQuestion, numberOfQuestion, pin } = useSelector((state) => state.game);
   const { socket } = useSelector((state) => state.socket);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [chartData, setChartData] = useState(initChart);
 
   useEffect(() => {
@@ -43,7 +45,11 @@ const HostLiveGame = () => {
     }
   };
   const handleFinishGame = () => {
-    console.log('Done');
+    socket.emit('student-sender', {
+      room: pin,
+      msg: currentQuestion + 1
+    });
+    navigate('/presentation');
   };
 
   const config = {

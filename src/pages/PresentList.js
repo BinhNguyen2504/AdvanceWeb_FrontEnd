@@ -8,7 +8,6 @@ import { useGetListPresentQuery } from '../app/presentationService';
 
 const PresentList = () => {
   const { data, isLoading } = useGetListPresentQuery();
-  console.log(data);
 
   return (
     <Content>
