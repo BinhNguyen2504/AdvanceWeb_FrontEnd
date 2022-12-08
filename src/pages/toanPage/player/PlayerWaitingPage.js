@@ -10,6 +10,7 @@ import { SocketContext } from '../../../context/socket';
 import SlicePreview from '../../../components/toanntt/SlicePreview';
 import { MyPresent } from '../mock';
 import '../carousel.css';
+import { BASE_URL } from '../../../constants';
 
 const contentStyle = {
   margin: 0,
@@ -29,7 +30,7 @@ const PlayerWaitingPage = () => {
   const { gamepin } = useParams();
   const token = localStorage.getItem('token');
   const API = axios.create({
-    baseURL: 'http://localhost:5001/api',
+    baseURL: BASE_URL,
     headers: {
       Authorization: `Bearer ${token}`
     }

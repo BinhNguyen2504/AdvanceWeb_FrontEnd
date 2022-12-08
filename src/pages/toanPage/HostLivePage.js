@@ -12,19 +12,20 @@ import './carousel.css';
 import ColChart from '../../components/toanntt/ColChart';
 import { SocketContext } from '../../context/socket';
 import axios from 'axios';
+import { BASE_URL } from '../../constants';
 
 const HostLivePage = () => {
   const socketRef = useRef(useContext(SocketContext));
   const { presentid } = useParams();
   const token = localStorage.getItem('token');
   const API = axios.create({
-    baseURL: 'http://localhost:5001/api',
+    baseURL: BASE_URL,
     headers: {
       Authorization: `Bearer ${token}`
     }
   });
   const updateRoom = (pin, status) =>
-    API.put('http://localhost:5001/api/game/updateStatus', {
+    API.put(`${BASE_URL}/game/updateStatus`, {
       pin,
       isOpen: status
     });

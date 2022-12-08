@@ -8,8 +8,9 @@
 import React, { useEffect, useState, useRef } from "react";
 // import { useNavigate } from "react-router-dom";
 import socketIOClient from 'socket.io-client';
+import { BASE_URL } from "../../constants";
 
-const serverHost = 'http://localhost:3000';
+const serverHost = BASE_URL;
 
 function JoinGameClient() {
 //   const navigate = useNavigate();
