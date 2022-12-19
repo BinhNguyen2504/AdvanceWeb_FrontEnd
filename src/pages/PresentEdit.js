@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import Title from 'antd/es/typography/Title';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
-import { useCreatePresentMutation, useGetPresentQuery } from '../app/presentationService';
+import { useCreatePresentMutation, useGetPresentQuery, useUpdatePresentMutation } from '../app/presentationService';
 import BasicLayout from '../layouts/BasicLayout';
 import { useNavigate } from 'react-router-dom';
 import { cancelEditPresent } from '../app/presentationSlice';
@@ -37,7 +37,8 @@ const PresentEdit = () => {
   const presentId = useSelector((state) => state.presentation.presentId);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [createPresent, createPresentResult] = useCreatePresentMutation();
+  const [createPresent] = useCreatePresentMutation();
+  const [updatePresent] = useUpdatePresentMutation();
 
   const { data, isLoading } = useGetPresentQuery(presentId, {
     skip: !presentId
@@ -50,7 +51,7 @@ const PresentEdit = () => {
     return () => dispatch(cancelEditPresent());
   }, [data]);
 
-  const handleChangeTitle = () => {
+  const handleChangeTitle = (value) => {
     setFormData((form) => ({
       questions: form.questions,
       name: value
@@ -83,11 +84,12 @@ const PresentEdit = () => {
     setCurrentIndex(formData.questions.length - 1);
   };
   const handleSubmit = async () => {
-    const result = await createPresent(formData);
-    if (result) {
-      console.log(result);
-      navigate('/presentation');
+    if (presentId) {
+      await updatePresent(formData);
+    } else {
+      await createPresent(formData);
     }
+    navigate('/presentation');
   };
 
   return (
@@ -192,10 +194,15 @@ const PresentEdit = () => {
                     />
                   </Form>
                 </Card>
-
-                <Button type='primary' className='btn' onClick={handleSubmit}>
-                  Create Presentation
-                </Button>
+                {presentId ? (
+                  <Button type='primary' className='btn' onClick={handleSubmit}>
+                    Edit Presentation
+                  </Button>
+                ) : (
+                  <Button type='primary' className='btn' onClick={handleSubmit}>
+                    Create Presentation
+                  </Button>
+                )}
               </div>
             </Col>
           </Row>
