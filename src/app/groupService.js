@@ -3,7 +3,7 @@ import { axiosBaseQuery } from '../api/client';
 
 export const groupServices = createApi({
   reducerPath: 'groupServices',
-  refetchOnFocus: false,
+  refetchOnFocus: true,
   refetchOnReconnect: false,
   baseQuery: axiosBaseQuery({ baseUrl: '' }),
   endpoints: (build) => ({
@@ -11,7 +11,7 @@ export const groupServices = createApi({
       query: () => ({ url: '/user/profile', method: 'get' })
     }),
     getGroupDetail: build.query({
-      query: () => ({ url: '/group/:id', method: 'get' })
+      query: (id) => ({ url: `/group/${id}`, method: 'get' })
     }),
     createGroup: build.mutation({
       query: (body) => ({ url: '/group', method: 'post', data: body })

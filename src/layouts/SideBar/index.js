@@ -30,10 +30,10 @@ const SideBar = () => {
           <i className='fas fa-chalkboard-user' />
           <span>Presentation</span>
         </Link>
-        <Link to='/presentation/1/edit'>
+        {/* <Link to='/dashboard'>
           <i className='fas fa-headset' />
           <span>Contact us</span>
-        </Link>
+        </Link> */}
       </nav>
     </div>
   );

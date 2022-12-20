@@ -3,25 +3,22 @@ import { Button, Form, Input, Layout, notification } from 'antd';
 import { useCreateGroupMutation } from '../app/groupService';
 
 import MainLayout from '../layouts/MainLayout';
+import { openNotification } from '../utils';
 
 const { Content } = Layout;
 
 const GroupForm = () => {
-  const [createGroup, createGroupResult] = useCreateGroupMutation();
+  const [createGroup] = useCreateGroupMutation();
   const [api, contextHolder] = notification.useNotification();
+  const [form] = Form.useForm();
 
-  const openNotification = () => {
-    api.open({
-      message: 'Create group successfully',
-      icon: <SmileOutlined style={{ color: '#108ee9' }} />
-    });
-  };
   const onFinish = async (values) => {
-    console.log(values);
-    // const result = await createGroup(values).unwrap();
-    // console.log(result);
-    // console.log(createGroupResult);
-    openNotification();
+    const result = await createGroup(values).unwrap();
+    if (!result.error) {
+      console.log(result);
+      form.resetFields();
+      openNotification(api, 'Create group successfully', result.error, <SmileOutlined style={{ color: '#108ee9' }} />);
+    }
   };
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
@@ -32,7 +29,14 @@ const GroupForm = () => {
       <MainLayout>
         {contextHolder}
         <section className='form-container container'>
-          <Form name='login' layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete='off'>
+          <Form
+            form={form}
+            name='login'
+            layout='vertical'
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            autoComplete='off'
+          >
             <h3>Create new group</h3>
             <Form.Item
               label='Group name'
