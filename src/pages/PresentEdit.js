@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import Title from 'antd/es/typography/Title';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Col, Form, Input, Row, Select } from 'antd';
+import Title from 'antd/es/typography/Title';
+
 import { useCreatePresentMutation, useGetPresentQuery, useUpdatePresentMutation } from '../app/presentationService';
-import BasicLayout from '../layouts/BasicLayout';
-import { useNavigate } from 'react-router-dom';
 import { cancelEditPresent } from '../app/presentationSlice';
+import BasicLayout from '../layouts/BasicLayout';
 
 const initialState = {
   name: 'Presentation',

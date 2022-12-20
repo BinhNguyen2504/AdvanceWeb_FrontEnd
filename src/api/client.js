@@ -19,10 +19,8 @@ const axiosBaseQuery =
       const err = axiosError;
       console.log('Axios error: ', err);
       return {
-        error: {
-          code: err.code,
-          data: err.message
-        }
+        code: err.code,
+        data: err.response.data
       };
     }
   };

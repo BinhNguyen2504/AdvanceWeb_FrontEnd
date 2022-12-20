@@ -8,9 +8,7 @@ const setAuthHeader = (token) => {
     delete axiosClient.defaults.headers.common['Authorization'];
   }
 };
-export default setAuthHeader;
-
-export const getNotNullList = (list) => {
+const getNotNullList = (list) => {
   if (list === undefined) return [];
   if (!Array.isArray(list)) return [];
   if (!list.length || list.length <= 0) {
@@ -19,10 +17,12 @@ export const getNotNullList = (list) => {
   return list;
 };
 
-export const openNotification = (api, message, description, icon) => {
+const openNotification = (api, message, description, icon) => {
   api.open({
     message,
     description,
     icon
   });
 };
+
+export { setAuthHeader, getNotNullList, openNotification };

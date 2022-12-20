@@ -31,7 +31,7 @@ const GroupForm = () => {
     <Content>
       <MainLayout>
         {contextHolder}
-        <section className='form-container'>
+        <section className='form-container container'>
           <Form name='login' layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete='off'>
             <h3>Create new group</h3>
             <Form.Item

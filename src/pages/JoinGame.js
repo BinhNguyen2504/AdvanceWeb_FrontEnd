@@ -11,7 +11,7 @@ import BasicLayout from '../layouts/BasicLayout';
 const JoinGame = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [joinGame, joinGameResult] = useJoinPresentMutation();
+  const [joinGame] = useJoinPresentMutation();
   const [api, contextHolder] = notification.useNotification();
   const { username } = useSelector((state) => state.auth);
   const { socket } = useSelector((state) => state.socket);

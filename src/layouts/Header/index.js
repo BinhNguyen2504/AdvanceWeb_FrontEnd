@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../../app/authService';
 import { logoutUser } from '../../app/authSlice';
-import setAuthHeader from '../../utils';
+import { setAuthHeader } from '../../utils';
 
 import './styles.css';
 

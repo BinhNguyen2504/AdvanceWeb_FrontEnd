@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 
-import setAuthHeader from './utils';
+import { setAuthHeader } from './utils';
 import { useGetProfileQuery } from './app/profileService';
 import { loginUser } from './app/authSlice';
 import { createSocket } from './app/socketSlice';
@@ -33,16 +33,6 @@ import './variables.css';
 import './index.css';
 import './App.css';
 
-// import JoinGameClient from './pages/Game/JoinGame';
-// import GamePage from './pages/Game/Game';
-// import PlayerScreen from './pages/Game/ScreenPlayer';
-// import PresentListPage from './pages/PresentList';
-// import WaitingHostPage from './pages/toanPage/WaitingHostPage';
-// import HostLivePage from './pages/toanPage/HostLivePage';
-// import TestNaviPage from './pages/toanPage/testPassNavigationPage';
-// import PlayerWaitingPage from './pages/toanPage/player/PlayerWaitingPage';
-// import PlayerLivePage from './pages/toanPage/player/PlayerLivePage';
-
 const App = () => {
   const user = localStorage.getItem('token');
   const dispatch = useDispatch();
@@ -56,7 +46,7 @@ const App = () => {
   // ? Load user info
   useEffect(() => {
     async function loadUser() {
-      if (data) {
+      if (data && data.data) {
         const { email, username, _id } = data.data;
         await dispatch(loginUser({ email, username, id: _id }));
       } else {
@@ -82,14 +72,6 @@ const App = () => {
           <Route index element={<JoinGame />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<RegisterPage />} />
-          {/* <Route path='/game/:id' element={<GamePage />} /> */}
-          {/* <Route path='/join' element={<JoinGameClient />} /> */}
-          {/* <Route path='/game/player/:pin/:userid' element={<PlayerScreen />} /> */}
-          {/* <Route path='/toan/presentation/host/waiting/:presentid' element={<WaitingHostPage />} /> */}
-          {/* <Route path='/toan/presentation/host/live/:presentid' element={<HostLivePage />} /> */}
-          {/* <Route path='/toan/presentation/player/waiting/:gamepin' element={<PlayerWaitingPage />} /> */}
-          {/* <Route path='/toan/presentation/player/live/:gamepin' element={<PlayerLivePage />} /> */}
-          {/* <Route path='/toan/test/navi' element={<TestNaviPage />} /> */}
           <Route element={<GameRoute />}>
             <Route path='/player/waiting' element={<PlayerWaitingRoom />} />
             <Route path='/player/live' element={<PlayerLiveGame />} />
@@ -100,7 +82,6 @@ const App = () => {
             <Route path='/groups' element={<GroupList />} />
             <Route path='/groups/:id' element={<GroupDetail />} />
             <Route path='/groups/create' element={<GroupForm />} />
-
             <Route path='/presentation' element={<PresentList />} />
             <Route path='/presentation/create' element={<PresentEdit />} />
             <Route path='/presentation/preview/:id' element={<PresentPreview />} />

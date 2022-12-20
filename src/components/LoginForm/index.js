@@ -9,7 +9,7 @@ const LoginForm = ({ onFinish, onFinishFailed, isLoading }) => {
   };
 
   return (
-    <section className='form-container container'>
+    <section className='form-container'>
       <Form name='login' layout='vertical' onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete='off'>
         <h3>Login to your account</h3>
         <Form.Item label='Email' name='email' rules={[{ required: true, message: 'Please input your email address!' }]}>
@@ -18,7 +18,10 @@ const LoginForm = ({ onFinish, onFinishFailed, isLoading }) => {
         <Form.Item
           label='Password'
           name='password'
-          rules={[{ required: true, message: 'Please input your password!' }]}
+          rules={[
+            { required: true, message: 'Please input your password!' },
+            { min: 8, message: 'Password must be at least 8 characters' }
+          ]}
         >
           <Input.Password placeholder='Password' type='password' required className='box' />
         </Form.Item>
@@ -37,11 +40,7 @@ const LoginForm = ({ onFinish, onFinishFailed, isLoading }) => {
             Login with Google
           </Button>
         </Form.Item>
-        <div className='divider'>
-          <div className='divider-left' />
-          <span>OR</span>
-          <div className='divider-right' />
-        </div>
+        <div className='divider' />
         <Form.Item>
           <Link to='/signup'>Do not have account</Link>
         </Form.Item>
