@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLogoutMutation } from '../../app/authService';
 import { logoutUser } from '../../app/authSlice';
+import { BASE_URL } from '../../constants';
 import { setAuthHeader } from '../../utils';
 
 import './styles.css';
@@ -38,6 +39,7 @@ const Header = () => {
   };
   const handleLogout = async () => {
     await logout().unwrap();
+    window.open(`${BASE_URL}/user/logout`, '_self');
     localStorage.removeItem('token');
     dispatch(logoutUser());
     navigate('/login');

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../app/authService';
 import { loginUser } from '../app/authSlice';
 import LoginForm from '../components/LoginForm';
+import { BASE_URL } from '../constants';
 import BasicLayout from '../layouts/BasicLayout';
 import { openNotification, setAuthHeader } from '../utils';
 
@@ -38,11 +39,13 @@ const LoginPage = () => {
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
-
+  const googleLogin = () => {
+    window.open(`${BASE_URL}/user/auth/google/callback`, '_self');
+  };
   return (
     <BasicLayout>
       {contextHolder}
-      <LoginForm onFinish={onFinish} onFinishFailed={onFinishFailed} isLoading={isLoading} />
+      <LoginForm onFinish={onFinish} onFinishFailed={onFinishFailed} isLoading={isLoading} googleLogin={googleLogin} />
     </BasicLayout>
   );
 };

@@ -32,6 +32,8 @@ import PlayerLiveGame from './pages/PlayerLiveGame';
 import './variables.css';
 import './index.css';
 import './App.css';
+import { BASE_URL } from './constants';
+import { axiosClient } from './api/client';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -50,7 +52,17 @@ const App = () => {
         const { email, username, _id } = data.data;
         await dispatch(loginUser({ email, username, id: _id }));
       } else {
-        setAuthHeader(null);
+        const url = `${BASE_URL}/user/login/success`;
+        const result = await axiosClient.get(url, { withCredentials: true });
+        const { email, username, _id } = result.data.data.user;
+        const { token } = result.data.data;
+        if (token) {
+          setAuthHeader(result.data.data.token);
+          localStorage.setItem('token', result.data.data.token);
+          await dispatch(loginUser({ email, username, id: _id }));
+        } else {
+          setAuthHeader(null);
+        }
       }
     }
     loadUser();
