@@ -3,7 +3,7 @@ import { axiosBaseQuery } from '../api/client';
 
 export const presentationService = createApi({
   reducerPath: 'presentationService',
-  refetchOnFocus: true,
+  refetchOnFocus: false,
   refetchOnReconnect: false,
   baseQuery: axiosBaseQuery({ baseUrl: '/presentation' }),
   endpoints: (build) => ({

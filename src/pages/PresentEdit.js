@@ -60,33 +60,51 @@ const PresentEdit = () => {
   };
   const handleChangeQuestion = (e) => {
     const newData = { ...formData };
-    newData.questions[currentIndex].content = e.target.value;
+    const questions = [...newData.questions];
+    const currentQuestion = { ...newData.questions[currentIndex] };
+    currentQuestion.content = e.target.value;
+    questions[currentIndex] = currentQuestion;
+    newData.questions = questions;
     setFormData(newData);
   };
   const handleChangeAnswer = (e, type) => {
     const newData = { ...formData };
-    newData.questions[currentIndex][type] = e.target.value;
+    const questions = [...newData.questions];
+    const currentQuestion = { ...newData.questions[currentIndex] };
+    currentQuestion[type] = e.target.value;
+    questions[currentIndex] = currentQuestion;
+    newData.questions = questions;
     setFormData(newData);
   };
   const handleChangeTime = (value) => {
     const newData = { ...formData };
-    newData.questions[currentIndex].time = value;
+    const questions = [...newData.questions];
+    const currentQuestion = { ...newData.questions[currentIndex] };
+    currentQuestion.time = value;
+    questions[currentIndex] = currentQuestion;
+    newData.questions = questions;
     setFormData(newData);
   };
   const handleChangeKey = (value) => {
     const newData = { ...formData };
-    newData.questions[currentIndex].trueAns = value;
+    const questions = [...newData.questions];
+    const currentQuestion = { ...newData.questions[currentIndex] };
+    currentQuestion.trueAns = value;
+    questions[currentIndex] = currentQuestion;
+    newData.questions = questions;
     setFormData(newData);
   };
   const handleCreateNewSlide = () => {
     const newData = { ...formData };
-    newData.questions.push({ ...initialQuestion });
+    const questions = [...newData.questions];
+    questions.push({ ...initialQuestion });
+    newData.questions = questions;
     setFormData(newData);
     setCurrentIndex(formData.questions.length - 1);
   };
   const handleSubmit = async () => {
     if (presentId) {
-      await updatePresent(formData);
+      await updatePresent({ questions: formData.questions });
     } else {
       await createPresent(formData);
     }
@@ -102,12 +120,13 @@ const PresentEdit = () => {
           <Row>
             <Col span={6}>
               <h1>Slide list</h1>
-              {formData.questions.map((ques, index) => (
-                // eslint-disable-next-line react/no-array-index-key
-                <Button key={index} style={{ width: '90%' }} onClick={() => setCurrentIndex(index)}>
-                  {ques.content}
-                </Button>
-              ))}
+              {Array.isArray(formData.questions) &&
+                formData.questions.map((ques, index) => (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <Button key={index} style={{ width: '90%' }} onClick={() => setCurrentIndex(index)}>
+                    {ques.content}
+                  </Button>
+                ))}
             </Col>
             <Col span={18}>
               <div className='site-card-border-less-wrapper'>

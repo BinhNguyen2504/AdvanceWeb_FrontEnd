@@ -54,12 +54,14 @@ const App = () => {
       } else {
         const url = `${BASE_URL}/user/login/success`;
         const result = await axiosClient.get(url, { withCredentials: true });
-        const { email, username, _id } = result.data.data.user;
-        const { token } = result.data.data;
-        if (token) {
-          setAuthHeader(result.data.data.token);
-          localStorage.setItem('token', result.data.data.token);
-          await dispatch(loginUser({ email, username, id: _id }));
+        if (result.data.data !== 'logout success') {
+          const { email, username, _id } = result.data.data.user;
+          const { token } = result.data.data;
+          if (token) {
+            setAuthHeader(result.data.data.token);
+            localStorage.setItem('token', result.data.data.token);
+            await dispatch(loginUser({ email, username, id: _id }));
+          }
         } else {
           setAuthHeader(null);
         }
