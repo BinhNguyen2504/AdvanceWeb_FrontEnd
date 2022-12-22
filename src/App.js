@@ -32,7 +32,7 @@ import PlayerLiveGame from './pages/PlayerLiveGame';
 import './variables.css';
 import './index.css';
 import './App.css';
-import { BASE_URL } from './constants';
+import { BASE_URL, SOCKET_URL } from './constants';
 import { axiosClient } from './api/client';
 
 const App = () => {
@@ -72,7 +72,7 @@ const App = () => {
 
   // ? Add connect socket io
   useEffect(() => {
-    const socket = io('http://localhost:5001');
+    const socket = io(SOCKET_URL);
     dispatch(createSocket(socket));
     // return () => socket.disconnect();
   }, [dispatch]);
