@@ -9,6 +9,7 @@ const PlayerWaitingRoom = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.body.requestFullscreen();
     socket.on('student-receiver', (msg) => {
       if (msg === -1) navigate('/player/live');
     });

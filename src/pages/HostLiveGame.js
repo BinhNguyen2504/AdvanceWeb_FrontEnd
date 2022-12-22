@@ -13,20 +13,32 @@ const HostLiveGame = () => {
     { type: 'C', answers: 0 },
     { type: 'D', answers: 0 }
   ];
-  const { name, questions, currentQuestion, numberOfQuestion, pin } = useSelector((state) => state.game);
-  const { socket } = useSelector((state) => state.socket);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { name, questions, currentQuestion, numberOfQuestion, pin } = useSelector((state) => state.game);
+  const { socket } = useSelector((state) => state.socket);
   const [chartData, setChartData] = useState(initChart);
+  const [counter, setCounter] = useState(questions[currentQuestion].time);
 
+  useEffect(() => {
+    document.body.requestFullscreen();
+    return () => document.exitFullscreen();
+  }, []);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (counter > 0) {
+        setCounter((prev) => prev - 1);
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [counter]);
   useEffect(() => {
     // TODO: Gửi message qua student số thứ tự câu hỏi
     socket.emit('student-sender', {
       room: pin,
       msg: currentQuestion
     });
-  }, [currentQuestion]);
-  useEffect(() => {
     // TODO: Lắng nghe đáp án student
     socket.on('teacher-receiver', (msg) => {
       const index = chartData.findIndex((item) => item.type === msg.ans);
@@ -36,6 +48,7 @@ const HostLiveGame = () => {
       }
       setChartData([...newData]);
     });
+    setCounter(questions[currentQuestion].time);
   }, [currentQuestion]);
 
   const handleMoveQuestion = () => {
@@ -89,9 +102,13 @@ const HostLiveGame = () => {
             bordered={false}
             extra={
               currentQuestion < numberOfQuestion - 1 ? (
-                <Button onClick={handleMoveQuestion}>Next</Button>
+                <Button onClick={handleMoveQuestion} disabled={counter > 0}>
+                  Next
+                </Button>
               ) : (
-                <Button onClick={handleFinishGame}>Endgame</Button>
+                <Button onClick={handleFinishGame} disabled={counter > 0}>
+                  Endgame
+                </Button>
               )
             }
             style={{
@@ -102,6 +119,10 @@ const HostLiveGame = () => {
             <Column {...config} height={300} />
             <div style={{ marginTop: '100px' }} />
             <Row gutter={[16, 16]}>
+              <Col span={24}>
+                Time:
+                {counter}
+              </Col>
               <Col span={12}>
                 <Button block>{`A: ${questions[currentQuestion].ansA}`}</Button>
               </Col>

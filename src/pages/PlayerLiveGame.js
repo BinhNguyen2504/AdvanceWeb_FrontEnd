@@ -10,9 +10,22 @@ const PlayerLiveGame = () => {
   const { socket } = useSelector((state) => state.socket);
   const { username } = useSelector((state) => state.auth);
   const [isDisable, setIsDisable] = useState(false);
+  const [counter, setCounter] = useState(questions[currentQuestion].time);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (counter > 0) {
+        setCounter((prev) => prev - 1);
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [counter]);
+  useEffect(() => {
+    document.body.requestFullscreen();
+    return () => document.exitFullscreen();
+  }, []);
   useEffect(() => {
     socket.on('student-receiver', (msg) => {
       if (msg < numberOfQuestion) {
@@ -21,6 +34,7 @@ const PlayerLiveGame = () => {
         navigate('/');
       }
     });
+    setCounter(questions[currentQuestion].time);
     setIsDisable(false);
   }, [currentQuestion]);
 
@@ -46,23 +60,27 @@ const PlayerLiveGame = () => {
             }}
           >
             <Row gutter={[16, 16]}>
+              <Col span={24}>
+                Time:
+                {counter}
+              </Col>
               <Col span={12}>
-                <Button block onClick={() => sendAnswer('A')} disabled={isDisable}>
+                <Button block onClick={() => sendAnswer('A')} disabled={isDisable || counter <= 0}>
                   {`A: ${questions[currentQuestion].ansA}`}
                 </Button>
               </Col>
               <Col span={12}>
-                <Button block onClick={() => sendAnswer('B')} disabled={isDisable}>
+                <Button block onClick={() => sendAnswer('B')} disabled={isDisable || counter <= 0}>
                   {`B: ${questions[currentQuestion].ansB}`}
                 </Button>
               </Col>
               <Col span={12}>
-                <Button block onClick={() => sendAnswer('C')} disabled={isDisable}>
+                <Button block onClick={() => sendAnswer('C')} disabled={isDisable || counter <= 0}>
                   {`C: ${questions[currentQuestion].ansC}`}
                 </Button>
               </Col>
               <Col span={12}>
-                <Button block onClick={() => sendAnswer('D')} disabled={isDisable}>
+                <Button block onClick={() => sendAnswer('D')} disabled={isDisable || counter <= 0}>
                   {`D: ${questions[currentQuestion].ansD}`}
                 </Button>
               </Col>

@@ -1,12 +1,12 @@
-// import { SmileOutlined } from '@ant-design/icons';
 import { Button, Form, Input, notification } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { SmileOutlined } from '@ant-design/icons';
 import { loginAnonymous } from '../app/authSlice';
 import { initGame } from '../app/gameSlice';
 import { useJoinPresentMutation } from '../app/presentationService';
+import { openNotification } from '../utils';
 import BasicLayout from '../layouts/BasicLayout';
-// import { openNotification } from '../utils';
 
 const JoinGame = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const JoinGame = () => {
 
   const onFinish = async (values) => {
     const result = await joinGame(values).unwrap();
-    if (result) {
+    if (result.success) {
       const { name, questions, numberOfQuestion } = result.data;
       await dispatch(initGame({ pin: values.pin, name, questions, numberOfQuestion }));
       dispatch(loginAnonymous(values.username));
@@ -27,6 +27,8 @@ const JoinGame = () => {
         room: values.pin
       });
       navigate('/player/waiting');
+    } else {
+      openNotification(api, result.error, '', <SmileOutlined style={{ color: '#108ee9' }} />);
     }
   };
 
