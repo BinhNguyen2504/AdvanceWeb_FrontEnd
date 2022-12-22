@@ -1125,7 +1125,6 @@ section {
   color: var(--black);
   margin-top: 1rem;
   z-index: 1000;
-  /* padding-bottom: 9.5rem; */
 }
 
 .footer span {
@@ -1203,7 +1202,6 @@ section {
   }
 }
 
-// thien toan
 .ant-carousel .slick-slide h3 {
   color: #fff;
 }
