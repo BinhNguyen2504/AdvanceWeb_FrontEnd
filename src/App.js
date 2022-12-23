@@ -34,6 +34,8 @@ import './index.css';
 import './App.css';
 import { BASE_URL, SOCKET_URL } from './constants';
 import { axiosClient } from './api/client';
+import ForgotPasswordPage from './pages/ForgotPassword';
+import ResetPasswordPage from './pages/ResetPassword';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -86,6 +88,8 @@ const App = () => {
           <Route index element={<JoinGame />} />
           <Route path='/login' element={<LoginPage />} />
           <Route path='/signup' element={<RegisterPage />} />
+          <Route path='/forgotpassword' element={<ForgotPasswordPage />} />
+          <Route path='/resetpassword/:token' element={<ResetPasswordPage />} />
           <Route element={<GameRoute />}>
             <Route path='/player/waiting' element={<PlayerWaitingRoom />} />
             <Route path='/player/live' element={<PlayerLiveGame />} />

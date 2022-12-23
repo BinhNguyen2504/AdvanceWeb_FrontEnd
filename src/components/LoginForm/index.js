@@ -36,7 +36,10 @@ const LoginForm = ({ onFinish, onFinishFailed, googleLogin, isLoading }) => (
       </Form.Item>
       <div className='divider' />
       <Form.Item>
-        <Link to='/signup'>Do not have account</Link>
+        <Link to='/signup'>Do not have account?</Link>
+      </Form.Item>
+      <Form.Item>
+        <Link to='/forgotpassword'>Forgotten password?</Link>
       </Form.Item>
     </Form>
   </section>

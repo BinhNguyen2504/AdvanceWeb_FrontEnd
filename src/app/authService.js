@@ -15,8 +15,20 @@ export const authServices = createApi({
     }),
     logout: build.mutation({
       query: () => ({ url: '/logout', method: 'post' })
+    }),
+    forgotPassword: build.mutation({
+      query: (body) => ({ url: '/forgotpassword', method: 'post', data: body })
+    }),
+    resetPassword: build.mutation({
+      query: (body) => ({ url: `/resetpassword/${body.token}`, method: 'put', data: { password: body.password } })
     })
   })
 });
 
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation } = authServices;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useLogoutMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation
+} = authServices;
