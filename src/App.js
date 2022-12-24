@@ -39,7 +39,7 @@ import ForgotPasswordPage from './pages/ForgotPassword';
 import ResetPasswordPage from './pages/ResetPassword';
 import CreateGroupPage from './pages/groups/CreateGroup';
 import GroupPage from './pages/groups/GroupPage';
-import GroupDetailPage from './pages/groups/GroupDetailPage';
+import GroupDetailPage from './pages/groups/GroupDetailPage2';
 
 const App = () => {
   const user = localStorage.getItem('token');

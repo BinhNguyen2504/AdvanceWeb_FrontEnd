@@ -11,7 +11,7 @@ import network from '../../utils/network';
 
 const { Content } = Layout;
 
-const GroupDetailPage = () => {
+const GroupDetailPageOld = () => {
   //   const { data, isLoading } = useGetListGroupQuery();
   //   const socketRef = useRef(useContext(SocketContext));
   //   const location = useLocation();
@@ -57,4 +57,4 @@ const GroupDetailPage = () => {
   );
 };
 
-export default GroupDetailPage;
+export default GroupDetailPageOld;

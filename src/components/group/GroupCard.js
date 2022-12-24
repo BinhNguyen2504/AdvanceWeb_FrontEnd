@@ -24,7 +24,7 @@ const GroupCard = ({ data }) => {
         {data.member.length}
       </h5>
       <p className='title'>
-        Owner: 
+        Owner:
         {data.owner.name}
       </p>
       <Link to={`/toan/groups/${data._id}`} className='inline-btn'>
