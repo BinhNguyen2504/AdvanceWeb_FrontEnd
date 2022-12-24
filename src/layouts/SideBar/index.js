@@ -22,7 +22,7 @@ const SideBar = () => {
           <i className='fas fa-home' />
           <span>Dashboard</span>
         </Link>
-        <Link to='/groups'>
+        <Link to='/toan/groups'>
           <i className='fas fa-chalkboard-user' />
           <span>Groups</span>
         </Link>

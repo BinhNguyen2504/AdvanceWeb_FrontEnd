@@ -1,12 +1,13 @@
 import { Layout } from 'antd';
 import { Link } from 'react-router-dom';
-import { useGetListGroupQuery } from '../app/groupService';
-import GroupItem from '../components/GroupItem';
-import MainLayout from '../layouts/MainLayout';
+import { useGetListGroupQuery } from '../../app/groupService';
+import GroupCard from '../../components/group/GroupCard';
+import GroupItem from '../../components/GroupItem';
+import MainLayout from '../../layouts/MainLayout';
 
 const { Content } = Layout;
 
-const GroupList = () => {
+const GroupPage = () => {
   const { data, isLoading } = useGetListGroupQuery();
 
   return (
@@ -22,8 +23,9 @@ const GroupList = () => {
               Joined groups
             </h1>
             <div className='box-container'>
-              {data.data.groups.map((group) => (
-                <GroupItem key={group.id} name={group.groupName} id={group.id} />
+              {data.data.map((group) => (
+                // <GroupItem key={group.id} name={group.groupName} id={group.id} />
+                <GroupCard key={group.id} data={group} />
               ))}
             </div>
             <br />
@@ -31,7 +33,7 @@ const GroupList = () => {
               Owner groups
             </h1>
             <div className='box-container'>
-              {data.data.ownGroups.map((group) => (
+              {data.data.map((group) => (
                 <GroupItem key={group.id} name={group.groupName} id={group.id} />
               ))}
             </div>
@@ -44,4 +46,4 @@ const GroupList = () => {
   );
 };
 
-export default GroupList;
+export default GroupPage;

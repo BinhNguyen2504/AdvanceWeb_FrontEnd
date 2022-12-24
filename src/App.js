@@ -13,9 +13,9 @@ import ProtectedRoute from './components/ProtectedRoute';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import ErrorPage from './pages/404';
-import GroupList from './pages/GroupList';
+// import GroupList from './pages/GroupList';
 import GroupDetail from './pages/GroupDetail';
-import GroupForm from './pages/GroupForm';
+// import GroupForm from './pages/GroupForm';
 import Profile from './pages/Profile';
 // import ReportSlide from './pages/ReportSlide';
 import Dashboard from './pages/Dashboard';
@@ -32,10 +32,14 @@ import PlayerLiveGame from './pages/PlayerLiveGame';
 import './variables.css';
 import './index.css';
 import './App.css';
+
 import { BASE_URL, SOCKET_URL } from './constants';
 import { axiosClient } from './api/client';
 import ForgotPasswordPage from './pages/ForgotPassword';
 import ResetPasswordPage from './pages/ResetPassword';
+import CreateGroupPage from './pages/groups/CreateGroup';
+import GroupPage from './pages/groups/GroupPage';
+import GroupDetailPage from './pages/groups/GroupDetailPage';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -90,6 +94,7 @@ const App = () => {
           <Route path='/signup' element={<RegisterPage />} />
           <Route path='/forgotpassword' element={<ForgotPasswordPage />} />
           <Route path='/resetpassword/:token' element={<ResetPasswordPage />} />
+          <Route path='/host/live' element={<HostLiveGame />} />
           <Route element={<GameRoute />}>
             <Route path='/player/waiting' element={<PlayerWaitingRoom />} />
             <Route path='/player/live' element={<PlayerLiveGame />} />
@@ -97,17 +102,20 @@ const App = () => {
           <Route element={<ProtectedRoute />}>
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/profile' element={<Profile />} />
-            <Route path='/groups' element={<GroupList />} />
+            {/* <Route path='/groups' element={<GroupList />} /> */}
             <Route path='/groups/:id' element={<GroupDetail />} />
-            <Route path='/groups/create' element={<GroupForm />} />
+            {/* <Route path='/groups/create' element={<GroupForm />} /> */}
             <Route path='/presentation' element={<PresentList />} />
             <Route path='/presentation/create' element={<PresentEdit />} />
             <Route path='/presentation/preview/:id' element={<PresentPreview />} />
             <Route path='/presentation/edit/:id' element={<PresentEdit />} />
             <Route path='/presentation/:id' element={<PresentItem />} />
             <Route path='/host/waiting' element={<HostWaitingRoom />} />
-            <Route path='/host/live' element={<HostLiveGame />} />
+            <Route path='/toan/groups/create' element={<CreateGroupPage />} />
             {/* <Route path='/report' element={<ReportSlide />} /> */}
+            <Route path='/toan/groups' element={<GroupPage />} />
+            <Route path='/toan/groups/create' element={<CreateGroupPage />} />
+            <Route path='/toan/groups/:groupid' element={<GroupDetailPage />} />
           </Route>
           <Route path='*' element={<ErrorPage />} />
         </Routes>

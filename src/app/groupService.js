@@ -8,7 +8,7 @@ export const groupServices = createApi({
   baseQuery: axiosBaseQuery({ baseUrl: '' }),
   endpoints: (build) => ({
     getListGroup: build.query({
-      query: () => ({ url: '/user/profile', method: 'get' })
+      query: () => ({ url: '/group/mygroups', method: 'get' })
     }),
     getGroupDetail: build.query({
       query: (id) => ({ url: `/group/${id}`, method: 'get' })
