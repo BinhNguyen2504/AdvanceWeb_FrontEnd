@@ -40,6 +40,7 @@ import ResetPasswordPage from './pages/ResetPassword';
 import CreateGroupPage from './pages/groups/CreateGroup';
 import GroupPage from './pages/groups/GroupPage';
 import GroupDetailPage from './pages/groups/GroupDetailPage2';
+import EditRolePage from './pages/groups/GroupEditRolePage';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -116,6 +117,7 @@ const App = () => {
             <Route path='/toan/groups' element={<GroupPage />} />
             <Route path='/toan/groups/create' element={<CreateGroupPage />} />
             <Route path='/toan/groups/:groupid' element={<GroupDetailPage />} />
+            <Route path='/toan/groups/role/:groupid' element={<EditRolePage />} />
           </Route>
           <Route path='*' element={<ErrorPage />} />
         </Routes>
