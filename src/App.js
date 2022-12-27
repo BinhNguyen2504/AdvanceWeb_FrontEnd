@@ -41,6 +41,8 @@ import CreateGroupPage from './pages/groups/CreateGroup';
 import GroupPage from './pages/groups/GroupPage';
 import GroupDetailPage from './pages/groups/GroupDetailPage2';
 import EditRolePage from './pages/groups/GroupEditRolePage';
+import PresentGroupPage from './pages/groups/PresentGroup';
+import HostWaitingRoomGroupPage from './pages/presentInGroup/HostWaitingRoom';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -118,6 +120,8 @@ const App = () => {
             <Route path='/toan/groups/create' element={<CreateGroupPage />} />
             <Route path='/toan/groups/:groupid' element={<GroupDetailPage />} />
             <Route path='/toan/groups/role/:groupid' element={<EditRolePage />} />
+            <Route path='/toan/presentation/group/:presentid' element={<PresentGroupPage />} />
+            <Route path='/toan/presentation/group/host/waiting' element={<HostWaitingRoomGroupPage />} />
           </Route>
           <Route path='*' element={<ErrorPage />} />
         </Routes>

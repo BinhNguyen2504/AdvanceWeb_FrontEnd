@@ -1,7 +1,9 @@
-import { Button, Carousel } from 'antd';
+/* eslint-disable no-underscore-dangle */
+import { Button, Carousel, Dropdown, Space } from 'antd';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
+import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import MainLayout from '../layouts/MainLayout';
 import SlicePreview from '../components/SlidePreview';
 import { useDeletePresentMutation, useGetPresentQuery } from '../app/presentationService';
@@ -41,6 +43,42 @@ const PresentPreview = () => {
       navigate('/presentation');
     }
   };
+
+  const handlePublicPresent = () => {
+    // flow nhu cu
+    console.log('public present');
+  };
+
+  const handleGroupPresent = () => {
+    const presentid = 'id123';
+    console.log('group present');
+    navigate(`/toan/presentation/group/${presentid}`);
+  };
+
+  const handleMenuClick = (e) => {
+    console.log('click', e);
+    if (e.key === '1') {
+      handlePublicPresent();
+    } else {
+      handleGroupPresent();
+    }
+  };
+
+  const items = [
+    {
+      label: 'Public',
+      key: '1'
+    },
+    {
+      label: 'Group Only',
+      key: '2'
+    }
+  ];
+  const menuProps = {
+    items,
+    onClick: handleMenuClick
+  };
+
   return (
     <MainLayout>
       {isLoading ? (
@@ -64,6 +102,14 @@ const PresentPreview = () => {
           <Button type='primary' className='btn' onClick={handleCreateGame}>
             Start presentation
           </Button>
+          <Dropdown menu={menuProps}>
+            <Button type='primary' className='btn' onClick={handleCreateGame}>
+              <Space>
+                Start presentation
+                <DownOutlined />
+              </Space>
+            </Button>
+          </Dropdown>
         </section>
       )}
     </MainLayout>
