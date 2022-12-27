@@ -42,7 +42,7 @@ import GroupPage from './pages/groups/GroupPage';
 import GroupDetailPage from './pages/groups/GroupDetailPage2';
 import EditRolePage from './pages/groups/GroupEditRolePage';
 import PresentGroupPage from './pages/groups/PresentGroup';
-import HostWaitingRoomGroupPage from './pages/presentInGroup/HostWaitingRoom';
+import HostWaitingRoomGroupPage from './pages/presentInGroup/HostWaitingRoomGroup';
 
 const App = () => {
   const user = localStorage.getItem('token');
