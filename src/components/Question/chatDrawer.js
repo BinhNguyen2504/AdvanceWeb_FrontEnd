@@ -23,7 +23,12 @@ const CommentList = ({ comments, onScroll }) => (
     <VirtualList data={comments} height={ContainerHeight} itemHeight={47} itemKey='email' onScroll={onScroll}>
       {(item) => (
         <List.Item key={item.email}>
-          <QuestionComment />
+          <List.Item.Meta
+            avatar={<Avatar src={item.picture.large} />}
+            title={<a href='https://ant.design'>{item.name.last}</a>}
+            description={item.email}
+          />
+          <div>Content</div>
         </List.Item>
       )}
     </VirtualList>
@@ -41,7 +46,7 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
     </Form.Item>
   </>
 );
-const SendQuestionForm = () => {
+const ChatForm = () => {
   const [comments, setComments] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [value, setValue] = useState('');
@@ -96,4 +101,4 @@ const SendQuestionForm = () => {
   );
 };
 
-export default SendQuestionForm;
+export default ChatForm;

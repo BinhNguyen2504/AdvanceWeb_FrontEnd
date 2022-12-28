@@ -12,16 +12,25 @@ import BasicLayout from '../../layouts/BasicLayout';
 import PresentQuestionForm from '../../components/Question/CommonForm';
 import QuestionComment from '../../components/Question/questionComment';
 import SendQuestionForm from '../../components/Question/sendQuestionForm';
+import ChatForm from '../../components/Question/chatDrawer';
 
 const { Option } = Select;
 
 const HostLiveGameGroupPage = () => {
-  const [open, setOpen] = useState(false);
-  const showDrawer = () => {
-    setOpen(true);
+  const [openQuestion, setOpenQuestion] = useState(false);
+  const showQuestionDrawer = () => {
+    setOpenQuestion(true);
   };
-  const onClose = () => {
-    setOpen(false);
+  const onCloseQuestion = () => {
+    setOpenQuestion(false);
+  };
+
+  const [openChat, setOpenChat] = useState(false);
+  const showChatDrawer = () => {
+    setOpenQuestion(true);
+  };
+  const onCloseChat = () => {
+    setOpenQuestion(false);
   };
   const initChart = [
     { type: 'A', answers: 0 },
@@ -111,21 +120,21 @@ const HostLiveGameGroupPage = () => {
   return (
     <BasicLayout>
       <>
-        <Button type='primary' onClick={showDrawer} icon={<PlusOutlined />}>
+        <Button type='primary' onClick={showQuestionDrawer} icon={<PlusOutlined />}>
           Question
         </Button>
         <Drawer
           title='Question for Presentation'
           width={720}
-          onClose={onClose}
-          open={open}
+          onClose={onCloseQuestion}
+          open={openQuestion}
           bodyStyle={{
             paddingBottom: 80
           }}
           extra={(
             <Space>
-              <Button onClick={onClose}>Cancel</Button>
-              <Button onClick={onClose} type='primary'>
+              <Button onClick={onCloseQuestion}>Cancel</Button>
+              <Button onClick={onCloseQuestion} type='primary'>
                 Submit
               </Button>
             </Space>
@@ -262,6 +271,31 @@ const HostLiveGameGroupPage = () => {
           </Form> */}
           {/* <QuestionComment /> */}
           <SendQuestionForm />
+        </Drawer>
+      </>
+      <>
+        <Button type='primary' onClick={showChatDrawer} icon={<PlusOutlined />}>
+          Chat
+        </Button>
+        <Drawer
+          title='Chat for Presentation'
+          width={720}
+          onClose={onCloseChat}
+          placement="left"
+          open={openChat}
+          bodyStyle={{
+            paddingBottom: 80
+          }}
+          extra={(
+            <Space>
+              <Button onClick={onCloseChat}>Cancel</Button>
+              <Button onClick={onCloseChat} type='primary'>
+                Submit
+              </Button>
+            </Space>
+          )}
+        >
+          <ChatForm />
         </Drawer>
       </>
       <section className='courses'>
