@@ -52,7 +52,7 @@ const HostWaitingRoomGroupPage = () => {
     //   });
     //   navigate('/host/live');
     // }
-    navigate('/toan/presentation/group/host/waiting');
+    navigate('/toan/presentation/group/host/live');
   };
 
   // const playerNameList = getNotNullList([...playerSet.current]).map((player) => <div key={player}>{player}</div>);

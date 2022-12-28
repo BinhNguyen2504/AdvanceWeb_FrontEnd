@@ -1,12 +1,28 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/jsx-wrap-multilines */
 import { Column } from '@ant-design/plots';
-import { Button, Card, Col, Row } from 'antd';
+import { Button, Card, Col, Row, DatePicker, Drawer, Form, Input, Select, Space } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { PlusOutlined } from '@ant-design/icons';
 import { nextQuestion } from '../../app/gameSlice';
 import BasicLayout from '../../layouts/BasicLayout';
+import PresentQuestionForm from '../../components/Question/CommonForm';
+import QuestionComment from '../../components/Question/questionComment';
+import SendQuestionForm from '../../components/Question/sendQuestionForm';
 
-const HostLiveGame = () => {
+const { Option } = Select;
+
+const HostLiveGameGroupPage = () => {
+  const [open, setOpen] = useState(false);
+  const showDrawer = () => {
+    setOpen(true);
+  };
+  const onClose = () => {
+    setOpen(false);
+  };
   const initChart = [
     { type: 'A', answers: 0 },
     { type: 'B', answers: 0 },
@@ -19,37 +35,37 @@ const HostLiveGame = () => {
   const { name, questions, currentQuestion, numberOfQuestion, pin } = useSelector((state) => state.game);
   const { socket } = useSelector((state) => state.socket);
   const [chartData, setChartData] = useState(initChart);
-  const [counter, setCounter] = useState(questions[currentQuestion].time);
+  // const [counter, setCounter] = useState(questions[currentQuestion].time);
 
-  useEffect(() => {
-    document.body.requestFullscreen();
-    return () => document.exitFullscreen();
-  }, []);
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (counter > 0) {
-        setCounter((prev) => prev - 1);
-      }
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [counter]);
-  useEffect(() => {
-    // TODO: Gửi message qua student số thứ tự câu hỏi
-    socket.emit('student-sender', {
-      room: pin,
-      msg: currentQuestion
-    });
-    // TODO: Lắng nghe đáp án student
-    socket.on('teacher-receiver', (msg) => {
-      const index = chartData.findIndex((item) => item.type === msg.ans);
-      const newData = [...chartData];
-      if ([0, 1, 2, 3].includes(index)) {
-        newData[index].answers = chartData[index].answers + 1;
-      }
-      setChartData([...newData]);
-    });
-    setCounter(questions[currentQuestion].time);
-  }, [currentQuestion]);
+  // useEffect(() => {
+  //   document.body.requestFullscreen();
+  //   return () => document.exitFullscreen();
+  // }, []);
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     if (counter > 0) {
+  //       setCounter((prev) => prev - 1);
+  //     }
+  //   }, 1000);
+  //   return () => clearInterval(timer);
+  // }, [counter]);
+  // useEffect(() => {
+  //   // TODO: Gửi message qua student số thứ tự câu hỏi
+  //   socket.emit('student-sender', {
+  //     room: pin,
+  //     msg: currentQuestion
+  //   });
+  //   // TODO: Lắng nghe đáp án student
+  //   socket.on('teacher-receiver', (msg) => {
+  //     const index = chartData.findIndex((item) => item.type === msg.ans);
+  //     const newData = [...chartData];
+  //     if ([0, 1, 2, 3].includes(index)) {
+  //       newData[index].answers = chartData[index].answers + 1;
+  //     }
+  //     setChartData([...newData]);
+  //   });
+  //   setCounter(questions[currentQuestion].time);
+  // }, [currentQuestion]);
 
   const handleMoveQuestion = () => {
     if (currentQuestion < numberOfQuestion - 1) {
@@ -94,19 +110,176 @@ const HostLiveGame = () => {
 
   return (
     <BasicLayout>
+      <>
+        <Button type='primary' onClick={showDrawer} icon={<PlusOutlined />}>
+          Question
+        </Button>
+        <Drawer
+          title='Question for Presentation'
+          width={720}
+          onClose={onClose}
+          open={open}
+          bodyStyle={{
+            paddingBottom: 80
+          }}
+          extra={(
+            <Space>
+              <Button onClick={onClose}>Cancel</Button>
+              <Button onClick={onClose} type='primary'>
+                Submit
+              </Button>
+            </Space>
+          )}
+        >
+          {/* <Form layout='vertical' hideRequiredMark>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name='name'
+                  label='Name'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter user name'
+                    }
+                  ]}
+                >
+                  <Input placeholder='Please enter user name' />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name='url'
+                  label='Url'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please enter url'
+                    }
+                  ]}
+                >
+                  <Input
+                    style={{
+                      width: '100%'
+                    }}
+                    addonBefore='http://'
+                    addonAfter='.com'
+                    placeholder='Please enter url'
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name='owner'
+                  label='Owner'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please select an owner'
+                    }
+                  ]}
+                >
+                  <Select placeholder='Please select an owner'>
+                    <Option value='xiao'>Xiaoxiao Fu</Option>
+                    <Option value='mao'>Maomao Zhou</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name='type'
+                  label='Type'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please choose the type'
+                    }
+                  ]}
+                >
+                  <Select placeholder='Please choose the type'>
+                    <Option value='private'>Private</Option>
+                    <Option value='public'>Public</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item
+                  name='approver'
+                  label='Approver'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please choose the approver'
+                    }
+                  ]}
+                >
+                  <Select placeholder='Please choose the approver'>
+                    <Option value='jack'>Jack Ma</Option>
+                    <Option value='tom'>Tom Liu</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name='dateTime'
+                  label='DateTime'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please choose the dateTime'
+                    }
+                  ]}
+                >
+                  <DatePicker.RangePicker
+                    style={{
+                      width: '100%'
+                    }}
+                    getPopupContainer={(trigger) => trigger.parentElement}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={24}>
+                <Form.Item
+                  name='description'
+                  label='Description'
+                  rules={[
+                    {
+                      required: true,
+                      message: 'please enter url description'
+                    }
+                  ]}
+                >
+                  <Input.TextArea rows={4} placeholder='please enter url description' />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Form> */}
+          {/* <QuestionComment /> */}
+          <SendQuestionForm />
+        </Drawer>
+      </>
       <section className='courses'>
-        <p className='btn'>{name}</p>
+        <p className='btn'>name j do</p>
         <div className='site-card-border-less-wrapper'>
-          <Card
+          {/* <Card
             title={questions[currentQuestion].content}
             bordered={false}
             extra={
               currentQuestion < numberOfQuestion - 1 ? (
-                <Button onClick={handleMoveQuestion} disabled={counter > 0}>
+                // <Button onClick={handleMoveQuestion} disabled={counter > 0}>
+                //   Next
+                // </Button>
+                <Button onClick={handleMoveQuestion} disabled={false}>
                   Next
                 </Button>
               ) : (
-                <Button onClick={handleFinishGame} disabled={counter > 0}>
+                <Button onClick={handleFinishGame} disabled={false}>
                   Endgame
                 </Button>
               )
@@ -121,7 +294,7 @@ const HostLiveGame = () => {
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 Time:
-                {counter}
+                {1221}
               </Col>
               <Col span={12}>
                 <Button block>{`A: ${questions[currentQuestion].ansA}`}</Button>
@@ -136,11 +309,11 @@ const HostLiveGame = () => {
                 <Button block>{`D: ${questions[currentQuestion].ansD}`}</Button>
               </Col>
             </Row>
-          </Card>
+          </Card> */}
         </div>
       </section>
     </BasicLayout>
   );
 };
 
-export default HostLiveGame;
+export default HostLiveGameGroupPage;

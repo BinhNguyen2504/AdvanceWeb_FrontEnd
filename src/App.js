@@ -43,6 +43,7 @@ import GroupDetailPage from './pages/groups/GroupDetailPage2';
 import EditRolePage from './pages/groups/GroupEditRolePage';
 import PresentGroupPage from './pages/groups/PresentGroup';
 import HostWaitingRoomGroupPage from './pages/presentInGroup/HostWaitingRoomGroup';
+import HostLiveGameGroupPage from './pages/presentInGroup/HostLiveGameGroup';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -122,6 +123,7 @@ const App = () => {
             <Route path='/toan/groups/role/:groupid' element={<EditRolePage />} />
             <Route path='/toan/presentation/group/:presentid' element={<PresentGroupPage />} />
             <Route path='/toan/presentation/group/host/waiting' element={<HostWaitingRoomGroupPage />} />
+            <Route path='/toan/presentation/group/host/live' element={<HostLiveGameGroupPage />} />
           </Route>
           <Route path='*' element={<ErrorPage />} />
         </Routes>

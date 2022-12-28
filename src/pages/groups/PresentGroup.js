@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable no-underscore-dangle */
@@ -42,7 +43,7 @@ const PresentGroupPage = () => {
                 <Col span={8} key={group._id}>
                   <GroupPresentPageCard
                     groupData={group}
-                    canPresent={false}
+                    canPresent
                     id={group._id}
                     handleSelect={handleSelectGroup}
                   />
