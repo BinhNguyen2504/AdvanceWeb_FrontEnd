@@ -1,14 +1,10 @@
-import { SmileOutlined } from '@ant-design/icons';
 import { Button, Form, Layout, notification, Select, Typography } from 'antd';
-// import { useCreateGroupMutation } from '../../app/groupService';
-// import { useCreateGroupMutation } from '../../app/groupService';
 
-import MainLayout from '../../layouts/MainLayout';
+import MainLayout from '../layouts/MainLayout';
 
 const { Content } = Layout;
 
-const EditRolePage = () => {
-  //   const [createGroup, createGroupResult] = useCreateGroupMutation();
+const EditRole = () => {
   const [api, contextHolder] = notification.useNotification();
   const [form] = Form.useForm();
 
@@ -31,25 +27,8 @@ const EditRolePage = () => {
       label: 'owner'
     }
   ];
-
-  const openNotification = () => {
-    api.open({
-      message: 'Create group successfully',
-      icon: <SmileOutlined style={{ color: '#108ee9' }} />
-    });
-  };
   const handleSubmit = async (values) => {
     console.log(values);
-    // const result = await createGroup(values).unwrap();
-    // const role = values.target.elements.category.value;
-    // console.log('role: ', role);
-    // console.log(result);
-    // console.log(createGroupResult);
-    openNotification();
-    form.resetFields();
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
 
   return (
@@ -57,14 +36,7 @@ const EditRolePage = () => {
       <MainLayout>
         {contextHolder}
         <section className='container form-container'>
-          <Form
-            form={form}
-            name='login'
-            layout='vertical'
-            onFinish={handleSubmit}
-            onFinishFailed={onFinishFailed}
-            autoComplete='off'
-          >
+          <Form form={form} name='login' layout='vertical' onFinish={handleSubmit} autoComplete='off'>
             <h3>Edit Role</h3>
             <Typography.Title type='success' level={3}>
               Ten someone
@@ -92,4 +64,4 @@ const EditRolePage = () => {
   );
 };
 
-export default EditRolePage;
+export default EditRole;

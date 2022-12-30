@@ -4,23 +4,27 @@ import { useDispatch } from 'react-redux';
 import { io } from 'socket.io-client';
 
 import { setAuthHeader } from './utils';
+import { BASE_URL, SOCKET_URL } from './constants';
 import { useGetProfileQuery } from './app/profileService';
 import { loginUser } from './app/authSlice';
 import { createSocket } from './app/socketSlice';
+import { axiosClient } from './api/client';
 
 import GameRoute from './components/GameRoute';
 import ProtectedRoute from './components/ProtectedRoute';
+
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
+import ForgotPasswordPage from './pages/ForgotPassword';
+import ResetPasswordPage from './pages/ResetPassword';
 import ErrorPage from './pages/404';
-// import GroupList from './pages/GroupList';
+import GroupList from './pages/GroupList';
 import GroupDetail from './pages/GroupDetail';
-// import GroupForm from './pages/GroupForm';
+import EditRole from './pages/GroupEditRole';
+import GroupForm from './pages/GroupForm';
 import Profile from './pages/Profile';
-// import ReportSlide from './pages/ReportSlide';
 import Dashboard from './pages/Dashboard';
 import PresentEdit from './pages/PresentEdit';
-import PresentItem from './pages/PresentItem';
 import PresentList from './pages/PresentList';
 import JoinGame from './pages/JoinGame';
 import PlayerWaitingRoom from './pages/PlayerWaitingRoom';
@@ -33,14 +37,8 @@ import './variables.css';
 import './index.css';
 import './App.css';
 
-import { BASE_URL, SOCKET_URL } from './constants';
-import { axiosClient } from './api/client';
-import ForgotPasswordPage from './pages/ForgotPassword';
-import ResetPasswordPage from './pages/ResetPassword';
-import CreateGroupPage from './pages/groups/CreateGroup';
-import GroupPage from './pages/groups/GroupPage';
-import GroupDetailPage from './pages/groups/GroupDetailPage2';
-import EditRolePage from './pages/groups/GroupEditRolePage';
+// import GroupDetailPage from './pages/groups/GroupDetailPage2';
+// import EditRolePage from './pages/groups/GroupEditRolePage';
 import PresentGroupPage from './pages/groups/PresentGroup';
 import HostWaitingRoomGroupPage from './pages/presentInGroup/HostWaitingRoomGroup';
 import HostLiveGameGroupPage from './pages/presentInGroup/HostLiveGameGroup';
@@ -84,7 +82,7 @@ const App = () => {
   useEffect(() => {
     const socket = io(SOCKET_URL);
     dispatch(createSocket(socket));
-    // return () => socket.disconnect();
+    return () => socket.disconnect();
   }, [dispatch]);
 
   return (
@@ -106,21 +104,17 @@ const App = () => {
           <Route element={<ProtectedRoute />}>
             <Route path='/dashboard' element={<Dashboard />} />
             <Route path='/profile' element={<Profile />} />
-            {/* <Route path='/groups' element={<GroupList />} /> */}
+            <Route path='/groups' element={<GroupList />} />
             <Route path='/groups/:id' element={<GroupDetail />} />
-            {/* <Route path='/groups/create' element={<GroupForm />} /> */}
+            <Route path='/groups/role/:groupid' element={<EditRole />} />
+            <Route path='/groups/create' element={<GroupForm />} />
             <Route path='/presentation' element={<PresentList />} />
             <Route path='/presentation/create' element={<PresentEdit />} />
             <Route path='/presentation/preview/:id' element={<PresentPreview />} />
             <Route path='/presentation/edit/:id' element={<PresentEdit />} />
-            <Route path='/presentation/:id' element={<PresentItem />} />
+
             <Route path='/host/waiting' element={<HostWaitingRoom />} />
-            <Route path='/toan/groups/create' element={<CreateGroupPage />} />
-            {/* <Route path='/report' element={<ReportSlide />} /> */}
-            <Route path='/toan/groups' element={<GroupPage />} />
-            <Route path='/toan/groups/create' element={<CreateGroupPage />} />
-            <Route path='/toan/groups/:groupid' element={<GroupDetailPage />} />
-            <Route path='/toan/groups/role/:groupid' element={<EditRolePage />} />
+
             <Route path='/toan/presentation/group/:presentid' element={<PresentGroupPage />} />
             <Route path='/toan/presentation/group/host/waiting' element={<HostWaitingRoomGroupPage />} />
             <Route path='/toan/presentation/group/host/live' element={<HostLiveGameGroupPage />} />

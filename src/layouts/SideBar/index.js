@@ -10,7 +10,7 @@ const SideBar = () => {
         <i className='fas fa-times' />
       </div>
       <div className='profile'>
-        <img src='/img/ava.jpg' className='image' alt='' />
+        <img src='/img/ava.jpg' className='image' alt='avatar' />
         <h3 className='name'>{username}</h3>
         <p className='role'>{email}</p>
         <Link to='/profile' className='btn'>
@@ -22,7 +22,7 @@ const SideBar = () => {
           <i className='fas fa-home' />
           <span>Dashboard</span>
         </Link>
-        <Link to='/toan/groups'>
+        <Link to='/groups'>
           <i className='fas fa-chalkboard-user' />
           <span>Groups</span>
         </Link>
@@ -30,10 +30,6 @@ const SideBar = () => {
           <i className='fas fa-chalkboard-user' />
           <span>Presentation</span>
         </Link>
-        {/* <Link to='/dashboard'>
-          <i className='fas fa-headset' />
-          <span>Contact us</span>
-        </Link> */}
       </nav>
     </div>
   );

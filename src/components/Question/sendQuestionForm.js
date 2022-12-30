@@ -5,6 +5,7 @@ import Comment from '@ant-design/compatible/lib/comment';
 import QuestionComment from './questionComment';
 
 const { TextArea } = Input;
+
 const CommentList = ({ comments }) => (
   <List
     dataSource={comments}
