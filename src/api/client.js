@@ -17,7 +17,7 @@ const axiosBaseQuery =
       return { data: result.data };
     } catch (axiosError) {
       const err = axiosError;
-      console.log('Axios error: ', err);
+      // console.log('Axios error: ', err);
       return {
         code: err.code,
         data: err.response.data

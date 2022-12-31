@@ -3,19 +3,47 @@ import Title from 'antd/es/typography/Title';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { useGetGroupDetailQuery } from '../app/groupService';
+import {
+  useGetGroupDetailQuery,
+  useGetInviteLinkMutation,
+  useKickOutMutation,
+  useRemoveGroupMutation
+} from '../app/groupService';
 
 import MainLayout from '../layouts/MainLayout';
 
 const { Content } = Layout;
-
 const GroupDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { data, isLoading } = useGetGroupDetailQuery(id);
+  const [removeGroup] = useRemoveGroupMutation();
+  const [kickMember] = useKickOutMutation();
+  const [getLink] = useGetInviteLinkMutation();
   const [dataSource, setDataSource] = useState([]);
   const [inviteLink, setInviteLink] = useState('');
-  const [isDisplayInviteLink, setIsDisplayInviteLink] = useState(false);
+  // const [isDisplayInviteLink, setIsDisplayInviteLink] = useState(false);
+
+  const handleEditRole = (member) => {
+    console.log(member);
+    navigate(`/groups/role/${id}`);
+  };
+  const handleInviteClick = async () => {
+    const result = await getLink({ id });
+    console.log(result);
+    if (result) {
+      setInviteLink(result.data.data);
+    }
+    //   setIsDisplayInviteLink(true);
+  };
+  const handleRemoveGroup = async () => {
+    await removeGroup(id).unwrap();
+    navigate('/groups');
+  };
+  const handleRemoveMember = async (username) => {
+    console.log(username);
+    await kickMember({ groupId: id, kickUsername: username });
+  };
 
   useEffect(() => {
     if (data) {
@@ -34,14 +62,8 @@ const GroupDetail = () => {
             ONLINE
           </Button>
         ),
-        employed: (
-          <div className='ant-employed'>
-            <Button>Remove</Button>
-            <Button>Edit</Button>
-          </div>
-        )
+        employed: <div className='ant-employed' />
       };
-
       const memberList = member.map((item) => ({
         key: item._id,
         name: item.name,
@@ -57,10 +79,21 @@ const GroupDetail = () => {
           </Button>
         ),
         employed: (
-          <div className='ant-employed'>
-            <Button>Remove</Button>
-            <Button>Edit</Button>
-          </div>
+          <Space size='middle'>
+            <Button onClick={() => handleEditRole(member)} type='primary' ghost>
+              Edit Role
+            </Button>
+            <Popconfirm
+              placement='topLeft'
+              title='Are you sure to delete this member'
+              description='{description}'
+              onConfirm={() => handleRemoveMember(item.name)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button danger>Remove</Button>
+            </Popconfirm>
+          </Space>
         )
       }));
       const coOwnerList = coOwners.map((item) => ({
@@ -78,47 +111,27 @@ const GroupDetail = () => {
           </Button>
         ),
         employed: (
-          <div className='ant-employed'>
-            <Button>Remove</Button>
-            <Button>Edit</Button>
-          </div>
+          <Space size='middle'>
+            <Button onClick={() => handleEditRole(member)} type='primary' ghost>
+              Edit Role
+            </Button>
+            <Popconfirm
+              placement='topLeft'
+              title='Are you sure to delete this member'
+              description='{description}'
+              // onConfirm={() => handleRemove(member)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button danger>Remove</Button>
+            </Popconfirm>
+          </Space>
         )
       }));
       setDataSource([ownerData, ...coOwnerList, ...memberList]);
-      // setDataSource([
-      //   {
-      //     key: '1',
-      //     name: 'toan',
-      //     _id: 'id1',
-      //     function: (
-      //       <div className='author-info'>
-      //         <Title level={5}>Manager</Title>
-      //         <p>Organization</p>
-      //       </div>
-      //     ),
-      //     status: (
-      //       <Button type='primary' className='tag-primary'>
-      //         ONLINE
-      //       </Button>
-      //     ),
-      //     employed: (
-      //       <div className='ant-employed'>
-      //         <Button>Remove</Button>
-      //         <Button>Edit</Button>
-      //       </div>
-      //     )
-      //   }
-      // ]);
     }
   }, []);
-
-  const handleEditRole = (member) => {
-    const groupid = '123';
-    navigate(`/groups/role/${groupid}`);
-  };
-
-  console.log(data);
-
+  const hasStreaming = true;
   const columns = [
     {
       title: 'MEMBER',
@@ -127,7 +140,6 @@ const GroupDetail = () => {
       width: '32%',
       render: (_, member) => (
         <Avatar.Group>
-          {console.log(member)}
           <Avatar className='shape-avatar' shape='square' size={40} src='/img/ava.jpg' />
           <Title level={5}>{member.name}</Title>
         </Avatar.Group>
@@ -138,7 +150,6 @@ const GroupDetail = () => {
       dataIndex: 'function',
       key: 'function'
     },
-
     {
       title: 'STATUS',
       key: 'status',
@@ -147,32 +158,9 @@ const GroupDetail = () => {
     {
       title: 'ACTION',
       key: 'employed',
-      dataIndex: 'employed',
-      render: (_, member) => (
-        <Space size='middle'>
-          <Button onClick={() => handleEditRole(member)} type='primary' ghost>
-            Edit Role
-          </Button>
-          <Popconfirm
-            placement='topLeft'
-            title='Are you sure to delete this member'
-            description='{description}'
-            // onConfirm={() => handleRemove(member)}
-            okText='Yes'
-            cancelText='No'
-          >
-            <Button danger>Remove</Button>
-          </Popconfirm>
-        </Space>
-      )
+      dataIndex: 'employed'
     }
   ];
-  // const dataSource = [];
-  const handleInviteClick = () => {
-    setInviteLink('link 123');
-    setIsDisplayInviteLink(true);
-  };
-  const hasStreaming = true;
 
   return (
     <Content>
@@ -195,10 +183,11 @@ const GroupDetail = () => {
               <Button type='primary' ghost onClick={handleInviteClick}>
                 Invite member
               </Button>
-              <Button type='primary' danger ghost>
+              <Button type='primary' danger ghost onClick={handleRemoveGroup}>
                 Delete
               </Button>
             </Space>
+            {inviteLink && <p>{inviteLink}</p>}
 
             {/* <div className='box-container'> */}
             {/* <div className='box'>

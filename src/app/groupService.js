@@ -23,8 +23,10 @@ export const groupServices = createApi({
       query: (id) => ({ url: `group/${id}`, method: 'delete' })
     }),
     kickOut: build.mutation({
-      // body: { groupId, username }
       query: (body) => ({ url: '/group/kickmember', method: 'put', data: body })
+    }),
+    getInviteLink: build.mutation({
+      query: (body) => ({ url: '/group/invitelink', method: 'post', data: body })
     })
   })
 });
@@ -35,5 +37,6 @@ export const {
   useGetListJoinedGroupQuery,
   useGetListOwnerGroupQuery,
   useRemoveGroupMutation,
-  useKickOutMutation
+  useKickOutMutation,
+  useGetInviteLinkMutation
 } = groupServices;

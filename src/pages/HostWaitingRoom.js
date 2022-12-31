@@ -37,7 +37,7 @@ const HostWaitingRoom = () => {
     }
     // TODO: Lắng nghe người tham gia
     socket.on('join-room-receiver', (newPlayer) => {
-      console.log('joining message: ', newPlayer);
+      // console.log('joining message: ', newPlayer);
       setCountPlayer((num) => num + 1);
     });
   }, []);
@@ -45,7 +45,7 @@ const HostWaitingRoom = () => {
   const handleStartGame = async () => {
     const result = await startGame({ pin, isOpen: false });
     if (result) {
-      console.log(result);
+      // console.log(result);
       socket.emit('student-sender', {
         room: pin,
         msg: -1
