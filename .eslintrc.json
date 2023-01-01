@@ -30,6 +30,7 @@
     "max-len": 0,
     "no-console": "off",
     "no-param-reassign": "off",
+    "no-underscore-dangle": "off",
     "react/react-in-jsx-scope": "off",
     "react/prop-types": 0,
     "react/jsx-props-no-spreading": 0,

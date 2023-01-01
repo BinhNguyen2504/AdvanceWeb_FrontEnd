@@ -1,15 +1,166 @@
-import { Layout } from 'antd';
-import { useParams } from 'react-router-dom';
-import { useGetGroupDetailQuery } from '../app/groupService';
+import { Avatar, Button, Card, Col, Layout, Popconfirm, Row, Space, Table } from 'antd';
+import Title from 'antd/es/typography/Title';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import {
+  useGetGroupDetailQuery,
+  useGetInviteLinkMutation,
+  useKickOutMutation,
+  useRemoveGroupMutation
+} from '../app/groupService';
 
 import MainLayout from '../layouts/MainLayout';
 
 const { Content } = Layout;
-
 const GroupDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data, isLoading } = useGetGroupDetailQuery(id);
-  // console.log(data);
+  const [removeGroup] = useRemoveGroupMutation();
+  const [kickMember] = useKickOutMutation();
+  const [getLink] = useGetInviteLinkMutation();
+  const [dataSource, setDataSource] = useState([]);
+  const [inviteLink, setInviteLink] = useState('');
+  // const [isDisplayInviteLink, setIsDisplayInviteLink] = useState(false);
+
+  const handleEditRole = (member) => {
+    console.log(member);
+    navigate(`/groups/role/${id}`);
+  };
+  const handleInviteClick = async () => {
+    const result = await getLink({ id });
+    console.log(result);
+    if (result) {
+      setInviteLink(result.data.data);
+    }
+    //   setIsDisplayInviteLink(true);
+  };
+  const handleRemoveGroup = async () => {
+    await removeGroup(id).unwrap();
+    navigate('/groups');
+  };
+  const handleRemoveMember = async (username) => {
+    console.log(username);
+    await kickMember({ groupId: id, kickUsername: username });
+  };
+
+  useEffect(() => {
+    if (data) {
+      const { owner, coOwners, member } = data.data;
+      const ownerData = {
+        key: owner.name,
+        name: owner.name,
+        _id: owner.id,
+        function: (
+          <div className='author-info'>
+            <p>Owner</p>
+          </div>
+        ),
+        status: (
+          <Button type='primary' className='tag-primary'>
+            ONLINE
+          </Button>
+        ),
+        employed: <div className='ant-employed' />
+      };
+      const memberList = member.map((item) => ({
+        key: item._id,
+        name: item.name,
+        _id: item._id,
+        function: (
+          <div className='author-info'>
+            <p>Member</p>
+          </div>
+        ),
+        status: (
+          <Button type='primary' className='tag-primary'>
+            ONLINE
+          </Button>
+        ),
+        employed: (
+          <Space size='middle'>
+            <Button onClick={() => handleEditRole(member)} type='primary' ghost>
+              Edit Role
+            </Button>
+            <Popconfirm
+              placement='topLeft'
+              title='Are you sure to delete this member'
+              description='{description}'
+              onConfirm={() => handleRemoveMember(item.name)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button danger>Remove</Button>
+            </Popconfirm>
+          </Space>
+        )
+      }));
+      const coOwnerList = coOwners.map((item) => ({
+        key: item._id,
+        name: item.name,
+        _id: item._id,
+        function: (
+          <div className='author-info'>
+            <p>Co-owner</p>
+          </div>
+        ),
+        status: (
+          <Button type='primary' className='tag-primary'>
+            ONLINE
+          </Button>
+        ),
+        employed: (
+          <Space size='middle'>
+            <Button onClick={() => handleEditRole(member)} type='primary' ghost>
+              Edit Role
+            </Button>
+            <Popconfirm
+              placement='topLeft'
+              title='Are you sure to delete this member'
+              description='{description}'
+              // onConfirm={() => handleRemove(member)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button danger>Remove</Button>
+            </Popconfirm>
+          </Space>
+        )
+      }));
+      setDataSource([ownerData, ...coOwnerList, ...memberList]);
+    }
+  }, []);
+  const hasStreaming = true;
+  const columns = [
+    {
+      title: 'MEMBER',
+      dataIndex: 'name',
+      key: 'name',
+      width: '32%',
+      render: (_, member) => (
+        <Avatar.Group>
+          <Avatar className='shape-avatar' shape='square' size={40} src='/img/ava.jpg' />
+          <Title level={5}>{member.name}</Title>
+        </Avatar.Group>
+      )
+    },
+    {
+      title: 'ROLE',
+      dataIndex: 'function',
+      key: 'function'
+    },
+    {
+      title: 'STATUS',
+      key: 'status',
+      dataIndex: 'status'
+    },
+    {
+      title: 'ACTION',
+      key: 'employed',
+      dataIndex: 'employed'
+    }
+  ];
 
   return (
     <Content>
@@ -19,10 +170,29 @@ const GroupDetail = () => {
         ) : (
           <section className='teachers container'>
             <h1 className='heading'>Group Details</h1>
-            <div className='box-container'>
-              <div className='box'>
+            {hasStreaming ? (
+              <Space direction='vertical' style={{ width: '100%', marginBottom: 20 }}>
+                <Button style={{ borderColor: '#18A558', backgroundColor: '#A3EBB1' }} block>
+                  User ??? is streaming, click to join
+                </Button>
+              </Space>
+            ) : (
+              <div />
+            )}
+            <Space direction='horizontal' style={{ width: '100%', marginBottom: 20 }}>
+              <Button type='primary' ghost onClick={handleInviteClick}>
+                Invite member
+              </Button>
+              <Button type='primary' danger ghost onClick={handleRemoveGroup}>
+                Delete
+              </Button>
+            </Space>
+            {inviteLink && <p>{inviteLink}</p>}
+
+            {/* <div className='box-container'> */}
+            {/* <div className='box'>
                 <div className='tutor'>
-                  <img src='/img/ava.jpg' alt='' />
+                  <img src='' alt='' />
                   <div>
                     <h3>{data.data && data.data.owner.name}</h3>
                     <span>Owner</span>
@@ -31,9 +201,20 @@ const GroupDetail = () => {
                 <a href='teacher_profile.html' className='inline-btn'>
                   view profile
                 </a>
-              </div>
-              <hr />
-              {data.data &&
+              </div> */}
+            <hr />
+            <div className='tabled'>
+              <Row gutter={[24, 0]}>
+                <Col xs='24' xl={24}>
+                  <Card bordered={false} className='criclebox tablespace mb-24' title='Group Member'>
+                    <div className='table-responsive'>
+                      <Table columns={columns} dataSource={dataSource} pagination className='ant-border-space' />
+                    </div>
+                  </Card>
+                </Col>
+              </Row>
+            </div>
+            {/* {data.data &&
                 data.data.member.map((item) => (
                   <div className='box'>
                     <div className='tutor'>
@@ -47,8 +228,8 @@ const GroupDetail = () => {
                       view profile
                     </a>
                   </div>
-                ))}
-            </div>
+                ))} */}
+            {/* </div> */}
           </section>
         )}
       </MainLayout>

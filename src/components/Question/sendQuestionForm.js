@@ -7,6 +7,7 @@ import QuestionComment from './questionComment';
 
 const ContainerHeight = 580;
 const { TextArea } = Input;
+
 const CommentList = ({ comments, onScroll }) => (
   //   <List
   //     dataSource={comments}
@@ -29,6 +30,7 @@ const CommentList = ({ comments, onScroll }) => (
     </VirtualList>
   </List>
 );
+
 const Editor = ({ onChange, onSubmit, submitting, value }) => (
   <>
     <Form.Item>

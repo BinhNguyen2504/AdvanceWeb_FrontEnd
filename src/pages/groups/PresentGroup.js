@@ -10,7 +10,7 @@ import { useState } from 'react';
 import MainLayout from '../../layouts/MainLayout';
 
 import GroupPresentPageCard from '../../components/group/GroupPresentPageCard';
-import { useGetListGroupQuery } from '../../app/groupService';
+// import { useGetListGroupQuery } from '../../app/groupService';
 
 const PresentGroupPage = () => {
   const navigate = useNavigate();
@@ -41,12 +41,7 @@ const PresentGroupPage = () => {
             <Row gutter={[16, 16]}>
               {data.data.map((group) => (
                 <Col span={8} key={group._id}>
-                  <GroupPresentPageCard
-                    groupData={group}
-                    canPresent
-                    id={group._id}
-                    handleSelect={handleSelectGroup}
-                  />
+                  <GroupPresentPageCard groupData={group} canPresent id={group._id} handleSelect={handleSelectGroup} />
                 </Col>
               ))}
             </Row>

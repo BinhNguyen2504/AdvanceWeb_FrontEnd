@@ -15,13 +15,9 @@ const GroupForm = () => {
   const onFinish = async (values) => {
     const result = await createGroup(values).unwrap();
     if (!result.error) {
-      console.log(result);
       form.resetFields();
       openNotification(api, 'Create group successfully', result.error, <SmileOutlined style={{ color: '#108ee9' }} />);
     }
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
 
   return (
@@ -29,14 +25,7 @@ const GroupForm = () => {
       <MainLayout>
         {contextHolder}
         <section className='form-container container'>
-          <Form
-            form={form}
-            name='login'
-            layout='vertical'
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete='off'
-          >
+          <Form form={form} name='login' layout='vertical' onFinish={onFinish} autoComplete='off'>
             <h3>Create new group</h3>
             <Form.Item
               label='Group name'
