@@ -49,9 +49,8 @@ const PresentPreview = () => {
     console.log('public present');
   };
 
-  const handleGroupPresent = () => {
-    const presentid = 'id123';
-    console.log('group present');
+  const handleGroupPresent = (presentid) => {
+    console.log('group present id:', presentid);
     navigate(`/presentation/group/${presentid}`);
   };
 
@@ -60,7 +59,7 @@ const PresentPreview = () => {
     if (e.key === '1') {
       handlePublicPresent();
     } else {
-      handleGroupPresent();
+      handleGroupPresent(id);
     }
   };
 

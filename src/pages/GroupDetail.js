@@ -2,6 +2,7 @@ import { Avatar, Button, Card, Col, Layout, Popconfirm, Row, Space, Table } from
 import Title from 'antd/es/typography/Title';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import groupAPI from '../api/groupAPI';
 
 import {
   useGetGroupDetailQuery,
@@ -21,6 +22,7 @@ const GroupDetail = () => {
   const [kickMember] = useKickOutMutation();
   const [getLink] = useGetInviteLinkMutation();
   const [dataSource, setDataSource] = useState([]);
+  const [gameDataSource, setGameDataSource] = useState([]);
   const [inviteLink, setInviteLink] = useState('');
   // const [isDisplayInviteLink, setIsDisplayInviteLink] = useState(false);
 
@@ -44,6 +46,14 @@ const GroupDetail = () => {
     console.log(username);
     await kickMember({ groupId: id, kickUsername: username });
   };
+
+  const handleJoinGame = async (game) => {
+    navigate('/presentation/group/player/join', { state: { gameid: game.roomId } });
+  };
+
+  // const handleJoinPresentGroup = () => {
+  //   navigate('/presentation/group/player/join', { state: { gameid: '123' } });
+  // };
 
   useEffect(() => {
     if (data) {
@@ -131,6 +141,50 @@ const GroupDetail = () => {
       setDataSource([ownerData, ...coOwnerList, ...memberList]);
     }
   }, []);
+
+  // get current game
+  useEffect(() => {
+    const getGameList = async (groupid) => {
+      const res = await groupAPI.getGameInGroup(groupid);
+      console.log('game res: ', res);
+      // return res.data;
+      const gameListData = res.data;
+      console.log('gameListData: ', gameListData);
+      const gameElementList = gameListData.map((item) => ({
+        key: item._id,
+        name: item.roomId,
+        _id: item._id,
+        function: (
+          <div className='author-info'>
+            <p>{item.participants.length}</p>
+          </div>
+        ),
+        status: (
+          <Button type='primary' className='tag-primary'>
+            {item.isOpen ? 'Playing' : 'Finished'}
+          </Button>
+        ),
+        employed: (
+          <Space size='middle'>
+            <Popconfirm
+              placement='topLeft'
+              title='Are you sure to delete this member'
+              description='{description}'
+              onConfirm={() => handleJoinGame(item)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button>Join Presentation</Button>
+            </Popconfirm>
+          </Space>
+        )
+      }));
+      console.log('gameElelIst: ', gameElementList);
+      setGameDataSource([...gameElementList]);
+    };
+    getGameList(id);
+  }, []);
+
   const hasStreaming = true;
   const columns = [
     {
@@ -162,6 +216,37 @@ const GroupDetail = () => {
     }
   ];
 
+  // game table
+  const gameColumns = [
+    {
+      title: 'Presentor',
+      dataIndex: 'name',
+      key: 'name',
+      width: '32%',
+      render: (_, member) => (
+        <Avatar.Group>
+          <Avatar className='shape-avatar' shape='square' size={40} src='/img/ava.jpg' />
+          <Title level={5}>{member.name}</Title>
+        </Avatar.Group>
+      )
+    },
+    {
+      title: 'Participant',
+      dataIndex: 'function',
+      key: 'function'
+    },
+    {
+      title: 'STATUS',
+      key: 'status',
+      dataIndex: 'status'
+    },
+    {
+      title: 'ACTION',
+      key: 'employed',
+      dataIndex: 'employed'
+    }
+  ];
+
   return (
     <Content>
       <MainLayout>
@@ -170,15 +255,19 @@ const GroupDetail = () => {
         ) : (
           <section className='teachers container'>
             <h1 className='heading'>Group Details</h1>
-            {hasStreaming ? (
+            {/* {hasStreaming ? (
               <Space direction='vertical' style={{ width: '100%', marginBottom: 20 }}>
-                <Button style={{ borderColor: '#18A558', backgroundColor: '#A3EBB1' }} block>
+                <Button
+                  style={{ borderColor: '#18A558', backgroundColor: '#A3EBB1' }}
+                  onClick={() => handleJoinPresentGroup()}
+                  block
+                >
                   User ??? is streaming, click to join
                 </Button>
               </Space>
             ) : (
               <div />
-            )}
+            )} */}
             <Space direction='horizontal' style={{ width: '100%', marginBottom: 20 }}>
               <Button type='primary' ghost onClick={handleInviteClick}>
                 Invite member
@@ -208,28 +297,29 @@ const GroupDetail = () => {
                 <Col xs='24' xl={24}>
                   <Card bordered={false} className='criclebox tablespace mb-24' title='Group Member'>
                     <div className='table-responsive'>
+                      <Table
+                        columns={gameColumns}
+                        dataSource={gameDataSource}
+                        pagination
+                        className='ant-border-space'
+                      />
+                    </div>
+                  </Card>
+                </Col>
+              </Row>
+            </div>
+            <br />
+            <div className='tabled'>
+              <Row gutter={[24, 0]}>
+                <Col xs='24' xl={24}>
+                  <Card bordered={false} className='criclebox tablespace mb-24' title='Group Member'>
+                    <div className='table-responsive'>
                       <Table columns={columns} dataSource={dataSource} pagination className='ant-border-space' />
                     </div>
                   </Card>
                 </Col>
               </Row>
             </div>
-            {/* {data.data &&
-                data.data.member.map((item) => (
-                  <div className='box'>
-                    <div className='tutor'>
-                      <img src='/img/ava.jpg' alt='' />
-                      <div>
-                        <h3>{item.name}</h3>
-                        <span>Member</span>
-                      </div>
-                    </div>
-                    <a href='teacher_profile.html' className='inline-btn'>
-                      view profile
-                    </a>
-                  </div>
-                ))} */}
-            {/* </div> */}
           </section>
         )}
       </MainLayout>

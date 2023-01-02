@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 // import { getNotNullList } from '../../utils';
 import MainLayout from '../layouts/MainLayout';
 import { useStartGameMutation } from '../app/gameService';
+import network from '../utils/network';
 
 const { Title } = Typography;
 const HostWaitingRoom = () => {

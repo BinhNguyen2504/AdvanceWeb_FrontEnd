@@ -42,6 +42,7 @@ import './App.css';
 import PresentGroupPage from './pages/groups/PresentGroup';
 import HostWaitingRoomGroupPage from './pages/presentInGroup/HostWaitingRoomGroup';
 import HostLiveGameGroupPage from './pages/presentInGroup/HostLiveGameGroup';
+import JoinGameGroup from './pages/presentInGroup/JoinGameGroup';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -117,6 +118,7 @@ const App = () => {
 
             <Route path='/presentation/group/:presentid' element={<PresentGroupPage />} />
             <Route path='/presentation/group/host/waiting' element={<HostWaitingRoomGroupPage />} />
+            <Route path='/presentation/group/player/join' element={<JoinGameGroup />} />
             <Route path='/toan/presentation/group/host/live' element={<HostLiveGameGroupPage />} />
           </Route>
           <Route path='*' element={<ErrorPage />} />
