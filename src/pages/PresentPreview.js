@@ -52,7 +52,7 @@ const PresentPreview = () => {
   const handleGroupPresent = () => {
     const presentid = 'id123';
     console.log('group present');
-    navigate(`/toan/presentation/group/${presentid}`);
+    navigate(`/presentation/group/${presentid}`);
   };
 
   const handleMenuClick = (e) => {

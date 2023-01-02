@@ -27,10 +27,10 @@ const HostLiveGameGroupPage = () => {
 
   const [openChat, setOpenChat] = useState(false);
   const showChatDrawer = () => {
-    setOpenQuestion(true);
+    setOpenChat(true);
   };
   const onCloseChat = () => {
-    setOpenQuestion(false);
+    setOpenChat(false);
   };
   const initChart = [
     { type: 'A', answers: 0 },
@@ -119,15 +119,73 @@ const HostLiveGameGroupPage = () => {
 
   return (
     <BasicLayout>
-      <>
-        <Button type='primary' onClick={showQuestionDrawer} icon={<PlusOutlined />}>
-          Question
-        </Button>
+      <section className='courses'>
+        <p className='btn'>name j do</p>
+        <div className='site-card-border-less-wrapper'>
+          {/* <Card
+            title={questions[currentQuestion].content}
+            bordered={false}
+            extra={
+              currentQuestion < numberOfQuestion - 1 ? (
+                // <Button onClick={handleMoveQuestion} disabled={counter > 0}>
+                //   Next
+                // </Button>
+                <Button onClick={handleMoveQuestion} disabled={false}>
+                  Next
+                </Button>
+              ) : (
+                <Button onClick={handleFinishGame} disabled={false}>
+                  Endgame
+                </Button>
+              )
+            }
+            style={{
+              height: 600,
+              width: '100%'
+            }}
+          >
+            <Column {...config} height={300} />
+            <div style={{ marginTop: '100px' }} />
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                Time:
+                {1221}
+              </Col>
+              <Col span={12}>
+                <Button block>{`A: ${questions[currentQuestion].ansA}`}</Button>
+              </Col>
+              <Col span={12}>
+                <Button block>{`B: ${questions[currentQuestion].ansB}`}</Button>
+              </Col>
+              <Col span={12}>
+                <Button block>{`C: ${questions[currentQuestion].ansC}`}</Button>
+              </Col>
+              <Col span={12}>
+                <Button block>{`D: ${questions[currentQuestion].ansD}`}</Button>
+              </Col>
+            </Row>
+          </Card> */}
+        </div>
+
+        <Row gutter={[16, 16]}>
+          <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Button type='primary' onClick={showQuestionDrawer} icon={<PlusOutlined />} block>
+              Question
+            </Button>
+          </Col>
+          <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Button type='primary' onClick={showChatDrawer} icon={<PlusOutlined />} block>
+              Chat
+            </Button>
+          </Col>
+
+        </Row>
         <Drawer
           title='Question for Presentation'
           width={720}
           onClose={onCloseQuestion}
           open={openQuestion}
+          placement="left"
           bodyStyle={{
             paddingBottom: 80
           }}
@@ -272,16 +330,12 @@ const HostLiveGameGroupPage = () => {
           {/* <QuestionComment /> */}
           <SendQuestionForm />
         </Drawer>
-      </>
-      <>
-        <Button type='primary' onClick={showChatDrawer} icon={<PlusOutlined />}>
-          Chat
-        </Button>
+
         <Drawer
           title='Chat for Presentation'
           width={720}
           onClose={onCloseChat}
-          placement="left"
+          placement="right"
           open={openChat}
           bodyStyle={{
             paddingBottom: 80
@@ -297,54 +351,6 @@ const HostLiveGameGroupPage = () => {
         >
           <ChatForm />
         </Drawer>
-      </>
-      <section className='courses'>
-        <p className='btn'>name j do</p>
-        <div className='site-card-border-less-wrapper'>
-          {/* <Card
-            title={questions[currentQuestion].content}
-            bordered={false}
-            extra={
-              currentQuestion < numberOfQuestion - 1 ? (
-                // <Button onClick={handleMoveQuestion} disabled={counter > 0}>
-                //   Next
-                // </Button>
-                <Button onClick={handleMoveQuestion} disabled={false}>
-                  Next
-                </Button>
-              ) : (
-                <Button onClick={handleFinishGame} disabled={false}>
-                  Endgame
-                </Button>
-              )
-            }
-            style={{
-              height: 600,
-              width: '100%'
-            }}
-          >
-            <Column {...config} height={300} />
-            <div style={{ marginTop: '100px' }} />
-            <Row gutter={[16, 16]}>
-              <Col span={24}>
-                Time:
-                {1221}
-              </Col>
-              <Col span={12}>
-                <Button block>{`A: ${questions[currentQuestion].ansA}`}</Button>
-              </Col>
-              <Col span={12}>
-                <Button block>{`B: ${questions[currentQuestion].ansB}`}</Button>
-              </Col>
-              <Col span={12}>
-                <Button block>{`C: ${questions[currentQuestion].ansC}`}</Button>
-              </Col>
-              <Col span={12}>
-                <Button block>{`D: ${questions[currentQuestion].ansD}`}</Button>
-              </Col>
-            </Row>
-          </Card> */}
-        </div>
       </section>
     </BasicLayout>
   );

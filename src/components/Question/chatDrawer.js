@@ -23,12 +23,8 @@ const CommentList = ({ comments, onScroll }) => (
     <VirtualList data={comments} height={ContainerHeight} itemHeight={47} itemKey='email' onScroll={onScroll}>
       {(item) => (
         <List.Item key={item.email}>
-          <List.Item.Meta
-            avatar={<Avatar src={item.picture.large} />}
-            title={<a href='https://ant.design'>{item.name.last}</a>}
-            description={item.email}
-          />
-          <div>Content</div>
+          <List.Item.Meta avatar={<Avatar src={item.picture.large} />} title={ item.name.last} />
+          Contente aefnaownf oằn oăienf oăine foaeikfn ăienf aolwknef alwkne faoken oalknf a
         </List.Item>
       )}
     </VirtualList>

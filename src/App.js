@@ -115,8 +115,8 @@ const App = () => {
 
             <Route path='/host/waiting' element={<HostWaitingRoom />} />
 
-            <Route path='/toan/presentation/group/:presentid' element={<PresentGroupPage />} />
-            <Route path='/toan/presentation/group/host/waiting' element={<HostWaitingRoomGroupPage />} />
+            <Route path='/presentation/group/:presentid' element={<PresentGroupPage />} />
+            <Route path='/presentation/group/host/waiting' element={<HostWaitingRoomGroupPage />} />
             <Route path='/toan/presentation/group/host/live' element={<HostLiveGameGroupPage />} />
           </Route>
           <Route path='*' element={<ErrorPage />} />
