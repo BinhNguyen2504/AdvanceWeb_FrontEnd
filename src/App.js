@@ -43,6 +43,8 @@ import PresentGroupPage from './pages/groups/PresentGroup';
 import HostWaitingRoomGroupPage from './pages/presentInGroup/HostWaitingRoomGroup';
 import HostLiveGameGroupPage from './pages/presentInGroup/HostLiveGameGroup';
 import JoinGameGroup from './pages/presentInGroup/JoinGameGroup';
+import PlayerWaitingRoomGroup from './pages/presentInGroup/PlayerWaitingRoomGroup';
+import PlayerLiveGameGroupPage from './pages/presentInGroup/PlayerLiveGameGroup';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -119,7 +121,9 @@ const App = () => {
             <Route path='/presentation/group/:presentid' element={<PresentGroupPage />} />
             <Route path='/presentation/group/host/waiting' element={<HostWaitingRoomGroupPage />} />
             <Route path='/presentation/group/player/join' element={<JoinGameGroup />} />
-            <Route path='/toan/presentation/group/host/live' element={<HostLiveGameGroupPage />} />
+            <Route path='/presentation/group/host/live' element={<HostLiveGameGroupPage />} />
+            <Route path='/presentation/group/player/waiting' element={<PlayerWaitingRoomGroup />} />
+            <Route path='/presentation/group/player/live' element={<PlayerLiveGameGroupPage />} />
           </Route>
           <Route path='*' element={<ErrorPage />} />
         </Routes>

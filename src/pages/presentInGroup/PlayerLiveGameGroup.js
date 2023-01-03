@@ -17,7 +17,15 @@ import ChatForm from '../../components/Question/chatDrawer';
 
 const { Option } = Select;
 
-const HostLiveGameGroupPage = () => {
+const PlayerLiveGameGroupPage = () => {
+  const { socket } = useSelector((state) => state.socket);
+  const { state } = useLocation();
+  const { roomID } = state;
+  const { player } = state;
+  const { game } = state;
+  const { isHost } = game;
+  const { questions } = game;
+  const numberOfQuestion = questions.length;
   const [openQuestion, setOpenQuestion] = useState(false);
   const showQuestionDrawer = () => {
     setOpenQuestion(true);
@@ -40,10 +48,9 @@ const HostLiveGameGroupPage = () => {
     { type: 'D', answers: 0 }
   ];
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const navigate = useNavigate();
   // const { name, questions, currentQuestion, numberOfQuestion, pin } = useSelector((state) => state.game);
-  const { socket } = useSelector((state) => state.socket);
   const [chartData, setChartData] = useState(initChart);
   // const [counter, setCounter] = useState(questions[currentQuestion].time);
 
@@ -77,16 +84,35 @@ const HostLiveGameGroupPage = () => {
   //   setCounter(questions[currentQuestion].time);
   // }, [currentQuestion]);
 
-  const { state } = useLocation();
-  const questionList = useRef(state.presentation.questions);
-  const { numberOfQuestion } = state.presentation;
   const [i, setI] = useState(0);
+
+  const handleEndGame = () => {
+    console.log('endgame');
+  };
 
   useEffect(() => {
     console.log('state in live: ', state);
-    socket.emit('send-nextQuestion', {
-      room: state.roomId,
-      msg: -1,
+    console.log('player: ', player);
+    console.log('room', roomID);
+    console.log('game: ', game);
+    console.log('isHost: ', isHost);
+    // socket.emit('send-nextQuestion', {
+    //   room: state.roomId,
+    //   msg: -1,
+    // });
+
+    socket.on('listen-nextQuestion', (index) => {
+      // setInfo(msg);
+      // setQuestion(questions.current[msg]);
+      console.log('mess from server: ', index);
+      if (index < numberOfQuestion) {
+        setI(index);
+      } else {
+        handleEndGame();
+      }
+    });
+    socket.on('listen-answer-chart', (msg) => {
+      // setInfo(JSON.stringify(msg));
     });
   }, []);
 
@@ -95,24 +121,24 @@ const HostLiveGameGroupPage = () => {
     //   dispatch(nextQuestion({ id: currentQuestion + 1 }));
     //   setChartData(initChart);
     // }
-
     if (i + 1 < numberOfQuestion) {
-      // setinfo(i.current);
-      // setQuestion(questions.current[i.current]);
-      console.log('host emit i: ', i + 1);
       setI(i + 1);
-      socket.emit('send-nextQuestion', {
-        room: state.roomId,
-        msg: i + 1,
-      });
+      // setinfo(i);
+      // setQuestion(questions.current[i]);
+
+      // socket.current.emit('send-nextQuestion', {
+      //   room: gameData.current.roomId,
+      //   msg: i,
+      // });
     }
+    console.log('handle move');
   };
   const handleFinishGame = () => {
-    console.log('host emit i: ', i + 1);
-    socket.emit('send-nextQuestion', {
-      room: state.roomId,
-      msg: i + 1,
-    });
+    // socket.emit('student-sender', {
+    //   room: pin,
+    //   msg: currentQuestion + 1
+    // });
+    // navigate('/presentation');
   };
 
   const config = {
@@ -141,59 +167,62 @@ const HostLiveGameGroupPage = () => {
       }
     }
   };
-  console.log('i current: ', i);
-  console.log('question: ', questionList.current);
+
+  const getCardButton = (index) => {
+    // if (!isHost) return <div />;
+    if (index < numberOfQuestion - 1) {
+      return <Button onClick={handleMoveQuestion}>Next</Button>;
+    }
+    return <Button onClick={handleFinishGame}>Endgame</Button>;
+  };
 
   return (
     <BasicLayout>
       <section className='courses'>
+        <p className='btn'>Player Screen</p>
         <p className='btn'>name j do</p>
         <div className='site-card-border-less-wrapper'>
-          { i < 0 ? (<div>{i}</div>) : (
-            <Card
-              title={questionList.current[i].content}
-              bordered={false}
-              extra={
-            i < numberOfQuestion - 1 ? (
-              // <Button onClick={handleMoveQuestion} disabled={counter > 0}>
-              //   Next
-              // </Button>
-              <Button onClick={handleMoveQuestion} disabled={false}>
-                Next
-              </Button>
-            ) : (
-              <Button onClick={handleFinishGame} disabled={false}>
-                Endgame
-              </Button>
-            )
+          <Card
+            title={questions[i].content}
+            bordered={false}
+            extra={
+              // i.current < numberOfQuestion - 1 ? (
+              //   <Button onClick={handleMoveQuestion} disabled={false}>
+              //     Next
+              //   </Button>
+              // ) : (
+              //   <Button onClick={handleFinishGame} disabled={false}>
+              //     Endgame
+              //   </Button>
+              // )
+              getCardButton(i)
             }
-              style={{
-                height: 600,
-                width: '100%'
-              }}
-            >
-              <Column {...config} height={300} />
-              <div style={{ marginTop: '60px' }} />
-              <Row gutter={[16, 16]}>
-                <Col span={24}>
-                  Time:
-                  {1221}
-                </Col>
-                <Col span={12}>
-                  <Button block>{`A: ${questionList.current[i].ansA}`}</Button>
-                </Col>
-                <Col span={12}>
-                  <Button block>{`B: ${questionList.current[i].ansB}`}</Button>
-                </Col>
-                <Col span={12}>
-                  <Button block>{`C: ${questionList.current[i].ansC}`}</Button>
-                </Col>
-                <Col span={12}>
-                  <Button block>{`D: ${questionList.current[i].ansD}`}</Button>
-                </Col>
-              </Row>
-            </Card>
-          )}
+            style={{
+              height: 600,
+              width: '100%'
+            }}
+          >
+            <Column {...config} height={300} />
+            <div style={{ marginTop: '60px' }} />
+            <Row gutter={[16, 16]}>
+              <Col span={24}>
+                Time:
+                {1221}
+              </Col>
+              <Col span={12}>
+                <Button block>{`A: ${questions[i].ansA}`}</Button>
+              </Col>
+              <Col span={12}>
+                <Button block>{`B: ${questions[i].ansB}`}</Button>
+              </Col>
+              <Col span={12}>
+                <Button block>{`C: ${questions[i].ansC}`}</Button>
+              </Col>
+              <Col span={12}>
+                <Button block>{`D: ${questions[i].ansD}`}</Button>
+              </Col>
+            </Row>
+          </Card>
         </div>
         <Divider />
         <Row gutter={[16, 16]}>
@@ -385,4 +414,4 @@ const HostLiveGameGroupPage = () => {
   );
 };
 
-export default HostLiveGameGroupPage;
+export default PlayerLiveGameGroupPage;

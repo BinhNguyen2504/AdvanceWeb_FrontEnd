@@ -15,9 +15,15 @@ const GroupItem = ({ data }) => (
       <img src='/img/thumbnail.jpg' alt='' />
     </div>
     <h3 className='title'>{data.name}</h3>
-    <Link to={`/groups/${data._id}`} className='inline-btn'>
-      view group
-    </Link>
+    {data.id ? (
+      <Link to={`/groups/${data.id}`} className='inline-btn'>
+        view group
+      </Link>
+    ) : (
+      <Link to={`/groups/${data._id}`} className='inline-btn'>
+        view group
+      </Link>
+    )}
   </div>
 );
 

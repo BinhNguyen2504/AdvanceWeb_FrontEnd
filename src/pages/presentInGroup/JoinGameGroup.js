@@ -1,10 +1,10 @@
 import { Button, Form, Input, notification } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { SmileOutlined } from '@ant-design/icons';
-import { loginAnonymous } from '../../app/authSlice';
-import { initGame } from '../../app/gameSlice';
-import { useJoinPresentMutation } from '../../app/presentationService';
+// import { loginAnonymous } from '../../app/authSlice';
+// import { initGame } from '../../app/gameSlice';
+// import { useJoinPresentMutation } from '../../app/presentationService';
 import { openNotification } from '../../utils';
 import BasicLayout from '../../layouts/BasicLayout';
 import { getPresentationByroomId } from '../../api/groupAPI';
@@ -23,7 +23,15 @@ const JoinGameGroup = () => {
     console.log('values: ', values);
     console.log('stateL :', state);
     const { data } = await getPresentationByroomId(state.gameid, values.username);
-    console.log('client game data: ', data);
+    console.log('client join game data: ', data);
+
+    if (data.success) {
+      navigate('/presentation/group/player/waiting', {
+        state: { player: values, game: data.data, roomID: state.gameid }
+      });
+    } else {
+      openNotification(api, 'Join game fail, please try later', '', <SmileOutlined style={{ color: '#108ee9' }} />);
+    }
     // const result = await joinGame(values).unwrap();
     // if (result.success) {
     //   const { name, questions, numberOfQuestion } = result.data;
@@ -58,7 +66,7 @@ const JoinGameGroup = () => {
           </Form.Item> */}
           <Form.Item>
             <Button type='primary' htmlType='submit' className='btn'>
-              Submit
+              Join Game
             </Button>
           </Form.Item>
           <br />

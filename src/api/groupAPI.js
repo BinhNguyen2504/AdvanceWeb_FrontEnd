@@ -27,6 +27,14 @@ const getGameInGroup = async (groupid) => {
   return data;
 };
 
+const updateRoom = async (pin, status) => {
+  const { data } = api.put('/game/updateStatus', {
+    roomId: pin,
+    isOpen: status
+  });
+  return data;
+};
+
 // export const createGame = (body) => api.post('/game/creategame', body);
 
-export default { createGame, getGameInGroup };
+export default { createGame, getGameInGroup, updateRoom };

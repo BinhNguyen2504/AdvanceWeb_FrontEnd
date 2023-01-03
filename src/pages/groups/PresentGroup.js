@@ -4,14 +4,30 @@ import { Content } from 'antd/es/layout/layout';
 
 import { useRef, useState } from 'react';
 import { SmileOutlined } from '@ant-design/icons';
+import axios from 'axios';
 import MainLayout from '../../layouts/MainLayout';
 
 import GroupPresentPageCard from '../../components/group/GroupPresentPageCard';
 import { useGetListOwnerGroupQuery } from '../../app/groupService';
 import { openNotification } from '../../utils';
-import createGame from '../../api/groupAPI';
+import groupAPI from '../../api/groupAPI';
+import { BASE_URL } from '../../constants';
 
 const PresentGroupPage = () => {
+  const API = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+
+  const createGame = async (body) => {
+    console.log('api: ', API);
+    console.log('storage: ', localStorage.token);
+    const { data } = await API.post('/game/creategame', body);
+    console.log(' data: ', data);
+    return data;
+  };
   const { presentid } = useParams();
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
@@ -27,28 +43,34 @@ const PresentGroupPage = () => {
 
   const createGroupGame = async (presenID, groupID) => {
     // API tạo game : trả về
-    // i.current = 0;
-    console.log('insinde create group');
-    const response = await createGame({
-      presentationId: presenID,
-      groupId: groupID
-    });
-    console.log('response: ', response);
+    // i.current = 0; 
+    try {
+      console.log('insinde create group');
+      console.log('groupid: ', groupID);
+      const response = await createGame({
+        presentationId: presenID,
+        groupId: groupID
+      });
+      console.log('response create game: ', response);
 
-    // danh sách các câu hỏi
-    gameData.current = response.data;
-    // setinfo(JSON.stringify(response.data.data));
-    // setroomId(response.data.data.roomId);
-    // SOCKET gọi lên socket tạo phòng
-    // socket.current.emit('join-room', {
-    //   //  Tên định danh socket - duy nhất - có thể dùng id hoặc user name
-    //   name: 'thetoan3',
-    //   room: data.data.roomId
-    // });
-    // questions.current = data.data.presentation.questions;
-    // setMessage(JSON.stringify(gameData.current.roomId));
-    console.log('game: ', gameData.current);
-    return response.data;
+      // danh sách các câu hỏi
+      gameData.current = response.data;
+      // setinfo(JSON.stringify(response.data.data));
+      // setroomId(response.data.data.roomId);
+      // SOCKET gọi lên socket tạo phòng
+      // socket.current.emit('join-room', {
+      //   //  Tên định danh socket - duy nhất - có thể dùng id hoặc user name
+      //   name: 'thetoan3',
+      //   room: data.data.roomId
+      // });
+      // questions.current = data.data.presentation.questions;
+      // setMessage(JSON.stringify(gameData.current.roomId));
+      console.log('game: ', gameData.current);
+      return response.data;
+    } catch (err) {
+      console.log('[ERROR][create game group api]: ', err);
+      return null;
+    }
   };
 
   const handleStartGroupPresent = async () => {

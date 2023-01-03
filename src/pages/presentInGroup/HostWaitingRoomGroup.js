@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useSelector } from 'react-redux';
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Spin, Typography } from 'antd';
@@ -7,7 +8,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 // import { MyPresent } from './mock';
 // import { getNotNullList } from '../../utils';
 import MainLayout from '../../layouts/MainLayout';
-import { useStartGameMutation } from '../../app/gameService';
+// import { useStartGameMutation } from '../../app/gameService';
+import groupAPI from '../../api/groupAPI';
 
 const { Title } = Typography;
 const HostWaitingRoomGroupPage = () => {
@@ -47,9 +49,12 @@ const HostWaitingRoomGroupPage = () => {
     console.log('location: ', state);
     console.log('presentID: ', gameData.current.presentation._id);
     console.log('room', gameData.current.roomId);
+    console.log('socketID host: ', socket.id);
   }, []);
 
   const handleStartGame = async () => {
+    const data = await groupAPI.updateRoom(gameData.current.roomId, false);
+    console.log('response update game: ', data);
     // const result = await startGame({ pin, isOpen: false });
     // if (result) {
     //   console.log(result);
@@ -59,7 +64,7 @@ const HostWaitingRoomGroupPage = () => {
     //   });
     //   navigate('/host/live');
     // }
-    navigate('/toan/presentation/group/host/live');
+    navigate('/presentation/group/host/live', { state: gameData.current });
   };
 
   // const playerNameList = getNotNullList([...playerSet.current]).map((player) => <div key={player}>{player}</div>);
