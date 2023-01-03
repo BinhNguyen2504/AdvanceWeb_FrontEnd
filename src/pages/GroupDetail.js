@@ -168,13 +168,13 @@ const GroupDetail = () => {
           <Space size='middle'>
             <Popconfirm
               placement='topLeft'
-              title='Are you sure to delete this member'
+              title='Are you sure to join this present'
               description='{description}'
               onConfirm={() => handleJoinGame(item)}
               okText='Yes'
               cancelText='No'
             >
-              <Button>Join Presentation</Button>
+              <Button disabled={!item.isOpen}>Join Presentation</Button>
             </Popconfirm>
           </Space>
         )
@@ -185,7 +185,6 @@ const GroupDetail = () => {
     getGameList(id);
   }, []);
 
-  const hasStreaming = true;
   const columns = [
     {
       title: 'MEMBER',
@@ -295,7 +294,7 @@ const GroupDetail = () => {
             <div className='tabled'>
               <Row gutter={[24, 0]}>
                 <Col xs='24' xl={24}>
-                  <Card bordered={false} className='criclebox tablespace mb-24' title='Group Member'>
+                  <Card bordered={false} className='criclebox tablespace mb-24' title='Game List'>
                     <div className='table-responsive'>
                       <Table
                         columns={gameColumns}

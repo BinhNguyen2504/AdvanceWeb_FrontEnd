@@ -3,7 +3,7 @@ import { Button, Carousel, Dropdown, Space } from 'antd';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import { DownOutlined, UserOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import MainLayout from '../layouts/MainLayout';
 import SlicePreview from '../components/SlidePreview';
 import { useDeletePresentMutation, useGetPresentQuery } from '../app/presentationService';
