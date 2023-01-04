@@ -37,7 +37,9 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
     </Form.Item>
   </>
 );
-const SendQuestionForm = ({ roomID, username, isHost }) => {
+const SendQuestionForm = ({ roomID, username, isHost, status }) => {
+  console.log('roomID form: ', roomID);
+  console.log('drawer status: ', status);
   const API = axios.create({
     baseURL: BASE_URL,
     headers: {
@@ -77,7 +79,7 @@ const SendQuestionForm = ({ roomID, username, isHost }) => {
         content: value
       });
 
-      setComments([...comments, res.data]);
+      setComments([res.data, ...comments]);
       message.success('Send question successfully');
     }, 1000);
   };
@@ -89,7 +91,8 @@ const SendQuestionForm = ({ roomID, username, isHost }) => {
   const getQuestionList = async () => {
     const res = await getQuestionListAPI(roomID);
     console.log('questionListInDrawer: ', res);
-    setComments(res.data);
+    const reversed = res.data.reverse();
+    setComments(reversed);
   };
 
   const callFetchData = () => {
@@ -99,11 +102,11 @@ const SendQuestionForm = ({ roomID, username, isHost }) => {
 
   useEffect(() => {
     getQuestionList();
-  }, []);
+  }, [status]);
 
   const onScroll = (e) => {
     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop === ContainerHeight) {
-      // appendData();
+      // callFetchData();
     }
   };
 

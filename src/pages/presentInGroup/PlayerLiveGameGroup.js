@@ -189,7 +189,7 @@ const PlayerLiveGameGroupPage = () => {
   const handleFinishGame = () => {
     console.log('co-owner emit i: ', i + 1);
     socket.emit('send-nextQuestion', {
-      room: state.roomId,
+      room: roomID,
       msg: i + 1,
     });
     setChartData([...initChart]);
@@ -343,7 +343,7 @@ const PlayerLiveGameGroupPage = () => {
           //   </Space>
           // )}
         >
-          <SendQuestionForm roomID={state.roomId} username={player.username} isHost={isHost} />
+          <SendQuestionForm roomID={roomID} username={player.username} isHost={isHost} status={openQuestion} />
         </Drawer>
 
         <Drawer
