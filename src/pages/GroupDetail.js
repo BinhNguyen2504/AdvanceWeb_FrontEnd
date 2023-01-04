@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, Col, Layout, Popconfirm, Row, Space, Table } from 'antd';
+import { Avatar, Button, Card, Col, Form, Input, Layout, Popconfirm, Row, Space, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -6,9 +6,10 @@ import groupAPI from '../api/groupAPI';
 
 import {
   useGetGroupDetailQuery,
-  useGetInviteLinkMutation,
   useKickOutMutation,
-  useRemoveGroupMutation
+  useRemoveGroupMutation,
+  useSendInviteMailMutation,
+  useGetInviteLinkMutation
 } from '../app/groupService';
 
 import MainLayout from '../layouts/MainLayout';
@@ -20,23 +21,27 @@ const GroupDetail = () => {
   const { data, isLoading } = useGetGroupDetailQuery(id);
   const [removeGroup] = useRemoveGroupMutation();
   const [kickMember] = useKickOutMutation();
+  const [sendMail] = useSendInviteMailMutation();
   const [getLink] = useGetInviteLinkMutation();
   const [dataSource, setDataSource] = useState([]);
   const [gameDataSource, setGameDataSource] = useState([]);
   const [inviteLink, setInviteLink] = useState('');
-  // const [isDisplayInviteLink, setIsDisplayInviteLink] = useState(false);
+  const [isDisplayInvite, setIsDisplayInvite] = useState(false);
 
   const handleEditRole = (member) => {
     console.log(member);
     navigate(`/groups/role/${id}`);
   };
   const handleInviteClick = async () => {
+    setIsDisplayInvite(!isDisplayInvite);
     const result = await getLink({ id });
-    console.log(result);
-    if (result) {
-      setInviteLink(result.data.data);
-    }
-    //   setIsDisplayInviteLink(true);
+    if (result) setInviteLink(result.data.data);
+  };
+  const submitInvite = async (values) => {
+    await sendMail({
+      username: values.username,
+      id
+    });
   };
   const handleRemoveGroup = async () => {
     await removeGroup(id).unwrap();
@@ -275,7 +280,19 @@ const GroupDetail = () => {
                 Delete
               </Button>
             </Space>
-            {inviteLink && <p>{inviteLink}</p>}
+            {isDisplayInvite && (
+              <Form name='invite' onFinish={submitInvite} style={{ marginBottom: '30px' }}>
+                <Form.Item label='Username' name='username'>
+                  <Input type='text' placeholder='Search by username' />
+                </Form.Item>
+                {/* <Form.Item>
+                  <Button type='primary' htmlType='submit'>
+                    Invite people
+                  </Button>
+                </Form.Item> */}
+                {inviteLink && <a href={inviteLink}>Invitation Link Here</a>}
+              </Form>
+            )}
 
             {/* <div className='box-container'> */}
             {/* <div className='box'>

@@ -27,6 +27,9 @@ export const groupServices = createApi({
     }),
     getInviteLink: build.mutation({
       query: (body) => ({ url: '/group/invitelink', method: 'post', data: body })
+    }),
+    sendInviteMail: build.mutation({
+      query: (body) => ({ url: '/group/invitemail', method: 'post', data: body })
     })
   })
 });
@@ -38,5 +41,6 @@ export const {
   useGetListOwnerGroupQuery,
   useRemoveGroupMutation,
   useKickOutMutation,
-  useGetInviteLinkMutation
+  useGetInviteLinkMutation,
+  useSendInviteMailMutation
 } = groupServices;
