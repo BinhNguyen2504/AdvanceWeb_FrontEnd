@@ -12,7 +12,7 @@ import './comment.css';
 import axios from 'axios';
 import { BASE_URL } from '../../constants';
 
-const QuestionComment = ({ question, isHost, callback }) => {
+const QuestionComment = ({ question, isHost, callback, viewer }) => {
   const API = axios.create({
     baseURL: BASE_URL,
     headers: {
@@ -25,32 +25,44 @@ const QuestionComment = ({ question, isHost, callback }) => {
     return data;
   };
 
+  const upvoteApi = async (body) => {
+    const { data } = await API.put('question/vote', body);
+    return data;
+  };
+
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [action, setAction] = useState(null);
-  const like = () => {
-    setLikes(1);
-    setDislikes(0);
-    setAction('liked');
+  const like = async () => {
+    const res = await upvoteApi({ id: question._id, voter: viewer });
+    if (res.data === 'vote success') {
+      setAction('liked');
+    } else {
+      setAction('disliked');
+    }
+    callback();
+    // setLikes(1);
+    // setDislikes(0);
+    // setAction('liked');
   };
-  const dislike = () => {
-    setLikes(0);
-    setDislikes(1);
-    setAction('disliked');
-  };
+  // const dislike = () => {
+    // setLikes(0);
+    // setDislikes(1);
+    // setAction('disliked');
+  // };
   const actions = [
     <Tooltip key='comment-basic-like' title='Like'>
       <span onClick={like}>
         {createElement(action === 'liked' ? LikeFilled : LikeOutlined)}
-        <span className='comment-action'>{likes}</span>
+        <span className='comment-action'>{question.totalVote}</span>
       </span>
     </Tooltip>,
-    <Tooltip key='comment-basic-dislike' title='Dislike'>
-      <span onClick={dislike}>
-        {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
-        <span className='comment-action'>{dislikes}</span>
-      </span>
-    </Tooltip>,
+    // <Tooltip key='comment-basic-dislike' title='Dislike'>
+    //   <span onClick={dislike}>
+    //     {React.createElement(action === 'disliked' ? DislikeFilled : DislikeOutlined)}
+    //     <span className='comment-action'>{dislikes}</span>
+    //   </span>
+    // </Tooltip>,
     <span key='comment-basic-reply-to'>Reply to</span>
   ];
 

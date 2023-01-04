@@ -10,14 +10,14 @@ import { BASE_URL } from '../../constants';
 const ContainerHeight = 580;
 const { TextArea } = Input;
 
-const CommentList = ({ comments, onScroll, isHost, callback }) => {
+const CommentList = ({ comments, onScroll, isHost, callback, viewer }) => {
   console.log('comments in commentList: ', comments);
   return (
     <List>
       <VirtualList data={comments} height={ContainerHeight} itemHeight={47} itemKey='email' onScroll={onScroll}>
         {(item) => (
           <List.Item key={item.email}>
-            <QuestionComment question={item} isHost={isHost} callback={callback} />
+            <QuestionComment question={item} isHost={isHost} callback={callback} viewer={viewer} />
           </List.Item>
         )}
       </VirtualList>
@@ -113,7 +113,13 @@ const SendQuestionForm = ({ roomID, username, isHost, status }) => {
   return (
     <>
       {comments.length > 0 && (
-        <CommentList comments={comments} onScroll={onScroll} isHost={isHost} callback={callFetchData} />
+        <CommentList
+          comments={comments}
+          onScroll={onScroll}
+          isHost={isHost}
+          callback={callFetchData}
+          viewer={username}
+        />
       )}
       <Comment
         avatar={<Avatar src='https://joeschmoe.io/api/v1/random' alt='Han Solo' />}
