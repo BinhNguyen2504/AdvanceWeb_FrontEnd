@@ -8,16 +8,37 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
+import axios from 'axios';
 import { nextQuestion } from '../../app/gameSlice';
 import BasicLayout from '../../layouts/BasicLayout';
 import PresentQuestionForm from '../../components/Question/CommonForm';
 import QuestionComment from '../../components/Question/questionComment';
 import SendQuestionForm from '../../components/Question/sendQuestionForm';
 import ChatForm from '../../components/Question/chatDrawer';
+import { BASE_URL } from '../../constants';
+import ResultView from '../../components/game/resultView';
 
 const { Option } = Select;
 
 const PlayerLiveGameGroupPage = () => {
+  const API = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+  const sendAnswer = (roomId, username, question, ans) => API.put(`/game/answer/${roomId}`, {
+    username,
+    question,
+    ans,
+  });
+
+  const getResult = async (roomID) => {
+    const { data } = await API.get(`/game/gameresult/${roomID}`);
+    console.log(' data: ', data);
+    return data;
+  };
+
   const { socket } = useSelector((state) => state.socket);
   const { state } = useLocation();
   const { roomID } = state;
@@ -27,6 +48,11 @@ const PlayerLiveGameGroupPage = () => {
   const { questions } = game;
   const numberOfQuestion = questions.length;
   const [openQuestion, setOpenQuestion] = useState(false);
+  const [isDisable, setIsDisable] = useState(false);
+  const [i, setI] = useState(0);
+  const [counter, setCounter] = useState(i < numberOfQuestion ? questions[i].time : 0);
+  const [resultData, setResultData] = useState({});
+
   const showQuestionDrawer = () => {
     setOpenQuestion(true);
   };
@@ -84,10 +110,15 @@ const PlayerLiveGameGroupPage = () => {
   //   setCounter(questions[currentQuestion].time);
   // }, [currentQuestion]);
 
-  const [i, setI] = useState(0);
-
-  const handleEndGame = () => {
+  const handleEndGame = async () => {
     console.log('endgame');
+    try {
+      const res = await getResult(roomID);
+      setResultData(res.data);
+      console.log('result game: ', res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -104,17 +135,38 @@ const PlayerLiveGameGroupPage = () => {
     socket.on('listen-nextQuestion', (index) => {
       // setInfo(msg);
       // setQuestion(questions.current[msg]);
+      if (Number(index) < 0) return;
+      setI(index);
       console.log('mess from server: ', index);
       if (index < numberOfQuestion) {
-        setI(index);
+        setIsDisable(false);
       } else {
+        console.log('else case i: ', index);
         handleEndGame();
       }
+      setChartData([...initChart]);
     });
-    socket.on('listen-answer-chart', (msg) => {
+    socket.on('listen-answer-chart', (ansChartData) => {
       // setInfo(JSON.stringify(msg));
+      console.log('mess-chart', ansChartData);
+      const newChart = [
+        { type: 'A', answers: ansChartData.A },
+        { type: 'B', answers: ansChartData.B },
+        { type: 'C', answers: ansChartData.C },
+        { type: 'D', answers: ansChartData.D }
+      ];
+      setChartData([...newChart]);
     });
   }, []);
+
+  useEffect(() => {
+    // const timer = setInterval(() => {
+    //   if (counter > 0) {
+    //     setCounter((prev) => prev - 1);
+    //   }
+    // }, 1000);
+    // return () => clearInterval(timer);
+  }, [counter]);
 
   const handleMoveQuestion = () => {
     // if (currentQuestion < numberOfQuestion - 1) {
@@ -123,6 +175,7 @@ const PlayerLiveGameGroupPage = () => {
     // }
     if (i + 1 < numberOfQuestion) {
       setI(i + 1);
+      setChartData([...initChart]);
       // setinfo(i);
       // setQuestion(questions.current[i]);
 
@@ -134,11 +187,12 @@ const PlayerLiveGameGroupPage = () => {
     console.log('handle move');
   };
   const handleFinishGame = () => {
-    // socket.emit('student-sender', {
-    //   room: pin,
-    //   msg: currentQuestion + 1
-    // });
-    // navigate('/presentation');
+    console.log('co-owner emit i: ', i + 1);
+    socket.emit('send-nextQuestion', {
+      room: state.roomId,
+      msg: i + 1,
+    });
+    setChartData([...initChart]);
   };
 
   const config = {
@@ -169,11 +223,34 @@ const PlayerLiveGameGroupPage = () => {
   };
 
   const getCardButton = (index) => {
-    // if (!isHost) return <div />;
+    if (!isHost) return <div />;
     if (index < numberOfQuestion - 1) {
-      return <Button onClick={handleMoveQuestion}>Next</Button>;
+      return <Button onClick={() => handleMoveQuestion()}>{`${index + 1}/${numberOfQuestion}: Next`}</Button>;
     }
-    return <Button onClick={handleFinishGame}>Endgame</Button>;
+    return <Button onClick={() => handleFinishGame()}>{`${index + 1}/${numberOfQuestion}: Endgame`}</Button>;
+  };
+
+  const handleAnswer = async (ans) => {
+    try {
+      const { data } = await sendAnswer(
+        roomID,
+        player.username,
+        i + 1,
+        ans
+      );
+    } catch (error) {
+      console.log(error);
+    }
+    socket.emit('send-answer-chart', {
+      room: roomID,
+      msg: i + 1,
+    });
+    setIsDisable(true);
+    console.log('send anwser: ', ans);
+
+    console.log('counter: ', counter);
+    console.log('questions: ', questions);
+    // console.log('result ans: ', data);
   };
 
   return (
@@ -182,10 +259,11 @@ const PlayerLiveGameGroupPage = () => {
         <p className='btn'>Player Screen</p>
         <p className='btn'>name j do</p>
         <div className='site-card-border-less-wrapper'>
-          <Card
-            title={questions[i].content}
-            bordered={false}
-            extra={
+          { i >= numberOfQuestion ? (<ResultView resultData={resultData} />) : (
+            <Card
+              title={questions[i].content}
+              bordered={false}
+              extra={
               // i.current < numberOfQuestion - 1 ? (
               //   <Button onClick={handleMoveQuestion} disabled={false}>
               //     Next
@@ -197,32 +275,41 @@ const PlayerLiveGameGroupPage = () => {
               // )
               getCardButton(i)
             }
-            style={{
-              height: 600,
-              width: '100%'
-            }}
-          >
-            <Column {...config} height={300} />
-            <div style={{ marginTop: '60px' }} />
-            <Row gutter={[16, 16]}>
-              <Col span={24}>
-                Time:
-                {1221}
-              </Col>
-              <Col span={12}>
-                <Button block>{`A: ${questions[i].ansA}`}</Button>
-              </Col>
-              <Col span={12}>
-                <Button block>{`B: ${questions[i].ansB}`}</Button>
-              </Col>
-              <Col span={12}>
-                <Button block>{`C: ${questions[i].ansC}`}</Button>
-              </Col>
-              <Col span={12}>
-                <Button block>{`D: ${questions[i].ansD}`}</Button>
-              </Col>
-            </Row>
-          </Card>
+              style={{
+                height: 600,
+                width: '100%'
+              }}
+            >
+              <Column {...config} height={300} />
+              <div style={{ marginTop: '60px' }} />
+              <Row gutter={[16, 16]}>
+                <Col span={24}>
+                  Time:
+                  {counter}
+                </Col>
+                <Col span={12}>
+                  <Button block onClick={() => handleAnswer('A')} disabled={isDisable || counter <= 0}>
+                    {`A: ${questions[i].ansA}`}
+                  </Button>
+                </Col>
+                <Col span={12}>
+                  <Button block onClick={() => handleAnswer('B')} disabled={isDisable || counter <= 0}>
+                    {`B: ${questions[i].ansB}`}
+                  </Button>
+                </Col>
+                <Col span={12}>
+                  <Button block onClick={() => handleAnswer('C')} disabled={isDisable || counter <= 0}>
+                    {`C: ${questions[i].ansC}`}
+                  </Button>
+                </Col>
+                <Col span={12}>
+                  <Button block onClick={() => handleAnswer('D')} disabled={isDisable || counter <= 0}>
+                    {`D: ${questions[i].ansD}`}
+                  </Button>
+                </Col>
+              </Row>
+            </Card>
+          )}
         </div>
         <Divider />
         <Row gutter={[16, 16]}>

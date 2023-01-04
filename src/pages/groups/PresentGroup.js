@@ -10,7 +10,7 @@ import MainLayout from '../../layouts/MainLayout';
 import GroupPresentPageCard from '../../components/group/GroupPresentPageCard';
 import { useGetListOwnerGroupQuery } from '../../app/groupService';
 import { openNotification } from '../../utils';
-import groupAPI from '../../api/groupAPI';
+// import groupAPI from '../../api/groupAPI';
 import { BASE_URL } from '../../constants';
 
 const PresentGroupPage = () => {
@@ -43,7 +43,7 @@ const PresentGroupPage = () => {
 
   const createGroupGame = async (presenID, groupID) => {
     // API tạo game : trả về
-    // i.current = 0; 
+    // i.current = 0;
     try {
       console.log('insinde create group');
       console.log('groupid: ', groupID);

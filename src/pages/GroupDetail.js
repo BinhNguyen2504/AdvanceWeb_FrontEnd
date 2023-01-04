@@ -13,6 +13,7 @@ import {
 } from '../app/groupService';
 
 import MainLayout from '../layouts/MainLayout';
+import { getNotNullList } from '../utils';
 
 const { Content } = Layout;
 const GroupDetail = () => {
@@ -79,7 +80,7 @@ const GroupDetail = () => {
         ),
         employed: <div className='ant-employed' />
       };
-      const memberList = member.map((item) => ({
+      const memberList = getNotNullList(member).map((item) => ({
         key: item._id,
         name: item.name,
         _id: item._id,

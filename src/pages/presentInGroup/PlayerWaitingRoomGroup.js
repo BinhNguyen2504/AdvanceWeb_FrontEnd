@@ -24,18 +24,18 @@ const PlayerWaitingRoomGroup = () => {
     });
 
     socket.on('listen-nextQuestion', (msg) => {
-      console.log('[nextQuestion] message from server: ', msg);
+      // console.log('[nextQuestion] message from server: ', msg);
       // setInfo(msg);
       // setQuestion(questions.current[msg]);
       // i.current = msg;
       if (msg === -1) {
-        navigate('/presentation/group/player/live', { state: { player, game, roomID } });
+        navigate('/presentation/group/player/live', { state: { player, game, roomID }, replace: true });
       }
     });
 
-    socket.on('listen-answer-chart', (msg) => {
-      console.log('[answer-chart] message from server: ', msg);
-    });
+    // socket.on('listen-answer-chart', (msg) => {
+    //   console.log('[answer-chart] message from server: ', msg);
+    // });
 
     // document.body.requestFullscreen();
     // socket.on('student-receiver', (msg) => {

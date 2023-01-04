@@ -8,16 +8,32 @@ import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
+import axios from 'axios';
 import { nextQuestion } from '../../app/gameSlice';
 import BasicLayout from '../../layouts/BasicLayout';
 import PresentQuestionForm from '../../components/Question/CommonForm';
 import QuestionComment from '../../components/Question/questionComment';
 import SendQuestionForm from '../../components/Question/sendQuestionForm';
 import ChatForm from '../../components/Question/chatDrawer';
+import { BASE_URL } from '../../constants';
+import ResultView from '../../components/game/resultView';
 
 const { Option } = Select;
 
 const HostLiveGameGroupPage = () => {
+  const API = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+
+  const getResult = async (roomID) => {
+    const { data } = await API.get(`/game/gameresult/${roomID}`);
+    console.log(' data: ', data);
+    return data;
+  };
+  const [resultData, setResultData] = useState({});
   const [openQuestion, setOpenQuestion] = useState(false);
   const showQuestionDrawer = () => {
     setOpenQuestion(true);
@@ -82,11 +98,56 @@ const HostLiveGameGroupPage = () => {
   const { numberOfQuestion } = state.presentation;
   const [i, setI] = useState(0);
 
+  const handleEndGame = async () => {
+    console.log('endgame');
+    try {
+      const res = await getResult(state.roomId);
+      console.log('result game: ', res);
+      setResultData(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     console.log('state in live: ', state);
     socket.emit('send-nextQuestion', {
       room: state.roomId,
       msg: -1,
+    });
+
+    socket.on('listen-nextQuestion', (msgIndex) => {
+      // setinfo(JSON.stringify(msg));
+      if (Number(msgIndex) < 0) return;
+      setI(msgIndex);
+      console.log('mess from server: ', msgIndex);
+      if (msgIndex < numberOfQuestion) {
+        // setIsDisable(false);
+      } else {
+        console.log('else case i: ', msgIndex);
+        handleEndGame();
+      }
+      setChartData([...initChart]);
+    });
+    socket.on('listen-answer-chart', (ansChartData) => {
+      // setMessage(JSON.stringify(msg));
+      // setQuestion(questions.current[msg]);
+
+      // anwser chart data
+      console.log('player anwser: ', ansChartData);
+
+      // const index = chartData.findIndex((item) => item.type === msg.ans);
+      // const newData = [...chartData];
+      // if ([0, 1, 2, 3].includes(index)) {
+      //   newData[index].answers = chartData[index].answers + 1;
+      // }
+      const newChart = [
+        { type: 'A', answers: ansChartData.A },
+        { type: 'B', answers: ansChartData.B },
+        { type: 'C', answers: ansChartData.C },
+        { type: 'D', answers: ansChartData.D }
+      ];
+      setChartData([...newChart]);
     });
   }, []);
 
@@ -99,8 +160,9 @@ const HostLiveGameGroupPage = () => {
     if (i + 1 < numberOfQuestion) {
       // setinfo(i.current);
       // setQuestion(questions.current[i.current]);
-      console.log('host emit i: ', i + 1);
+      console.log('host send next question: ', i + 1);
       setI(i + 1);
+      setChartData([...initChart]);
       socket.emit('send-nextQuestion', {
         room: state.roomId,
         msg: i + 1,
@@ -109,10 +171,13 @@ const HostLiveGameGroupPage = () => {
   };
   const handleFinishGame = () => {
     console.log('host emit i: ', i + 1);
+    setI(i + 1);
+    handleEndGame();
     socket.emit('send-nextQuestion', {
       room: state.roomId,
       msg: i + 1,
     });
+    setChartData([...initChart]);
   };
 
   const config = {
@@ -144,28 +209,37 @@ const HostLiveGameGroupPage = () => {
   console.log('i current: ', i);
   console.log('question: ', questionList.current);
 
+  const getCardButton = (index) => {
+    // if (!isHost) return <div />;
+    if (index < numberOfQuestion - 1) {
+      return <Button onClick={() => handleMoveQuestion()}>{`${index + 1}/${numberOfQuestion}: Next`}</Button>;
+    }
+    return <Button onClick={() => handleFinishGame()}>{`${index + 1}/${numberOfQuestion}: Endgame`}</Button>;
+  };
+
   return (
     <BasicLayout>
       <section className='courses'>
         <p className='btn'>name j do</p>
         <div className='site-card-border-less-wrapper'>
-          { i < 0 ? (<div>{i}</div>) : (
+          { i >= numberOfQuestion ? (<ResultView resultData={resultData} />) : (
             <Card
               title={questionList.current[i].content}
               bordered={false}
               extra={
-            i < numberOfQuestion - 1 ? (
-              // <Button onClick={handleMoveQuestion} disabled={counter > 0}>
-              //   Next
-              // </Button>
-              <Button onClick={handleMoveQuestion} disabled={false}>
-                Next
-              </Button>
-            ) : (
-              <Button onClick={handleFinishGame} disabled={false}>
-                Endgame
-              </Button>
-            )
+            // i < numberOfQuestion - 1 ? (
+            //   // <Button onClick={handleMoveQuestion} disabled={counter > 0}>
+            //   //   Next
+            //   // </Button>
+            //   <Button onClick={handleMoveQuestion} disabled={false}>
+            //     Next
+            //   </Button>
+            // ) : (
+            //   <Button onClick={handleFinishGame} disabled={false}>
+            //     Endgame
+            //   </Button>
+            // )
+            getCardButton(i)
             }
               style={{
                 height: 600,
@@ -177,7 +251,7 @@ const HostLiveGameGroupPage = () => {
               <Row gutter={[16, 16]}>
                 <Col span={24}>
                   Time:
-                  {1221}
+                  {questionList.current[i].time ? questionList.current[i].time : ''}
                 </Col>
                 <Col span={12}>
                   <Button block>{`A: ${questionList.current[i].ansA}`}</Button>
