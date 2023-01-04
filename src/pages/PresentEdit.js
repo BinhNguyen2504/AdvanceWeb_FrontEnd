@@ -104,7 +104,7 @@ const PresentEdit = () => {
   };
   const handleSubmit = async () => {
     if (presentId) {
-      await updatePresent({ questions: formData.questions });
+      await updatePresent({ id: presentId, questions: formData.questions });
     } else {
       await createPresent(formData);
     }
