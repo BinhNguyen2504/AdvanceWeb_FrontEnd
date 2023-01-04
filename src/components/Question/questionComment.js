@@ -1,15 +1,30 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable prettier/prettier */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { createElement, useState } from 'react';
-import { DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
-import { Avatar, Tooltip } from 'antd';
+import { CheckCircleOutlined, CheckCircleTwoTone, DislikeFilled, DislikeOutlined, LikeFilled, LikeOutlined } from '@ant-design/icons';
+import { Avatar, Tooltip, Typography } from 'antd';
 import Comment from '@ant-design/compatible/lib/comment';
 
 import './comment.css';
+import axios from 'axios';
+import { BASE_URL } from '../../constants';
 
-const QuestionComment = () => {
+const QuestionComment = ({ question, isHost, callback }) => {
+  const API = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+
+  const sendMarkAnswerd = async (questionID) => {
+    const { data } = await API.put(`/question/${questionID}`);
+    return data;
+  };
+
   const [likes, setLikes] = useState(0);
   const [dislikes, setDislikes] = useState(0);
   const [action, setAction] = useState(null);
@@ -38,22 +53,45 @@ const QuestionComment = () => {
     </Tooltip>,
     <span key='comment-basic-reply-to'>Reply to</span>
   ];
+
+  const handleClick = async () => {
+    if (!isHost) return;
+    const res = await sendMarkAnswerd(question._id);
+    if (res.success) {
+      // setMarked(!marked);
+      console.log('call marked');
+      callback();
+    }
+  };
+
+  const getMarkIcon = (quest) => {
+    if (!isHost) return <div />;
+    return quest.isAnswered ? <Tooltip title='Unmark'><CheckCircleTwoTone twoToneColor="#52c41a" /></Tooltip> : <Tooltip title='Mark'><CheckCircleOutlined twoToneColor="#52c41a" /></Tooltip>;
+  };
+
   return (
     <Comment
       actions={actions}
-      author={<a>Han Solo</a>}
-      avatar={<Avatar src='https://joeschmoe.io/api/v1/random' alt='Han Solo' />}
+      author={question.username}
+      avatar={<Avatar src='https://joeschmoe.io/api/v1/random' alt={question.username} />}
       content={(
-        <p>
-          We supply a series of design principles, practical patterns and high quality design resources (Sketch and
-          Axure), to help people create their product prototypes beautifully and efficiently.
-        </p>
+        <>
+          <Typography.Text delete={question.isAnswered}>
+            {question.content}
+          </Typography.Text>
+          {/* {question.isAnswered ? <Tooltip title='Unmark'><CheckCircleTwoTone twoToneColor="#52c41a" /></Tooltip> : <Tooltip title='Mark'><CheckCircleOutlined twoToneColor="#52c41a" /></Tooltip> } */}
+          <Typography.Text>
+            {' '}
+          </Typography.Text>
+          {getMarkIcon(question)}
+        </>
       )}
       datetime={(
         <Tooltip title='2016-11-22 11:22:33'>
-          <span>8 hours ago</span>
+          <span>{question.createdAt}</span>
         </Tooltip>
       )}
+      onClick={() => handleClick()}
     />
   );
 };
