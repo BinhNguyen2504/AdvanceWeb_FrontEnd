@@ -3,7 +3,7 @@ import { axiosBaseQuery } from '../api/client';
 
 export const presentationService = createApi({
   reducerPath: 'presentationService',
-  refetchOnFocus: false,
+  refetchOnFocus: true,
   refetchOnReconnect: false,
   baseQuery: axiosBaseQuery({ baseUrl: '/presentation' }),
   endpoints: (build) => ({
@@ -17,7 +17,7 @@ export const presentationService = createApi({
       query: (body) => ({ url: '/create', method: 'post', data: body })
     }),
     updatePresent: build.mutation({
-      query: (body) => ({ url: '/', method: 'put', data: body })
+      query: (body) => ({ url: `/${body.id}`, method: 'put', data: { questions: body.questions } })
     }),
     deletePresent: build.mutation({
       query: (body) => ({ url: `/${body.id}`, method: 'delete' })
