@@ -2,7 +2,7 @@ import axios from 'axios';
 import { BASE_URL } from '../constants';
 
 const accessToken = localStorage.getItem('token');
-const api = axios.create({
+export const api = axios.create({
   baseURL: BASE_URL,
   headers: {
     Authorization: `Bearer ${localStorage.getItem('token')}`

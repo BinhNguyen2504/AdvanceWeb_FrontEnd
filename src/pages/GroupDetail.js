@@ -290,7 +290,13 @@ const GroupDetail = () => {
                     Invite people
                   </Button>
                 </Form.Item> */}
-                {inviteLink && <a href={inviteLink}>Invitation Link Here</a>}
+                {inviteLink && (
+                  <p>
+                    Copy this link:
+                    <br />
+                    {inviteLink}
+                  </p>
+                )}
               </Form>
             )}
 
