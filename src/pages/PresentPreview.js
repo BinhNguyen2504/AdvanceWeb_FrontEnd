@@ -100,11 +100,12 @@ const PresentPreview = () => {
           <Button type='primary' className='btn' onClick={handleDeletePresentation}>
             Delete presentation
           </Button>
-          <Button type='primary' className='btn' onClick={handleCreateGame}>
+          {/* <Button type='primary' className='btn' onClick={handleCreateGame}>
             Start presentation
-          </Button>
+          </Button> */}
           <Dropdown menu={menuProps}>
-            <Button type='primary' className='btn' onClick={handleCreateGame}>
+            {/* <Button type='primary' className='btn' onClick={handleCreateGame}> */}
+            <Button type='primary' className='btn'>
               <Space>
                 Start presentation
                 <DownOutlined />
