@@ -57,6 +57,10 @@ const GroupDetail = () => {
     navigate('/presentation/group/player/join', { state: { gameid: game.roomId } });
   };
 
+  const handleReviewGame = async (game) => {
+    navigate(`/presentation/review/${game.roomId}`);
+  };
+
   // const handleJoinPresentGroup = () => {
   //   navigate('/presentation/group/player/join', { state: { gameid: '123' } });
   // };
@@ -148,6 +152,15 @@ const GroupDetail = () => {
     }
   }, []);
 
+  function compare(a, b) {
+    if (a.isOpen === true && b.isOpen === false) {
+      return -1;
+    }
+    if (a.isOpen === false && b.isOpen === true) {
+      return 1;
+    }
+    return 0;
+  }
   // get current game
   useEffect(() => {
     const getGameList = async (groupid) => {
@@ -155,8 +168,10 @@ const GroupDetail = () => {
       console.log('game res: ', res);
       // return res.data;
       const gameListData = res.data;
+      const gameList = getNotNullList(gameListData);
+      const gameElementListSorted = gameList.sort(compare);
       console.log('gameListData: ', gameListData);
-      const gameElementList = gameListData.map((item) => ({
+      const rawElementList = gameElementListSorted.map((item) => ({
         key: item._id,
         name: item.roomId,
         _id: item._id,
@@ -166,25 +181,41 @@ const GroupDetail = () => {
           </div>
         ),
         status: (
-          <Button type='primary' className='tag-primary'>
+          <Button type={item.isOpen ? 'primary' : 'secondary'} className='tag-primary'>
             {item.isOpen ? 'Playing' : 'Finished'}
           </Button>
         ),
         employed: (
           <Space size='middle'>
-            <Popconfirm
-              placement='topLeft'
-              title='Are you sure to join this present'
-              description='{description}'
-              onConfirm={() => handleJoinGame(item)}
-              okText='Yes'
-              cancelText='No'
-            >
-              <Button disabled={!item.isOpen}>Join Presentation</Button>
-            </Popconfirm>
+            {item.isOpen ? (
+              <Popconfirm
+                placement='topLeft'
+                title='Are you sure to join this present'
+                description='{description}'
+                onConfirm={() => handleJoinGame(item)}
+                okText='Yes'
+                cancelText='No'
+              >
+                <Button disabled={!item.isOpen}>Join Presentation</Button>
+              </Popconfirm>
+            ) : (
+              <Popconfirm
+                placement='topLeft'
+                title='Are you want to review this present'
+                description='{description}'
+                onConfirm={() => handleReviewGame(item)}
+                okText='Yes'
+                cancelText='No'
+              >
+                <Button>Review</Button>
+              </Popconfirm>
+            )}
           </Space>
         )
+        // };
       }));
+      // const gameElementList = rawElementList.filter((item) => item !== null && item !== undefined);
+      const gameElementList = rawElementList.filter(() => true);
       console.log('gameElelIst: ', gameElementList);
       setGameDataSource([...gameElementList]);
     };

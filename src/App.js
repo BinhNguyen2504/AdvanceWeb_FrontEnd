@@ -45,6 +45,7 @@ import HostLiveGameGroupPage from './pages/presentInGroup/HostLiveGameGroup';
 import JoinGameGroup from './pages/presentInGroup/JoinGameGroup';
 import PlayerWaitingRoomGroup from './pages/presentInGroup/PlayerWaitingRoomGroup';
 import PlayerLiveGameGroupPage from './pages/presentInGroup/PlayerLiveGameGroup';
+import ReviewGamePage from './pages/presentInGroup/ReviewGame';
 
 const App = () => {
   const user = localStorage.getItem('token');
@@ -124,6 +125,7 @@ const App = () => {
             <Route path='/presentation/group/host/live' element={<HostLiveGameGroupPage />} />
             <Route path='/presentation/group/player/waiting' element={<PlayerWaitingRoomGroup />} />
             <Route path='/presentation/group/player/live' element={<PlayerLiveGameGroupPage />} />
+            <Route path='/presentation/review/:roomId' element={<ReviewGamePage />} />
           </Route>
           <Route path='*' element={<ErrorPage />} />
         </Routes>
