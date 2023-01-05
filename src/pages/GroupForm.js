@@ -17,6 +17,14 @@ const GroupForm = () => {
     if (!result.error) {
       form.resetFields();
       openNotification(api, 'Create group successfully', result.error, <SmileOutlined style={{ color: '#108ee9' }} />);
+      // navigate('/groups');
+    } else {
+      openNotification(
+        api,
+        'Create group fail, please try again',
+        result.error,
+        <SmileOutlined style={{ color: '#108ee9' }} />
+      );
     }
   };
 

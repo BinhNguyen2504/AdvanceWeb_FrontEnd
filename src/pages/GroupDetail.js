@@ -336,9 +336,21 @@ const GroupDetail = () => {
             <Button type='primary' ghost onClick={handleInviteClick}>
               Invite member
             </Button>
-            <Button type='primary' danger ghost onClick={handleRemoveGroup}>
+            <Popconfirm
+              placement='topLeft'
+              title='Are you sure to delete this member'
+              description='{description}'
+              onConfirm={() => handleRemoveGroup()}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button type='primary' danger ghost>
+                Delete
+              </Button>
+            </Popconfirm>
+            {/* <Button type='primary' danger ghost onClick={handleRemoveGroup}>
               Delete
-            </Button>
+            </Button> */}
           </Space>
           {isDisplayInvite && (
             <Form name='invite' onFinish={submitInvite} style={{ marginBottom: '30px' }}>
