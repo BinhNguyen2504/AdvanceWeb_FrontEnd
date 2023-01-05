@@ -26,6 +26,7 @@ const EditRole = () => {
   };
 
   const unassignCoOwnerAPI = async (groupID, name) => {
+    console.log('name member: ', name);
     const { data } = await API.put('/group/unassigncoowner', {
       groupId: groupID,
       coOwner: name

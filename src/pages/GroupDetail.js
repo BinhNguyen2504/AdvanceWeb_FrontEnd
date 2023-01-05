@@ -130,14 +130,14 @@ const GroupDetail = () => {
           <Space size='middle'>
             {data.role === 'OWNER' ? (
               <>
-                <Button onClick={() => handleEditRole(member, 'co-owner')} type='primary' ghost>
+                <Button onClick={() => handleEditRole(item, 'co-owner')} type='primary' ghost>
                   Unassign Co-Owner
                 </Button>
                 <Popconfirm
                   placement='topLeft'
                   title='Are you sure to delete this member'
                   description='{description}'
-                  onConfirm={() => handleRemoveMember(member)}
+                  onConfirm={() => handleRemoveMember(item.name)}
                   okText='Yes'
                   cancelText='No'
                 >
