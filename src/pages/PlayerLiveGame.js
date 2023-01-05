@@ -1,15 +1,19 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
+import { PlusOutlined, SmileOutlined } from '@ant-design/icons';
 import { Column } from '@ant-design/plots';
-import { Button, Card, Col, Row } from 'antd';
+import { Button, Card, Col, Divider, Drawer, notification, Row, Space } from 'antd';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { nextQuestion } from '../app/gameSlice';
 import ResultView from '../components/game/resultView';
+import SendChatForm from '../components/Question/sendChatForm';
+import SendQuestionForm from '../components/Question/sendQuestionForm';
 import { BASE_URL } from '../constants';
 import BasicLayout from '../layouts/BasicLayout';
+import { openNotification } from '../utils';
 
 const PlayerLiveGame = () => {
   const API = axios.create({
@@ -45,6 +49,23 @@ const PlayerLiveGame = () => {
   const [counter, setCounter] = useState(i < numberOfQuestion ? questions[i].time : 0);
   // const dispatch = useDispatch();
   const [resultData, setResultData] = useState({});
+
+  const [openQuestion, setOpenQuestion] = useState(false);
+  const showQuestionDrawer = () => {
+    setOpenQuestion(true);
+  };
+  const onCloseQuestion = () => {
+    setOpenQuestion(false);
+  };
+
+  const [openChat, setOpenChat] = useState(false);
+  const showChatDrawer = () => {
+    setOpenChat(true);
+  };
+  const onCloseChat = () => {
+    setOpenChat(false);
+  };
+
   const initChart = [
     { type: 'A', answers: 0 },
     { type: 'B', answers: 0 },
@@ -161,17 +182,21 @@ const PlayerLiveGame = () => {
     // console.log('result ans: ', data);
   };
 
-  // const sendAnswer = (answer) => {
-  //   socket.emit('teacher-sender', {
-  //     room: pin,
-  //     msg: { username, ans: answer }
-  //   });
-  //   setIsDisable(true);
-  // };
+  const [api, contextHolder] = notification.useNotification();
+  const handleNoti = () => {
+    console.log('has new message');
+    openNotification(
+      api,
+      'New message',
+      'You have new message',
+      <SmileOutlined style={{ color: '#108ee9' }} />
+    );
+  };
 
   return (
     <BasicLayout>
       <section className='courses'>
+        {contextHolder}
         <p className='btn'>{game.name}</p>
         <div className='site-card-border-less-wrapper'>
           {i >= numberOfQuestion ? (
@@ -216,6 +241,62 @@ const PlayerLiveGame = () => {
             </Card>
           )}
         </div>
+        <Divider />
+
+        <Drawer
+          title='Question for Presentation'
+          width={720}
+          onClose={onCloseQuestion}
+          open={openQuestion}
+          placement="left"
+          bodyStyle={{
+            paddingBottom: 80
+          }}
+          // extra={(
+          //   <Space>
+          //     <Button onClick={onCloseQuestion}>Cancel</Button>
+          //     <Button onClick={onCloseQuestion} type='primary'>
+          //       Submit
+          //     </Button>
+          //   </Space>
+          // )}
+        >
+          <SendQuestionForm roomID={roomID} username={player.username} isHost={false} status={openQuestion} />
+        </Drawer>
+
+        <Drawer
+          title='Chat for Presentation'
+          width={720}
+          onClose={onCloseChat}
+          placement="right"
+          open={openChat}
+          bodyStyle={{
+            paddingBottom: 80
+          }}
+          extra={(
+            <Space>
+              <Button onClick={onCloseChat}>Cancel</Button>
+              <Button onClick={onCloseChat} type='primary'>
+                Submit
+              </Button>
+            </Space>
+          )}
+        >
+          <SendChatForm roomID={roomID} username={player.username} isHost={false} status={openQuestion} socket={socket} callNoti={handleNoti} />
+        </Drawer>
+        <Row gutter={[16, 16]}>
+          <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Button type='primary' onClick={showQuestionDrawer} icon={<PlusOutlined />} block>
+              Question
+            </Button>
+          </Col>
+          <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Button type='primary' onClick={showChatDrawer} icon={<PlusOutlined />} block>
+              Chat
+            </Button>
+          </Col>
+
+        </Row>
       </section>
     </BasicLayout>
   );

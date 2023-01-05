@@ -216,7 +216,7 @@ const PresentEdit = () => {
                 </Card>
                 {presentId ? (
                   <Button type='primary' className='btn' onClick={handleSubmit}>
-                    Edit Presentation
+                    Save
                   </Button>
                 ) : (
                   <Button type='primary' className='btn' onClick={handleSubmit}>

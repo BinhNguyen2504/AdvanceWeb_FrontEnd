@@ -1,13 +1,17 @@
+import { PlusOutlined, SmileOutlined } from '@ant-design/icons';
 import { Column } from '@ant-design/plots';
-import { Button, Card, Col, Row } from 'antd';
+import { Button, Card, Col, Divider, Drawer, notification, Row } from 'antd';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 // import { nextQuestion } from '../app/gameSlice';
 import ResultView from '../components/game/resultView';
+import SendChatForm from '../components/Question/sendChatForm';
+import SendQuestionForm from '../components/Question/sendQuestionForm';
 import { BASE_URL } from '../constants';
 import BasicLayout from '../layouts/BasicLayout';
+import { openNotification } from '../utils';
 
 const HostLiveGame = () => {
   const API = axios.create({
@@ -42,6 +46,22 @@ const HostLiveGame = () => {
   const [i, setI] = useState(0);
   const [resultData, setResultData] = useState({});
   // const [counter, setCounter] = useState(questions[i].time);
+  const [openQuestion, setOpenQuestion] = useState(false);
+  const showQuestionDrawer = () => {
+    setOpenQuestion(true);
+  };
+  const onCloseQuestion = () => {
+    setOpenQuestion(false);
+  };
+
+  const [openChat, setOpenChat] = useState(false);
+  const showChatDrawer = () => {
+    setOpenChat(true);
+  };
+  const onCloseChat = () => {
+    setOpenChat(false);
+  };
+
   useEffect(() => {
     document.body.requestFullscreen();
     return () => document.exitFullscreen();
@@ -179,9 +199,16 @@ const HostLiveGame = () => {
     return <Button onClick={() => handleFinishGame()}>{`${index + 1}/${numberOfQuestion}: Endgame`}</Button>;
   };
 
+  const [api, contextHolder] = notification.useNotification();
+  const handleNoti = () => {
+    console.log('has new message');
+    openNotification(api, 'New message', 'You have new message', <SmileOutlined style={{ color: '#108ee9' }} />);
+  };
+
   return (
     <BasicLayout>
       <section className='courses'>
+        {contextHolder}
         <p className='btn'>{state.presenData.name}</p>
         <div className='site-card-border-less-wrapper'>
           {i >= numberOfQuestion ? (
@@ -219,6 +246,75 @@ const HostLiveGame = () => {
             </Card>
           )}
         </div>
+        <Divider />
+        <Row gutter={[16, 16]}>
+          <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Button type='primary' onClick={showQuestionDrawer} icon={<PlusOutlined />} block>
+              Question
+            </Button>
+          </Col>
+          <Col xs={12} sm={12} md={12} lg={12} xl={12}>
+            <Button type='primary' onClick={showChatDrawer} icon={<PlusOutlined />} block>
+              Chat
+            </Button>
+          </Col>
+        </Row>
+        <Drawer
+          title='Question for Presentation'
+          width={720}
+          onClose={onCloseQuestion}
+          open={openQuestion}
+          placement='left'
+          bodyStyle={{
+            paddingBottom: 80
+          }}
+          // extra={(
+          //   <Space>
+          //     <Button onClick={onCloseQuestion}>Cancel</Button>
+          //     <Button onClick={onCloseQuestion} type='primary'>
+          //       Submit
+          //     </Button>
+          //   </Space>
+          // )}
+        >
+          {/* <QuestionComment /> */}
+          <SendQuestionForm
+            roomID={state.gameData.roomId}
+            username='host'
+            isHost
+            status={openQuestion}
+            callNoti={handleNoti}
+          />
+        </Drawer>
+
+        <Drawer
+          title='Chat for Presentation'
+          width={720}
+          onClose={onCloseChat}
+          placement='right'
+          open={openChat}
+          bodyStyle={{
+            paddingBottom: 80
+          }}
+          // extra={(
+          //   <Space>
+          //     <Button onClick={onCloseChat}>Chat</Button>
+          //     <Button onClick={onCloseChat} type='primary'>
+          //       Submit
+          //     </Button>
+          //   </Space>
+          // )}
+        >
+          {/* <ChatForm /> */}
+          <SendChatForm
+            roomID={state.gameData.roomId}
+            username='host'
+            isHost
+            status={openQuestion}
+            socket={socket}
+            callNoti={handleNoti}
+          />
+        </Drawer>
       </section>
     </BasicLayout>
   );
