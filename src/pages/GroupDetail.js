@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-use-before-define */
 import { Avatar, Button, Card, Col, Form, Input, Layout, Popconfirm, Row, Space, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
 import axios from 'axios';
@@ -37,52 +39,23 @@ const GroupDetail = () => {
   const [kickMember] = useKickOutMutation();
   const [sendMail] = useSendInviteMailMutation();
   const [getLink] = useGetInviteLinkMutation();
+  const [roleInGroup, setRoleInGroup] = useState();
   const [dataSource, setDataSource] = useState([]);
   const [gameDataSource, setGameDataSource] = useState([]);
   const [inviteLink, setInviteLink] = useState('');
   const [isDisplayInvite, setIsDisplayInvite] = useState(false);
 
-  const handleEditRole = (member) => {
-    console.log(member);
-    navigate(`/groups/role/${id}`);
-  };
-  const handleInviteClick = async () => {
-    setIsDisplayInvite(!isDisplayInvite);
-    const result = await getLink({ id });
-    if (result) setInviteLink(result.data.data);
-  };
-  const submitInvite = async (values) => {
-    await sendMail({
-      username: values.username,
-      id
-    });
-  };
-  const handleRemoveGroup = async () => {
-    await removeGroup(id).unwrap();
-    navigate('/groups');
-  };
-  const handleRemoveMember = async (username) => {
-    console.log(username);
-    await kickMember({ groupId: id, kickUsername: username });
-  };
-
-  const handleJoinGame = async (game) => {
-    navigate('/presentation/group/player/join', { state: { gameid: game.roomId } });
-  };
-
-  const handleReviewGame = async (game) => {
-    navigate(`/presentation/review/${game.roomId}`);
-  };
-
-  // const handleJoinPresentGroup = () => {
-  //   navigate('/presentation/group/player/join', { state: { gameid: '123' } });
-  // };
-
   const getGroupDetail = async () => {
     const data = await getGroupDetailAPI(id);
     console.log('group data: ', data);
     if (data) {
+      setRoleInGroup(data.role);
       const { owner, coOwners, member } = data.data;
+      const setCoOwner = new Set();
+
+      for (const element of coOwners) {
+        setCoOwner.add(element.id);
+      }
       const ownerData = {
         key: owner.name,
         name: owner.name,
@@ -99,7 +72,8 @@ const GroupDetail = () => {
         ),
         employed: <div className='ant-employed' />
       };
-      const memberList = getNotNullList(member).map((item) => ({
+      const memberListReduce = getNotNullList(member).filter((mem) => !setCoOwner.has(mem.id));
+      const memberList = getNotNullList(memberListReduce).map((item) => ({
         key: item._id,
         name: item.name,
         _id: item._id,
@@ -117,14 +91,14 @@ const GroupDetail = () => {
           <Space size='middle'>
             {data.role !== 'MEMBER' ? (
               <>
-                <Button onClick={() => handleEditRole(member)} type='primary' ghost>
+                <Button onClick={() => handleEditRole(item, 'member')} type='primary' ghost>
                   Edit Role
                 </Button>
                 <Popconfirm
                   placement='topLeft'
                   title='Are you sure to delete this member'
                   description='{description}'
-                  // onConfirm={() => handleRemove(member)}
+                  onConfirm={() => handleRemoveMember(item.name)}
                   okText='Yes'
                   cancelText='No'
                 >
@@ -153,16 +127,16 @@ const GroupDetail = () => {
         ),
         employed: (
           <Space size='middle'>
-            {data.role !== 'MEMBER' ? (
+            {data.role === 'OWNER' ? (
               <>
-                <Button onClick={() => handleEditRole(member)} type='primary' ghost>
-                  Edit Role
+                <Button onClick={() => handleEditRole(member, 'co-owner')} type='primary' ghost>
+                  Unassign Co-Owner
                 </Button>
                 <Popconfirm
                   placement='topLeft'
                   title='Are you sure to delete this member'
                   description='{description}'
-                  // onConfirm={() => handleRemove(member)}
+                  onConfirm={() => handleRemoveMember(member)}
                   okText='Yes'
                   cancelText='No'
                 >
@@ -179,6 +153,42 @@ const GroupDetail = () => {
     }
   };
 
+  const handleEditRole = (member, role) => {
+    console.log(member);
+    navigate(`/groups/role/${id}`, { state: { member, role, groupID: id } });
+  };
+  const handleInviteClick = async () => {
+    setIsDisplayInvite(!isDisplayInvite);
+    const result = await getLink({ id });
+    if (result) setInviteLink(result.data.data);
+  };
+  const submitInvite = async (values) => {
+    await sendMail({
+      username: values.username,
+      id
+    });
+  };
+  const handleRemoveGroup = async () => {
+    await removeGroup(id).unwrap();
+    navigate('/groups');
+  };
+  const handleRemoveMember = async (username) => {
+    console.log('username: ', username);
+    await kickMember({ groupId: id, kickUsername: username });
+    await getGroupDetail();
+  };
+
+  const handleJoinGame = async (game) => {
+    navigate('/presentation/group/player/join', { state: { gameid: game.roomId } });
+  };
+
+  const handleReviewGame = async (game) => {
+    navigate(`/presentation/review/${game.roomId}`);
+  };
+
+  // const handleJoinPresentGroup = () => {
+  //   navigate('/presentation/group/player/join', { state: { gameid: '123' } });
+  // };
   useEffect(() => {
     getGroupDetail();
   }, []);
@@ -336,18 +346,22 @@ const GroupDetail = () => {
             <Button type='primary' ghost onClick={handleInviteClick}>
               Invite member
             </Button>
-            <Popconfirm
-              placement='topLeft'
-              title='Are you sure to delete this member'
-              description='{description}'
-              onConfirm={() => handleRemoveGroup()}
-              okText='Yes'
-              cancelText='No'
-            >
-              <Button type='primary' danger ghost>
-                Delete
-              </Button>
-            </Popconfirm>
+            {roleInGroup === 'OWNER' ? (
+              <Popconfirm
+                placement='topLeft'
+                title='Are you sure to delete this group'
+                description='{description}'
+                onConfirm={() => handleRemoveGroup()}
+                okText='Yes'
+                cancelText='No'
+              >
+                <Button type='primary' danger ghost>
+                  Delete Group
+                </Button>
+              </Popconfirm>
+            ) : (
+              <div />
+            )}
             {/* <Button type='primary' danger ghost onClick={handleRemoveGroup}>
               Delete
             </Button> */}
