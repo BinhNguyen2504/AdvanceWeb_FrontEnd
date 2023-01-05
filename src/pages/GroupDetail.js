@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-use-before-define */
-import { Avatar, Button, Card, Col, Form, Input, Layout, Popconfirm, Row, Space, Table } from 'antd';
+import { SmileOutlined } from '@ant-design/icons';
+import { Avatar, Button, Card, Col, Form, Input, Layout, Popconfirm, Row, Space, Table, notification } from 'antd';
 import Title from 'antd/es/typography/Title';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
@@ -17,7 +18,7 @@ import {
 import { BASE_URL } from '../constants';
 
 import MainLayout from '../layouts/MainLayout';
-import { getNotNullList } from '../utils';
+import { getNotNullList, openNotification } from '../utils';
 
 const { Content } = Layout;
 const GroupDetail = () => {
@@ -44,7 +45,7 @@ const GroupDetail = () => {
   const [gameDataSource, setGameDataSource] = useState([]);
   const [inviteLink, setInviteLink] = useState('');
   const [isDisplayInvite, setIsDisplayInvite] = useState(false);
-
+  const [api, contextHolder] = notification.useNotification();
   const getGroupDetail = async () => {
     const data = await getGroupDetailAPI(id);
     console.log('group data: ', data);
@@ -257,8 +258,20 @@ const GroupDetail = () => {
       }));
       // const gameElementList = rawElementList.filter((item) => item !== null && item !== undefined);
       const gameElementList = rawElementList.filter(() => true);
+
       console.log('gameElelIst: ', gameElementList);
       setGameDataSource([...gameElementList]);
+      for (const element of gameElementListSorted) {
+        if (element.isOpen === true) {
+          openNotification(
+            api,
+            'Annoucement',
+            'There is presentation in group right now',
+            <SmileOutlined style={{ color: '#108ee9' }} />
+          );
+          break;
+        }
+      }
     };
     getGameList(id);
   }, []);
@@ -327,6 +340,7 @@ const GroupDetail = () => {
   return (
     <Content>
       <MainLayout>
+        {contextHolder}
         <section className='teachers container'>
           <h1 className='heading'>Group Details</h1>
           {/* {hasStreaming ? (
