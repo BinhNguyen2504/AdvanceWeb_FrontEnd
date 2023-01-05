@@ -4,15 +4,15 @@ import { Content } from 'antd/es/layout/layout';
 
 import MainLayout from '../layouts/MainLayout';
 import PresentCard from '../components/PresentCard';
-import { useGetListPresentQuery } from '../app/presentationService';
+import { useGetListPresentQuery, useGetPresentCollabQuery } from '../app/presentationService';
 
 const PresentList = () => {
-  const { data, isLoading } = useGetListPresentQuery();
-
+  const { data: presentList, isLoading: a } = useGetListPresentQuery();
+  const { data: presentCollab, isLoading: b } = useGetPresentCollabQuery();
   return (
     <Content>
       <MainLayout>
-        {isLoading ? (
+        {a || b ? (
           <h1>Loading...</h1>
         ) : (
           <section className='courses container'>
@@ -25,7 +25,14 @@ const PresentList = () => {
             </h1>
 
             <Row gutter={[16, 16]}>
-              {data.data.map((present) => (
+              {presentList.data.map((present) => (
+                <Col span={8} key={present._id}>
+                  <PresentCard name={present.name} num={present.numberOfQuestion} id={present._id} />
+                </Col>
+              ))}
+            </Row>
+            <Row gutter={[16, 16]}>
+              {presentCollab.data.map((present) => (
                 <Col span={8} key={present._id}>
                   <PresentCard name={present.name} num={present.numberOfQuestion} id={present._id} />
                 </Col>

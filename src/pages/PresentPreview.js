@@ -1,26 +1,30 @@
 /* eslint-disable no-underscore-dangle */
-import { Button, Carousel, Dropdown, Space } from 'antd';
+import { Button, Carousel, Dropdown, Form, Input, notification, Space } from 'antd';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, SmileOutlined } from '@ant-design/icons';
 import MainLayout from '../layouts/MainLayout';
 import SlicePreview from '../components/SlidePreview';
-import { useDeletePresentMutation, useGetPresentQuery } from '../app/presentationService';
+import { useAddCollaboratorMutation, useDeletePresentMutation, useGetPresentQuery } from '../app/presentationService';
 import { useCreateGameMutation } from '../app/gameService';
 import { initGame } from '../app/gameSlice';
 import { startEditPresent } from '../app/presentationSlice';
+import { openNotification } from '../utils';
 
 const PresentPreview = () => {
   const { id } = useParams();
+  const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [createGame] = useCreateGameMutation();
   const [deletePresent] = useDeletePresentMutation();
+  const [addCollaborator] = useAddCollaboratorMutation();
 
   const { data, isLoading } = useGetPresentQuery(id, {
     skip: !id
   });
+  console.log(data);
   const handleCreateGame = async () => {
     const result = await createGame({ presentationId: id }).unwrap();
     console.log('res handleCreateGame: ', result);
@@ -65,6 +69,11 @@ const PresentPreview = () => {
     }
   };
 
+  const handleSubmitInvite = async (values) => {
+    await addCollaborator({ presentid: id, collaborator: values.username });
+    openNotification(api, 'Add user successfully', '', <SmileOutlined style={{ color: '#108ee9' }} />);
+  };
+
   const items = [
     {
       label: 'Public',
@@ -82,11 +91,20 @@ const PresentPreview = () => {
 
   return (
     <MainLayout>
+      {contextHolder}
       {isLoading ? (
         <h1>Loading</h1>
       ) : (
         <section className='courses container'>
           <p className='btn'>{data.data.name}</p>
+          <Form name='invite' onFinish={handleSubmitInvite} style={{ marginBottom: '30px' }}>
+            <Form.Item label='Username' name='username'>
+              <Input type='text' placeholder='Search by username' />
+            </Form.Item>
+          </Form>
+          {data.data.collaborators.map((item) => (
+            <p>{item.name}</p>
+          ))}
           <Carousel>
             {data.data.questions.map((slide) => (
               <div key={slide._id}>

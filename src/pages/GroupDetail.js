@@ -385,11 +385,6 @@ const GroupDetail = () => {
               <Form.Item label='Username' name='username'>
                 <Input type='text' placeholder='Search by username' />
               </Form.Item>
-              {/* <Form.Item>
-                  <Button type='primary' htmlType='submit'>
-                    Invite people
-                  </Button>
-                </Form.Item> */}
               {inviteLink && (
                 <p>
                   Copy this link:

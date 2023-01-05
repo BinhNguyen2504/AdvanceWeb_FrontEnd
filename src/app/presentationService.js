@@ -13,6 +13,9 @@ export const presentationService = createApi({
     getPresent: build.query({
       query: (id) => ({ url: `/mypresentation/${id}`, method: 'get' })
     }),
+    getPresentCollab: build.query({
+      query: () => ({ url: '/myCollabPresentation', method: 'get' })
+    }),
     createPresent: build.mutation({
       query: (body) => ({ url: '/create', method: 'post', data: body })
     }),
@@ -24,15 +27,20 @@ export const presentationService = createApi({
     }),
     joinPresent: build.mutation({
       query: (body) => ({ url: `/join/${body.username}/${body.pin}`, method: 'put' })
+    }),
+    addCollaborator: build.mutation({
+      query: (body) => ({ url: '/addcollaborator', method: 'put', data: body })
     })
   })
 });
 
 export const {
   useGetListPresentQuery,
+  useGetPresentCollabQuery,
   useCreatePresentMutation,
   useDeletePresentMutation,
   useUpdatePresentMutation,
   useGetPresentQuery,
-  useJoinPresentMutation
+  useJoinPresentMutation,
+  useAddCollaboratorMutation
 } = presentationService;
