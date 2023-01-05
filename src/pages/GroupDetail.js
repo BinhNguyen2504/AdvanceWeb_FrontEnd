@@ -100,19 +100,25 @@ const GroupDetail = () => {
         ),
         employed: (
           <Space size='middle'>
-            <Button onClick={() => handleEditRole(member)} type='primary' ghost>
-              Edit Role
-            </Button>
-            <Popconfirm
-              placement='topLeft'
-              title='Are you sure to delete this member'
-              description='{description}'
-              onConfirm={() => handleRemoveMember(item.name)}
-              okText='Yes'
-              cancelText='No'
-            >
-              <Button danger>Remove</Button>
-            </Popconfirm>
+            {data.role !== 'MEMBER' ? (
+              <>
+                <Button onClick={() => handleEditRole(member)} type='primary' ghost>
+                  Edit Role
+                </Button>
+                <Popconfirm
+                  placement='topLeft'
+                  title='Are you sure to delete this member'
+                  description='{description}'
+                  // onConfirm={() => handleRemove(member)}
+                  okText='Yes'
+                  cancelText='No'
+                >
+                  <Button danger>Remove</Button>
+                </Popconfirm>
+              </>
+            ) : (
+              <div />
+            )}
           </Space>
         )
       }));
@@ -132,19 +138,25 @@ const GroupDetail = () => {
         ),
         employed: (
           <Space size='middle'>
-            <Button onClick={() => handleEditRole(member)} type='primary' ghost>
-              Edit Role
-            </Button>
-            <Popconfirm
-              placement='topLeft'
-              title='Are you sure to delete this member'
-              description='{description}'
-              // onConfirm={() => handleRemove(member)}
-              okText='Yes'
-              cancelText='No'
-            >
-              <Button danger>Remove</Button>
-            </Popconfirm>
+            {data.role !== 'MEMBER' ? (
+              <>
+                <Button onClick={() => handleEditRole(member)} type='primary' ghost>
+                  Edit Role
+                </Button>
+                <Popconfirm
+                  placement='topLeft'
+                  title='Are you sure to delete this member'
+                  description='{description}'
+                  // onConfirm={() => handleRemove(member)}
+                  okText='Yes'
+                  cancelText='No'
+                >
+                  <Button danger>Remove</Button>
+                </Popconfirm>
+              </>
+            ) : (
+              <div />
+            )}
           </Space>
         )
       }));
