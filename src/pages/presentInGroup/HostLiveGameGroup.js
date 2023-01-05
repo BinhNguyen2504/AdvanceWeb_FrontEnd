@@ -60,6 +60,7 @@ const HostLiveGameGroupPage = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { username } = useSelector((state) => state.auth);
   // const { name, questions, currentQuestion, numberOfQuestion, pin } = useSelector((state) => state.game);
   const { socket } = useSelector((state) => state.socket);
   const [chartData, setChartData] = useState(initChart);
@@ -226,7 +227,7 @@ const HostLiveGameGroupPage = () => {
       <SmileOutlined style={{ color: '#108ee9' }} />
     );
   };
-
+  console.log('username in live', username);
   return (
     <BasicLayout>
       <section className='courses'>
@@ -312,7 +313,7 @@ const HostLiveGameGroupPage = () => {
           // )}
         >
           {/* <QuestionComment /> */}
-          <SendQuestionForm roomID={state.roomId} username='host' isHost status={openQuestion} />
+          <SendQuestionForm roomID={state.roomId} username={username} isHost status={openQuestion} />
         </Drawer>
 
         <Drawer
@@ -334,7 +335,7 @@ const HostLiveGameGroupPage = () => {
           // )}
         >
           {/* <ChatForm /> */}
-          <SendChatForm roomID={state.roomId} username='host' isHost status={openQuestion} socket={socket} callNoti={handleNoti} />
+          <SendChatForm roomID={state.roomId} username={username} isHost status={openQuestion} socket={socket} callNoti={handleNoti} />
         </Drawer>
       </section>
     </BasicLayout>

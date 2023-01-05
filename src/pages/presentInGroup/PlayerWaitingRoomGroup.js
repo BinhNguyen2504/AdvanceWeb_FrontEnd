@@ -7,19 +7,20 @@ import BasicLayout from '../../layouts/BasicLayout';
 const PlayerWaitingRoomGroup = () => {
   const { socket } = useSelector((state) => state.socket);
   const navigate = useNavigate();
-
+  const { username } = useSelector((state) => state.auth);
   const { state } = useLocation();
   const { roomID } = state;
   const { player } = state;
   const { game } = state;
-
+  console.log('username waiting: ', username);
   useEffect(() => {
-    console.log('roomID: ', roomID);
-    console.log('player: ', player);
-    console.log('player game data: ', game);
-    console.log('socketID: ', socket.id);
+    // console.log('roomID: ', roomID);
+    // console.log('player: ', player);
+    // console.log('player game data: ', game);
+    // console.log('socketID: ', socket.id);
+    // console.log('state: ', state);
     socket.emit('join-room', {
-      name: player.username,
+      name: username,
       room: roomID
     });
 

@@ -33,7 +33,8 @@ const HostWaitingRoomGroupPage = () => {
   const { socket } = useSelector((state) => state.socket);
   // const { pin } = useSelector((state) => state.game);
   const pin = 1;
-  // const { username } = useSelector((state) => state.auth);
+  const { username } = useSelector((state) => state.auth);
+  console.log('username in waiting', username);
   // const [startGame, startGameResult] = useStartGameMutation();
 
   const [countPlayer, setCountPlayer] = useState(0);
@@ -53,7 +54,7 @@ const HostWaitingRoomGroupPage = () => {
     if (gameData.current.roomId) {
       // TODO: Gọi lên socket tạo phòng
       socket.emit('join-room', {
-        name: `${gameData.current.roomId}_${gameData.current.presentation.name}`,
+        name: username,
         room: gameData.current.roomId
       });
     }

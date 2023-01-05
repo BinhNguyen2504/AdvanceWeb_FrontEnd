@@ -40,13 +40,14 @@ const PlayerLiveGameGroupPage = () => {
     console.log(' data: ', data);
     return data;
   };
-
+  const { username } = useSelector((state) => state.auth);
   const { socket } = useSelector((state) => state.socket);
   const { state } = useLocation();
   const { roomID } = state;
   const { player } = state;
   const { game } = state;
   const { isHost } = game;
+  console.log('isHost: ', isHost);
   const { questions } = game;
   const numberOfQuestion = questions.length;
   const [openQuestion, setOpenQuestion] = useState(false);
@@ -230,7 +231,7 @@ const PlayerLiveGameGroupPage = () => {
     try {
       const { data } = await sendAnswer(
         roomID,
-        player.username,
+        username,
         i + 1,
         ans
       );
@@ -350,7 +351,7 @@ const PlayerLiveGameGroupPage = () => {
           //   </Space>
           // )}
         >
-          <SendQuestionForm roomID={roomID} username={player.username} isHost={isHost} status={openQuestion} />
+          <SendQuestionForm roomID={roomID} username={username} isHost={isHost} status={openQuestion} />
         </Drawer>
 
         <Drawer
@@ -371,7 +372,7 @@ const PlayerLiveGameGroupPage = () => {
             </Space>
           )}
         >
-          <SendChatForm roomID={roomID} username={player.username} isHost={isHost} status={openQuestion} socket={socket} callNoti={handleNoti} />
+          <SendChatForm roomID={roomID} username={username} isHost={isHost} status={openQuestion} socket={socket} callNoti={handleNoti} />
         </Drawer>
       </section>
     </BasicLayout>

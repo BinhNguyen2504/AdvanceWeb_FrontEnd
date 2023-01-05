@@ -26,6 +26,7 @@ const HostLiveGame = () => {
     console.log(' data: ', data);
     return data;
   };
+  const { username } = useSelector((state) => state.auth);
 
   const initChart = [
     { type: 'A', answers: 0 },
@@ -280,7 +281,7 @@ const HostLiveGame = () => {
           {/* <QuestionComment /> */}
           <SendQuestionForm
             roomID={state.gameData.roomId}
-            username='host'
+            username={username}
             isHost
             status={openQuestion}
             callNoti={handleNoti}
@@ -308,7 +309,7 @@ const HostLiveGame = () => {
           {/* <ChatForm /> */}
           <SendChatForm
             roomID={state.gameData.roomId}
-            username='host'
+            username={username}
             isHost
             status={openQuestion}
             socket={socket}

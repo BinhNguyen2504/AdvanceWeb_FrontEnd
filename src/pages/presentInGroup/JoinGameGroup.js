@@ -5,6 +5,7 @@ import { SmileOutlined } from '@ant-design/icons';
 // import { loginAnonymous } from '../../app/authSlice';
 // import { initGame } from '../../app/gameSlice';
 // import { useJoinPresentMutation } from '../../app/presentationService';
+import { useSelector } from 'react-redux';
 import { openNotification } from '../../utils';
 import BasicLayout from '../../layouts/BasicLayout';
 import { getPresentationByroomId } from '../../api/groupAPI';
@@ -14,7 +15,7 @@ const JoinGameGroup = () => {
   // const dispatch = useDispatch();
   // const [joinGame] = useJoinPresentMutation();
   const [api, contextHolder] = notification.useNotification();
-  // const { username } = useSelector((state) => state.auth);
+  const { username } = useSelector((state) => state.auth);
   // const { socket } = useSelector((state) => state.socket);
 
   const { state } = useLocation();
@@ -22,7 +23,7 @@ const JoinGameGroup = () => {
   const onFinish = async (values) => {
     console.log('values: ', values);
     console.log('stateL :', state);
-    const { data } = await getPresentationByroomId(state.gameid, values.username);
+    const { data } = await getPresentationByroomId(state.gameid, username);
     console.log('client join game data: ', data);
 
     if (data.success) {
@@ -56,10 +57,10 @@ const JoinGameGroup = () => {
           <Form.Item
             label='Nick name'
             name='username'
-            rules={[{ required: true, message: 'Please input your name!' }]}
+            rules={[{ required: false, message: 'Please input your name!' }]}
             initialValue={state.game}
           >
-            <Input placeholder='Enter your name' type='text' required className='box' />
+            <Input placeholder={`${username}`} type='text' disabled className='box' />
           </Form.Item>
           {/* <Form.Item label='PIN code' name='pin' rules={[{ required: true, message: 'Please input PIN!' }]}>
             <Input placeholder='Enter PIN' type='text' required className='box' />
