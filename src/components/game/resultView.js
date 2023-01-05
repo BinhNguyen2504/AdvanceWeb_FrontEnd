@@ -9,7 +9,7 @@ const ResultView = ({ resultData }) => {
   // game table
   const gameColumns = [
     {
-      title: 'Presentor',
+      title: 'Player',
       dataIndex: 'name',
       key: 'name',
       width: '32%',
@@ -37,8 +37,20 @@ const ResultView = ({ resultData }) => {
     // }
   ];
   // get current game
+
+  function compare(a, b) {
+    if (a.score > b.score) {
+      return -1;
+    }
+    if (a.score < b.score) {
+      return 1;
+    }
+    return 0;
+  }
+
   useEffect(() => {
-    const gameElementList = getNotNullList(resultData.result).map((player, index) => ({
+    const gameList = getNotNullList(resultData.result);
+    const gameElementList = gameList.sort(compare).map((player, index) => ({
       key: player._id,
       name: player.name,
       _id: player._id,

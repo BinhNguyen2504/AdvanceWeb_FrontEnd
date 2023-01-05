@@ -17,6 +17,7 @@ import SendQuestionForm from '../../components/Question/sendQuestionForm';
 import ChatForm from '../../components/Question/chatDrawer';
 import { BASE_URL } from '../../constants';
 import ResultView from '../../components/game/resultView';
+import SendChatForm from '../../components/Question/sendChatForm';
 
 const { Option } = Select;
 
@@ -133,22 +134,16 @@ const PlayerLiveGameGroupPage = () => {
     // });
 
     socket.on('listen-nextQuestion', (index) => {
-      // setInfo(msg);
-      // setQuestion(questions.current[msg]);
       if (Number(index) < 0) return;
       setI(index);
-      console.log('mess from server: ', index);
       if (index < numberOfQuestion) {
         setIsDisable(false);
       } else {
-        console.log('else case i: ', index);
         handleEndGame();
       }
       setChartData([...initChart]);
     });
     socket.on('listen-answer-chart', (ansChartData) => {
-      // setInfo(JSON.stringify(msg));
-      console.log('mess-chart', ansChartData);
       const newChart = [
         { type: 'A', answers: ansChartData.A },
         { type: 'B', answers: ansChartData.B },
@@ -364,7 +359,7 @@ const PlayerLiveGameGroupPage = () => {
             </Space>
           )}
         >
-          <ChatForm />
+          <SendChatForm roomID={roomID} username={player.username} isHost={isHost} status={openQuestion} socket={socket} />
         </Drawer>
       </section>
     </BasicLayout>

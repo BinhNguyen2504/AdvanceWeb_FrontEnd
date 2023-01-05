@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Spin, Typography } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 // import { SocketContext } from '../../context/socket';
 // import SlicePreview from '../../components/toanntt/SlicePreview';
 // import { MyPresent } from './mock';
@@ -28,10 +28,19 @@ const HostWaitingRoom = () => {
   // const gameData = useRef({});
   // const [gameData, setGameData] = useState({});
   // const playerSet = useRef(new Set());
+  const gameData = useRef({});
+  // const [gameData, setGameData] = useState({});
+  // const playerSet = useRef(new Set());
+
+  const { state } = useLocation();
+  console.log('state in waiting host: ', state);
+  const { game } = state;
+  gameData.current = game;
+
   useEffect(() => {
     if (pin) {
       // TODO: Gọi lên socket tạo phòng
-      socket.emit('create-room', {
+      socket.emit('join-room', {
         name: username,
         room: pin
       });
@@ -44,14 +53,16 @@ const HostWaitingRoom = () => {
   }, []);
 
   const handleStartGame = async () => {
-    const result = await startGame({ pin, isOpen: false });
+    console.log('pin start game: ', pin);
+    const result = await startGame({ roomId: pin, isOpen: false });
     if (result) {
-      // console.log(result);
-      socket.emit('student-sender', {
-        room: pin,
-        msg: -1
-      });
-      navigate('/host/live');
+      console.log(result);
+      // socket.emit('student-sender', {
+      //   room: pin,
+      //   msg: -1
+      // });
+      // navigate('/host/live');
+      navigate('/host/live', { state: { gameData: result.data.data.data, presenData: game.presentation } });
     }
   };
 

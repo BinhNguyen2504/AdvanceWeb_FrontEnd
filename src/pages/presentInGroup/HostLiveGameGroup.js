@@ -17,6 +17,7 @@ import SendQuestionForm from '../../components/Question/sendQuestionForm';
 import ChatForm from '../../components/Question/chatDrawer';
 import { BASE_URL } from '../../constants';
 import ResultView from '../../components/game/resultView';
+import SendChatForm from '../../components/Question/sendChatForm';
 
 const { Option } = Select;
 
@@ -206,8 +207,6 @@ const HostLiveGameGroupPage = () => {
       }
     }
   };
-  console.log('i current: ', i);
-  console.log('question: ', questionList.current);
 
   const getCardButton = (index) => {
     // if (!isHost) return <div />;
@@ -302,7 +301,7 @@ const HostLiveGameGroupPage = () => {
           // )}
         >
           {/* <QuestionComment /> */}
-          <SendQuestionForm roomID={state.roomId} username='host' isHost />
+          <SendQuestionForm roomID={state.roomId} username='host' isHost status={openQuestion} />
         </Drawer>
 
         <Drawer
@@ -314,16 +313,17 @@ const HostLiveGameGroupPage = () => {
           bodyStyle={{
             paddingBottom: 80
           }}
-          extra={(
-            <Space>
-              <Button onClick={onCloseChat}>Cancel</Button>
-              <Button onClick={onCloseChat} type='primary'>
-                Submit
-              </Button>
-            </Space>
-          )}
+          // extra={(
+          //   <Space>
+          //     <Button onClick={onCloseChat}>Chat</Button>
+          //     <Button onClick={onCloseChat} type='primary'>
+          //       Submit
+          //     </Button>
+          //   </Space>
+          // )}
         >
-          <ChatForm />
+          {/* <ChatForm /> */}
+          <SendChatForm roomID={state.roomId} username='host' isHost status={openQuestion} socket={socket} />
         </Drawer>
       </section>
     </BasicLayout>

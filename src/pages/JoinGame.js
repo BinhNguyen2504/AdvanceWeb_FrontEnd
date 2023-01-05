@@ -22,11 +22,12 @@ const JoinGame = () => {
       const { name, questions, numberOfQuestion } = result.data;
       await dispatch(initGame({ pin: values.pin, name, questions, numberOfQuestion }));
       dispatch(loginAnonymous(values.username));
-      socket.emit('join-room', {
-        name: values.username,
-        room: values.pin
-      });
-      navigate('/player/waiting');
+      // socket.emit('join-room', {
+      //   name: values.username,
+      //   room: values.pin
+      // });
+      console.log('join game data: ', result.data);
+      navigate('/player/waiting', { state: { gameData: result.data, roomID: values.pin, username: values.username } });
     } else {
       openNotification(api, result.error, '', <SmileOutlined style={{ color: '#108ee9' }} />);
     }

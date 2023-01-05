@@ -23,17 +23,18 @@ const PresentPreview = () => {
   });
   const handleCreateGame = async () => {
     const result = await createGame({ presentationId: id }).unwrap();
+    console.log('res handleCreateGame: ', result);
     if (result) {
-      const { pin, presentation } = result.data;
+      const { roomId, presentation } = result.data;
       await dispatch(
         initGame({
-          pin,
+          pin: roomId,
           name: presentation.name,
           questions: presentation.questions,
           numberOfQuestion: presentation.numberOfQuestion
         })
       );
-      navigate('/host/waiting');
+      navigate('/host/waiting', { state: { game: result.data } });
     }
   };
   const handleDeletePresentation = async () => {
@@ -47,6 +48,7 @@ const PresentPreview = () => {
   const handlePublicPresent = () => {
     // flow nhu cu
     console.log('public present');
+    handleCreateGame();
   };
 
   const handleGroupPresent = (presentid) => {

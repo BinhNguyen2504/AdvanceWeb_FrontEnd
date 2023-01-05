@@ -3,20 +3,28 @@ import React, { useState, useEffect } from 'react';
 import Comment from '@ant-design/compatible/lib/comment';
 import VirtualList from 'rc-virtual-list';
 import axios from 'axios';
-import QuestionComment from './questionComment';
 import { BASE_URL } from '../../constants';
 
 const ContainerHeight = 580;
 const { TextArea } = Input;
 
-const CommentList = ({ comments, onScroll, isHost, callback, viewer }) => {
-  console.log('comments in commentList: ', comments);
+const CommentList = ({ comments, onScroll }) => {
+  console.log('chat in chatlist: ', comments);
   return (
     <List>
       <VirtualList data={comments} height={ContainerHeight} itemHeight={47} itemKey='email' onScroll={onScroll}>
         {(item) => (
-          <List.Item key={item.email}>
-            <QuestionComment question={item} isHost={isHost} callback={callback} viewer={viewer} />
+          <List.Item key={`${item.username}_${item.date}_${item.time}`}>
+            {/* <List.Item.Meta avatar={<Avatar src='https://joeschmoe.io/api/v1/random' />} title={item.username} /> */}
+            {/* <Typography.Text>{`${item.date} ${item.time}`}</Typography.Text>
+            <Typography.Text>{item.content}</Typography.Text> */}
+            {/* <p>{item.content}</p> */}
+            <Comment
+              author={item.username}
+              avatar={<Avatar src='https://joeschmoe.io/api/v1/random' alt={item.username} />}
+              content={item.content}
+              datetime={`${item.date} ${item.time}`}
+            />
           </List.Item>
         )}
       </VirtualList>
@@ -36,9 +44,9 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
     </Form.Item>
   </>
 );
-const SendQuestionForm = ({ roomID, username, isHost, status }) => {
+const SendChatForm = ({ roomID, username, isHost, status, socket }) => {
   console.log('roomID form: ', roomID);
-  console.log('drawer status: ', status);
+  console.log('drawer chat status: ', status);
   const API = axios.create({
     baseURL: BASE_URL,
     headers: {
@@ -46,62 +54,71 @@ const SendQuestionForm = ({ roomID, username, isHost, status }) => {
     }
   });
 
-  const getQuestionListAPI = async (id) => {
-    console.log('id in get api: ', id);
-    const { data } = await API.get(`/question/getquestion/${id}`);
-    console.log(' data response question list: ', data);
+  const createMessageAPI = async (body) => {
+    const { data } = await API.post('/message/createMessage', body);
+    console.log(' data response create chat: ', data);
     return data;
   };
 
-  const postQuestionAPI = async (body) => {
-    const { data } = await API.post('question/createQuestion', body);
-    console.log(' data response question list: ', data);
+  const getMessageAPI = async (id) => {
+    const { data } = await API.get(`/message/${id}`);
+    console.log(' data response create chat: ', data);
     return data;
   };
 
   const [comments, setComments] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [value, setValue] = useState('');
-  // const fakeDataUrl = 'https://randomuser.me/api/?results=20&inc=name,gender,email,nat,picture&noinfo';
 
   const handleSubmit = () => {
-    console.log('value type: ', value);
+    console.log('value type chat: ', value);
     if (!value) return;
 
     setSubmitting(true);
     setTimeout(async () => {
       setSubmitting(false);
       setValue('');
-      const res = await postQuestionAPI({
-        roomId: roomID,
-        username,
-        content: value
+
+      const res = await createMessageAPI({ roomId: roomID, username, content: value });
+      console.log('chat response api: ', res);
+      socket.emit('send-message', {
+        room: roomID
       });
 
-      setComments([res.data, ...comments]);
+      // setComments([res.data, ...comments]);
       message.success('Send question successfully');
-    }, 1000);
+    }, 500);
   };
 
   const handleChange = (e) => {
     setValue(e.target.value);
   };
 
-  const getQuestionList = async () => {
-    const res = await getQuestionListAPI(roomID);
-    console.log('questionListInDrawer: ', res);
-    const reversed = res.data.reverse();
-    setComments(reversed);
+  const getChatList = async () => {
+    const res = await getMessageAPI(roomID);
+    // const reversed = res.data.reverse();
+    setComments(res.data);
   };
 
   const callFetchData = () => {
     console.log('call fetch data');
-    getQuestionList();
+    // getQuestionList();
   };
 
   useEffect(() => {
-    getQuestionList();
+    getChatList();
+    socket.on('listen-message', (msg) => {
+      console.log('message chat data: ', msg);
+      setComments([...msg]);
+    });
   }, [status]);
+
+  // useEffect(() => {
+  //   socket.on('listen-message', (msg) => {
+  //     console.log('message chat data: ', msg);
+  //     setComments([...msg]);
+  //   });
+  // }, []);
 
   const onScroll = (e) => {
     if (e.currentTarget.scrollHeight - e.currentTarget.scrollTop === ContainerHeight) {
@@ -109,6 +126,7 @@ const SendQuestionForm = ({ roomID, username, isHost, status }) => {
     }
   };
 
+  console.log('chat comments: ', comments);
   return (
     <>
       {comments.length > 0 && (
@@ -128,4 +146,4 @@ const SendQuestionForm = ({ roomID, username, isHost, status }) => {
   );
 };
 
-export default SendQuestionForm;
+export default SendChatForm;

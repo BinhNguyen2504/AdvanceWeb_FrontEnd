@@ -1,18 +1,34 @@
 import { Spin } from 'antd';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import BasicLayout from '../layouts/BasicLayout';
 
 const PlayerWaitingRoom = () => {
   const { socket } = useSelector((state) => state.socket);
   const navigate = useNavigate();
 
+  const { state } = useLocation();
+  const { roomID } = state;
+  const { gameData } = state;
+  const { username } = state;
+  console.log('state :', state);
   useEffect(() => {
     document.body.requestFullscreen();
-    socket.on('student-receiver', (msg) => {
-      if (msg === -1) navigate('/player/live');
+    socket.emit('join-room', {
+      name: username,
+      room: roomID
     });
+
+    socket.on('listen-nextQuestion', (msg) => {
+      if (msg === -1) {
+        navigate('/player/live', { state: { player: username, game: gameData, roomID }, replace: true });
+      }
+    });
+
+    // socket.on('student-receiver', (msg) => {
+    //   if (msg === -1) navigate('/player/live');
+    // });
   }, []);
 
   return (
