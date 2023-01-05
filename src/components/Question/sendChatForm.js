@@ -44,7 +44,7 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
     </Form.Item>
   </>
 );
-const SendChatForm = ({ roomID, username, isHost, status, socket }) => {
+const SendChatForm = ({ roomID, username, isHost, status, socket, callNoti }) => {
   console.log('roomID form: ', roomID);
   console.log('drawer chat status: ', status);
   const API = axios.create({
@@ -110,6 +110,7 @@ const SendChatForm = ({ roomID, username, isHost, status, socket }) => {
     socket.on('listen-message', (msg) => {
       console.log('message chat data: ', msg);
       setComments([...msg]);
+      callNoti();
     });
   }, [status]);
 

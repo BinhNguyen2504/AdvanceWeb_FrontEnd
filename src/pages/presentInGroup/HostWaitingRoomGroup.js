@@ -7,12 +7,28 @@ import { useLocation, useNavigate } from 'react-router-dom';
 // import SlicePreview from '../../components/toanntt/SlicePreview';
 // import { MyPresent } from './mock';
 // import { getNotNullList } from '../../utils';
+import axios from 'axios';
 import MainLayout from '../../layouts/MainLayout';
 // import { useStartGameMutation } from '../../app/gameService';
 import groupAPI from '../../api/groupAPI';
+import { BASE_URL } from '../../constants';
 
 const { Title } = Typography;
 const HostWaitingRoomGroupPage = () => {
+  const API = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+
+  const updateRoomAPI = async (pin, status) => {
+    const { data } = await API.put('/game/updateStatus', {
+      roomId: pin,
+      isOpen: status
+    });
+    return data;
+  };
   const navigate = useNavigate();
   const { socket } = useSelector((state) => state.socket);
   // const { pin } = useSelector((state) => state.game);
@@ -53,8 +69,7 @@ const HostWaitingRoomGroupPage = () => {
   }, []);
 
   const handleStartGame = async () => {
-    const data = await groupAPI.updateRoom(gameData.current.roomId, false);
-    console.log('response update game: ', data);
+    const data = await updateRoomAPI(gameData.current.roomId, false);
     // const result = await startGame({ pin, isOpen: false });
     // if (result) {
     //   console.log(result);
@@ -73,7 +88,7 @@ const HostWaitingRoomGroupPage = () => {
     <MainLayout>
       <section className='courses container'>
         <button className='btn' onClick={handleCopyPin} type='button'>
-          {`PIN: ${gameData.current.roomId ? gameData.current.roomId : ''} HARD CODE`}
+          {`PIN: ${gameData.current.roomId ? gameData.current.roomId : ''}`}
         </button>
         <Title>{` Player Number:${countPlayer}`}</Title>
         <div className='example' style={{ marginBottom: 400 }}>

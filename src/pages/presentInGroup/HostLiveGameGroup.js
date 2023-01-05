@@ -3,11 +3,11 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react/jsx-wrap-multilines */
 import { Column } from '@ant-design/plots';
-import { Button, Card, Col, Row, DatePicker, Drawer, Form, Input, Select, Space, Divider } from 'antd';
+import { Button, Card, Col, Row, DatePicker, Drawer, Form, Input, Select, Space, Divider, notification } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, SmileOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { nextQuestion } from '../../app/gameSlice';
 import BasicLayout from '../../layouts/BasicLayout';
@@ -18,6 +18,7 @@ import ChatForm from '../../components/Question/chatDrawer';
 import { BASE_URL } from '../../constants';
 import ResultView from '../../components/game/resultView';
 import SendChatForm from '../../components/Question/sendChatForm';
+import { openNotification } from '../../utils';
 
 const { Option } = Select;
 
@@ -215,11 +216,21 @@ const HostLiveGameGroupPage = () => {
     }
     return <Button onClick={() => handleFinishGame()}>{`${index + 1}/${numberOfQuestion}: Endgame`}</Button>;
   };
+  const [api, contextHolder] = notification.useNotification();
+  const handleNoti = () => {
+    console.log('has new message');
+    openNotification(
+      api,
+      'New message',
+      'You have new message',
+      <SmileOutlined style={{ color: '#108ee9' }} />
+    );
+  };
 
   return (
     <BasicLayout>
       <section className='courses'>
-        <p className='btn'>name j do</p>
+        {contextHolder}
         <div className='site-card-border-less-wrapper'>
           { i >= numberOfQuestion ? (<ResultView resultData={resultData} isHost />) : (
             <Card
@@ -323,7 +334,7 @@ const HostLiveGameGroupPage = () => {
           // )}
         >
           {/* <ChatForm /> */}
-          <SendChatForm roomID={state.roomId} username='host' isHost status={openQuestion} socket={socket} />
+          <SendChatForm roomID={state.roomId} username='host' isHost status={openQuestion} socket={socket} callNoti={handleNoti} />
         </Drawer>
       </section>
     </BasicLayout>
