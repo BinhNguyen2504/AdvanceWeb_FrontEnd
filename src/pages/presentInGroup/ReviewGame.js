@@ -232,7 +232,7 @@ const ReviewGamePage = () => {
       <section className='courses'>
         <p className='btn'>Review Game</p>
         <div className='site-card-border-less-wrapper'>
-          <ResultView resultData={resultData} />
+          <ResultView resultData={resultData} isHost={false} />
         </div>
         <Divider />
         <Row gutter={[16, 16]}>

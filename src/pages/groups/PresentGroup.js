@@ -120,10 +120,12 @@ const PresentGroupPage = () => {
             <Button
               type='primary'
               onClick={() => handleStartGroupPresent()}
-              disabled={selectedGroup.groupName === ''}
+              disabled={selectedGroup.groupName === undefined}
               block
             >
-              {`Start Present: ${selectedGroup.groupName}`}
+              {selectedGroup.groupName !== undefined
+                ? `Start present in ${selectedGroup.groupName}`
+                : 'Select group to start'}
             </Button>
           </section>
         )}

@@ -185,7 +185,7 @@ const HostLiveGame = () => {
         <p className='btn'>{state.presenData.name}</p>
         <div className='site-card-border-less-wrapper'>
           {i >= numberOfQuestion ? (
-            <ResultView resultData={resultData} />
+            <ResultView resultData={resultData} isHost />
           ) : (
             <Card
               title={questionList.current[i].content}

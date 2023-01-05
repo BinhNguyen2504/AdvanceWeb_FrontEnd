@@ -175,7 +175,7 @@ const PlayerLiveGame = () => {
         <p className='btn'>{game.name}</p>
         <div className='site-card-border-less-wrapper'>
           {i >= numberOfQuestion ? (
-            <ResultView resultData={resultData} />
+            <ResultView resultData={resultData} isHost={false} />
           ) : (
             <Card
               title={questions[i].content}

@@ -221,7 +221,7 @@ const HostLiveGameGroupPage = () => {
       <section className='courses'>
         <p className='btn'>name j do</p>
         <div className='site-card-border-less-wrapper'>
-          { i >= numberOfQuestion ? (<ResultView resultData={resultData} />) : (
+          { i >= numberOfQuestion ? (<ResultView resultData={resultData} isHost />) : (
             <Card
               title={questionList.current[i].content}
               bordered={false}

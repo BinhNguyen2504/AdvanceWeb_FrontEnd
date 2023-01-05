@@ -254,7 +254,7 @@ const PlayerLiveGameGroupPage = () => {
         <p className='btn'>Player Screen</p>
         <p className='btn'>name j do</p>
         <div className='site-card-border-less-wrapper'>
-          { i >= numberOfQuestion ? (<ResultView resultData={resultData} />) : (
+          { i >= numberOfQuestion ? (<ResultView resultData={resultData} isHost={false} />) : (
             <Card
               title={questions[i].content}
               bordered={false}
