@@ -1,5 +1,6 @@
 import { Avatar, Button, Card, Col, Form, Input, Layout, Popconfirm, Row, Space, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import groupAPI from '../api/groupAPI';
@@ -11,15 +12,27 @@ import {
   useSendInviteMailMutation,
   useGetInviteLinkMutation
 } from '../app/groupService';
+import { BASE_URL } from '../constants';
 
 import MainLayout from '../layouts/MainLayout';
 import { getNotNullList } from '../utils';
 
 const { Content } = Layout;
 const GroupDetail = () => {
+  const API = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+  });
+
+  const getGroupDetailAPI = async (id) => {
+    const { data } = await API.get(`/group/${id}`);
+    return data;
+  };
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading } = useGetGroupDetailQuery(id);
+  // const { data, isLoading } = useGetGroupDetailQuery(id);
   const [removeGroup] = useRemoveGroupMutation();
   const [kickMember] = useKickOutMutation();
   const [sendMail] = useSendInviteMailMutation();
@@ -65,7 +78,9 @@ const GroupDetail = () => {
   //   navigate('/presentation/group/player/join', { state: { gameid: '123' } });
   // };
 
-  useEffect(() => {
+  const getGroupDetail = async () => {
+    const data = await getGroupDetailAPI(id);
+    console.log('group data: ', data);
     if (data) {
       const { owner, coOwners, member } = data.data;
       const ownerData = {
@@ -162,6 +177,10 @@ const GroupDetail = () => {
       }));
       setDataSource([ownerData, ...coOwnerList, ...memberList]);
     }
+  };
+
+  useEffect(() => {
+    getGroupDetail();
   }, []);
 
   function compare(a, b) {
@@ -298,12 +317,9 @@ const GroupDetail = () => {
   return (
     <Content>
       <MainLayout>
-        {isLoading ? (
-          <h1>Loading...</h1>
-        ) : (
-          <section className='teachers container'>
-            <h1 className='heading'>Group Details</h1>
-            {/* {hasStreaming ? (
+        <section className='teachers container'>
+          <h1 className='heading'>Group Details</h1>
+          {/* {hasStreaming ? (
               <Space direction='vertical' style={{ width: '100%', marginBottom: 20 }}>
                 <Button
                   style={{ borderColor: '#18A558', backgroundColor: '#A3EBB1' }}
@@ -316,36 +332,36 @@ const GroupDetail = () => {
             ) : (
               <div />
             )} */}
-            <Space direction='horizontal' style={{ width: '100%', marginBottom: 20 }}>
-              <Button type='primary' ghost onClick={handleInviteClick}>
-                Invite member
-              </Button>
-              <Button type='primary' danger ghost onClick={handleRemoveGroup}>
-                Delete
-              </Button>
-            </Space>
-            {isDisplayInvite && (
-              <Form name='invite' onFinish={submitInvite} style={{ marginBottom: '30px' }}>
-                <Form.Item label='Username' name='username'>
-                  <Input type='text' placeholder='Search by username' />
-                </Form.Item>
-                {/* <Form.Item>
+          <Space direction='horizontal' style={{ width: '100%', marginBottom: 20 }}>
+            <Button type='primary' ghost onClick={handleInviteClick}>
+              Invite member
+            </Button>
+            <Button type='primary' danger ghost onClick={handleRemoveGroup}>
+              Delete
+            </Button>
+          </Space>
+          {isDisplayInvite && (
+            <Form name='invite' onFinish={submitInvite} style={{ marginBottom: '30px' }}>
+              <Form.Item label='Username' name='username'>
+                <Input type='text' placeholder='Search by username' />
+              </Form.Item>
+              {/* <Form.Item>
                   <Button type='primary' htmlType='submit'>
                     Invite people
                   </Button>
                 </Form.Item> */}
-                {inviteLink && (
-                  <p>
-                    Copy this link:
-                    <br />
-                    {inviteLink}
-                  </p>
-                )}
-              </Form>
-            )}
+              {inviteLink && (
+                <p>
+                  Copy this link:
+                  <br />
+                  {inviteLink}
+                </p>
+              )}
+            </Form>
+          )}
 
-            {/* <div className='box-container'> */}
-            {/* <div className='box'>
+          {/* <div className='box-container'> */}
+          {/* <div className='box'>
                 <div className='tutor'>
                   <img src='' alt='' />
                   <div>
@@ -357,37 +373,31 @@ const GroupDetail = () => {
                   view profile
                 </a>
               </div> */}
-            <hr />
-            <div className='tabled'>
-              <Row gutter={[24, 0]}>
-                <Col xs='24' xl={24}>
-                  <Card bordered={false} className='criclebox tablespace mb-24' title='Game List'>
-                    <div className='table-responsive'>
-                      <Table
-                        columns={gameColumns}
-                        dataSource={gameDataSource}
-                        pagination
-                        className='ant-border-space'
-                      />
-                    </div>
-                  </Card>
-                </Col>
-              </Row>
-            </div>
-            <br />
-            <div className='tabled'>
-              <Row gutter={[24, 0]}>
-                <Col xs='24' xl={24}>
-                  <Card bordered={false} className='criclebox tablespace mb-24' title='Group Member'>
-                    <div className='table-responsive'>
-                      <Table columns={columns} dataSource={dataSource} pagination className='ant-border-space' />
-                    </div>
-                  </Card>
-                </Col>
-              </Row>
-            </div>
-          </section>
-        )}
+          <hr />
+          <div className='tabled'>
+            <Row gutter={[24, 0]}>
+              <Col xs='24' xl={24}>
+                <Card bordered={false} className='criclebox tablespace mb-24' title='Game List'>
+                  <div className='table-responsive'>
+                    <Table columns={gameColumns} dataSource={gameDataSource} pagination className='ant-border-space' />
+                  </div>
+                </Card>
+              </Col>
+            </Row>
+          </div>
+          <br />
+          <div className='tabled'>
+            <Row gutter={[24, 0]}>
+              <Col xs='24' xl={24}>
+                <Card bordered={false} className='criclebox tablespace mb-24' title='Group Member'>
+                  <div className='table-responsive'>
+                    <Table columns={columns} dataSource={dataSource} pagination className='ant-border-space' />
+                  </div>
+                </Card>
+              </Col>
+            </Row>
+          </div>
+        </section>
       </MainLayout>
     </Content>
   );
