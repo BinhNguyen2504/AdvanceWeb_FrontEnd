@@ -37,8 +37,6 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
   </>
 );
 const SendQuestionForm = ({ roomID, username, isHost, status }) => {
-  console.log('roomID form: ', roomID);
-  console.log('drawer status: ', status);
   const API = axios.create({
     baseURL: BASE_URL,
     headers: {
@@ -47,15 +45,12 @@ const SendQuestionForm = ({ roomID, username, isHost, status }) => {
   });
 
   const getQuestionListAPI = async (id) => {
-    console.log('id in get api: ', id);
     const { data } = await API.get(`/question/getquestion/${id}`);
-    console.log(' data response question list: ', data);
     return data;
   };
 
   const postQuestionAPI = async (body) => {
     const { data } = await API.post('question/createQuestion', body);
-    console.log(' data response question list: ', data);
     return data;
   };
 
@@ -65,7 +60,6 @@ const SendQuestionForm = ({ roomID, username, isHost, status }) => {
   // const fakeDataUrl = 'https://randomuser.me/api/?results=20&inc=name,gender,email,nat,picture&noinfo';
 
   const handleSubmit = () => {
-    console.log('value type: ', value);
     if (!value) return;
 
     setSubmitting(true);
@@ -89,13 +83,11 @@ const SendQuestionForm = ({ roomID, username, isHost, status }) => {
 
   const getQuestionList = async () => {
     const res = await getQuestionListAPI(roomID);
-    console.log('questionListInDrawer: ', res);
     const reversed = res.data.reverse();
     setComments(reversed);
   };
 
   const callFetchData = () => {
-    console.log('call fetch data');
     getQuestionList();
   };
 

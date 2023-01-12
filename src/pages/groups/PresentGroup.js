@@ -22,22 +22,17 @@ const PresentGroupPage = () => {
   });
 
   const createGame = async (body) => {
-    console.log('api: ', API);
-    console.log('storage: ', localStorage.token);
     const { data } = await API.post('/game/creategame', body);
-    console.log(' data: ', data);
     return data;
   };
   const { presentid } = useParams();
   const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
   const { data, isLoading } = useGetListOwnerGroupQuery();
-  console.log('group: ', data);
   const gameData = useRef();
 
   const [selectedGroup, setSelectedGroup] = useState({});
   const handleSelectGroup = (group) => {
-    console.log('selected group: ', group);
     setSelectedGroup(group);
   };
 
@@ -45,13 +40,10 @@ const PresentGroupPage = () => {
     // API tạo game : trả về
     // i.current = 0;
     try {
-      console.log('insinde create group');
-      console.log('groupid: ', groupID);
       const response = await createGame({
         presentationId: presenID,
         groupId: groupID
       });
-      console.log('response create game: ', response);
 
       // danh sách các câu hỏi
       gameData.current = response.data;
@@ -65,7 +57,6 @@ const PresentGroupPage = () => {
       // });
       // questions.current = data.data.presentation.questions;
       // setMessage(JSON.stringify(gameData.current.roomId));
-      console.log('game: ', gameData.current);
       return response.data;
     } catch (err) {
       console.log('[ERROR][create game group api]: ', err);

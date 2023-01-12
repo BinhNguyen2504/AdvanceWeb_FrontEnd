@@ -24,10 +24,8 @@ const PresentPreview = () => {
   const { data, isLoading } = useGetPresentQuery(id, {
     skip: !id
   });
-  console.log(data);
   const handleCreateGame = async () => {
     const result = await createGame({ presentationId: id }).unwrap();
-    console.log('res handleCreateGame: ', result);
     if (result) {
       const { roomId, presentation } = result.data;
       await dispatch(
@@ -44,24 +42,20 @@ const PresentPreview = () => {
   const handleDeletePresentation = async () => {
     const result = await deletePresent({ id });
     if (result) {
-      console.log(result);
       navigate('/presentation');
     }
   };
 
   const handlePublicPresent = () => {
     // flow nhu cu
-    console.log('public present');
     handleCreateGame();
   };
 
   const handleGroupPresent = (presentid) => {
-    console.log('group present id:', presentid);
     navigate(`/presentation/group/${presentid}`);
   };
 
   const handleMenuClick = (e) => {
-    console.log('click', e);
     if (e.key === '1') {
       handlePublicPresent();
     } else {
@@ -102,6 +96,7 @@ const PresentPreview = () => {
               <Input type='text' placeholder='Search by username' />
             </Form.Item>
           </Form>
+          <p>Co-owner: </p>
           {data.data.collaborators.map((item) => (
             <p>{item.name}</p>
           ))}

@@ -30,7 +30,6 @@ const PlayerLiveGame = () => {
 
   const getResult = async (roomID) => {
     const { data } = await API.get(`/game/gameresult/${roomID}`);
-    console.log(' data: ', data);
     return data;
   };
 
@@ -40,7 +39,6 @@ const PlayerLiveGame = () => {
   const { state } = useLocation();
   const { roomID } = state;
   const { player } = state;
-  console.log('player name: ', player);
   const { game } = state;
   const { questions } = game;
   const { numberOfQuestion } = game;
@@ -76,11 +74,9 @@ const PlayerLiveGame = () => {
   // const navigate = useNavigate();
 
   const handleEndGame = async () => {
-    console.log('endgame');
     try {
       const res = await getResult(roomID);
       setResultData(res.data);
-      console.log('result game: ', res);
     } catch (error) {
       console.log(error);
     }
@@ -107,7 +103,6 @@ const PlayerLiveGame = () => {
       if (index < numberOfQuestion) {
         setIsDisable(false);
       } else {
-        console.log('else case i: ', index);
         handleEndGame();
       }
       setChartData([...initChart]);
@@ -163,9 +158,6 @@ const PlayerLiveGame = () => {
 
   const handleAnswer = async (ans) => {
     try {
-      console.log('player: ', player);
-      console.log('i + 1: ', i + 1);
-      console.log('ans: ', ans);
       const { data } = await sendAnswer(roomID, player, i + 1, ans);
     } catch (error) {
       console.log(error);
@@ -175,16 +167,11 @@ const PlayerLiveGame = () => {
       msg: i + 1
     });
     setIsDisable(true);
-    console.log('send anwser: ', ans);
-
-    console.log('counter: ', counter);
-    console.log('questions: ', questions);
     // console.log('result ans: ', data);
   };
 
   const [api, contextHolder] = notification.useNotification();
   const handleNoti = () => {
-    console.log('has new message');
     openNotification(
       api,
       'New message',

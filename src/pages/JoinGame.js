@@ -26,7 +26,6 @@ const JoinGame = () => {
       //   name: values.username,
       //   room: values.pin
       // });
-      console.log('join game data: ', result.data);
       navigate('/player/waiting', { state: { gameData: result.data, roomID: values.pin, username: values.username } });
     } else {
       openNotification(api, result.error, '', <SmileOutlined style={{ color: '#108ee9' }} />);

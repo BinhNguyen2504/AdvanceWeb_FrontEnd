@@ -14,21 +14,12 @@ const PlayerWaitingRoomGroup = () => {
   const { game } = state;
   console.log('username waiting: ', username);
   useEffect(() => {
-    // console.log('roomID: ', roomID);
-    // console.log('player: ', player);
-    // console.log('player game data: ', game);
-    // console.log('socketID: ', socket.id);
-    // console.log('state: ', state);
     socket.emit('join-room', {
       name: username,
       room: roomID
     });
 
     socket.on('listen-nextQuestion', (msg) => {
-      // console.log('[nextQuestion] message from server: ', msg);
-      // setInfo(msg);
-      // setQuestion(questions.current[msg]);
-      // i.current = msg;
       if (msg === -1) {
         navigate('/presentation/group/player/live', { state: { player, game, roomID }, replace: true });
       }

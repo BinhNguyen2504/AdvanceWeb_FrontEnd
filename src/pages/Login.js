@@ -25,7 +25,6 @@ const LoginPage = () => {
   const onFinish = async (values) => {
     const result = await login(values).unwrap();
     if (result.error) {
-      console.log('Result: ', result);
       openNotification(api, 'Login failed', result.error, <SmileOutlined style={{ color: '#108ee9' }} />);
     }
     if (!result.error) {

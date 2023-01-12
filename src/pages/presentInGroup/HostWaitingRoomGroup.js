@@ -34,7 +34,6 @@ const HostWaitingRoomGroupPage = () => {
   // const { pin } = useSelector((state) => state.game);
   const pin = 1;
   const { username } = useSelector((state) => state.auth);
-  console.log('username in waiting', username);
   // const [startGame, startGameResult] = useStartGameMutation();
 
   const [countPlayer, setCountPlayer] = useState(0);
@@ -63,10 +62,6 @@ const HostWaitingRoomGroupPage = () => {
     //   console.log('joining message: ', newPlayer);
     //   setCountPlayer((num) => num + 1);
     // });
-    console.log('location: ', state);
-    console.log('presentID: ', gameData.current.presentation._id);
-    console.log('room', gameData.current.roomId);
-    console.log('socketID host: ', socket.id);
   }, []);
 
   const handleStartGame = async () => {

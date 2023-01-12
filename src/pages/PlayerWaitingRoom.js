@@ -12,7 +12,7 @@ const PlayerWaitingRoom = () => {
   const { roomID } = state;
   const { gameData } = state;
   const { username } = state;
-  console.log('state :', state);
+
   useEffect(() => {
     document.body.requestFullscreen();
     socket.emit('join-room', {

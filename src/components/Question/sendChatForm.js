@@ -45,8 +45,6 @@ const Editor = ({ onChange, onSubmit, submitting, value }) => (
   </>
 );
 const SendChatForm = ({ roomID, username, isHost, status, socket, callNoti }) => {
-  console.log('roomID form: ', roomID);
-  console.log('drawer chat status: ', status);
   const API = axios.create({
     baseURL: BASE_URL,
     headers: {
@@ -56,13 +54,11 @@ const SendChatForm = ({ roomID, username, isHost, status, socket, callNoti }) =>
 
   const createMessageAPI = async (body) => {
     const { data } = await API.post('/message/createMessage', body);
-    console.log(' data response create chat: ', data);
     return data;
   };
 
   const getMessageAPI = async (id) => {
     const { data } = await API.get(`/message/${id}`);
-    console.log(' data response create chat: ', data);
     return data;
   };
 
@@ -71,7 +67,6 @@ const SendChatForm = ({ roomID, username, isHost, status, socket, callNoti }) =>
   const [value, setValue] = useState('');
 
   const handleSubmit = () => {
-    console.log('value type chat: ', value);
     if (!value) return;
 
     setSubmitting(true);
@@ -101,14 +96,12 @@ const SendChatForm = ({ roomID, username, isHost, status, socket, callNoti }) =>
   };
 
   const callFetchData = () => {
-    console.log('call fetch data');
     // getQuestionList();
   };
 
   useEffect(() => {
     getChatList();
     socket.on('listen-message', (msg) => {
-      console.log('message chat data: ', msg);
       setComments([...msg]);
       callNoti();
     });
@@ -127,7 +120,6 @@ const SendChatForm = ({ roomID, username, isHost, status, socket, callNoti }) =>
     }
   };
 
-  console.log('chat comments: ', comments);
   return (
     <>
       {comments.length > 0 && (

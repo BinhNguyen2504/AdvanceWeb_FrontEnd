@@ -21,10 +21,7 @@ const JoinGameGroup = () => {
   const { state } = useLocation();
 
   const onFinish = async (values) => {
-    console.log('values: ', values);
-    console.log('stateL :', state);
     const { data } = await getPresentationByroomId(state.gameid, username);
-    console.log('client join game data: ', data);
 
     if (data.success) {
       navigate('/presentation/group/player/waiting', {

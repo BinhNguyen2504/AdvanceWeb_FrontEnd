@@ -33,7 +33,6 @@ const HostWaitingRoom = () => {
   // const playerSet = useRef(new Set());
 
   const { state } = useLocation();
-  console.log('state in waiting host: ', state);
   const { game } = state;
   gameData.current = game;
 
@@ -56,7 +55,6 @@ const HostWaitingRoom = () => {
     console.log('pin start game: ', pin);
     const result = await startGame({ roomId: pin, isOpen: false });
     if (result) {
-      console.log(result);
       // socket.emit('student-sender', {
       //   room: pin,
       //   msg: -1

@@ -21,13 +21,11 @@ const GroupList = () => {
 
   const getListJoinedAPI = async () => {
     const { data } = await API.get('/group/myjoinedgroups');
-    console.log(' data: ', data);
     return data;
   };
 
   const getOwnListGroupAPI = async () => {
     const { data } = await API.get('/group/mygroups');
-    console.log(' data: ', data);
     return data;
   };
 
@@ -42,13 +40,11 @@ const GroupList = () => {
 
   const getJoinGroup = async () => {
     const res = await getListJoinedAPI();
-    console.log('join data: ', res);
     setJoinedGroup(res.data);
   };
 
   const getOwnGroup = async () => {
     const res = await getOwnListGroupAPI();
-    console.log('own data: ', res.data);
     setOwnerGroup(res.data);
   };
 

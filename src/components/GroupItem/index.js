@@ -10,7 +10,6 @@ const GroupItem = ({ data }) => (
         <h3>{data.groupName}</h3>
       </div>
     </div>
-    {console.log(data)}
     <div className='thumb'>
       <img src='/img/thumbnail.jpg' alt='' />
     </div>

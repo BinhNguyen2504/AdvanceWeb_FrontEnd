@@ -23,7 +23,6 @@ const HostLiveGame = () => {
 
   const getResult = async (roomID) => {
     const { data } = await API.get(`/game/gameresult/${roomID}`);
-    console.log(' data: ', data);
     return data;
   };
   const { username } = useSelector((state) => state.auth);
@@ -77,10 +76,8 @@ const HostLiveGame = () => {
   // }, [counter]);
 
   const handleEndGame = async () => {
-    console.log('endgame');
     try {
       const res = await getResult(state.gameData.roomId);
-      console.log('result game: ', res);
       setResultData(res.data);
     } catch (error) {
       console.log(error);
@@ -88,7 +85,6 @@ const HostLiveGame = () => {
   };
 
   useEffect(() => {
-    console.log('state in live: ', state);
     socket.emit('send-nextQuestion', {
       room: state.gameData.roomId,
       msg: -1 // start game
@@ -98,18 +94,15 @@ const HostLiveGame = () => {
       // setinfo(JSON.stringify(msg));
       if (Number(msgIndex) < 0) return;
       setI(msgIndex);
-      console.log('mess from server: ', msgIndex);
       if (msgIndex < numberOfQuestion) {
         // setIsDisable(false);
       } else {
-        console.log('else case i: ', msgIndex);
         handleEndGame();
       }
       setChartData([...initChart]);
     });
 
     socket.on('listen-answer-chart', (ansChartData) => {
-      console.log('player anwser: ', ansChartData);
       const newChart = [
         { type: 'A', answers: ansChartData.A },
         { type: 'B', answers: ansChartData.B },
@@ -202,7 +195,6 @@ const HostLiveGame = () => {
 
   const [api, contextHolder] = notification.useNotification();
   const handleNoti = () => {
-    console.log('has new message');
     openNotification(api, 'New message', 'You have new message', <SmileOutlined style={{ color: '#108ee9' }} />);
   };
 

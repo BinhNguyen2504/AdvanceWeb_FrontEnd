@@ -37,7 +37,6 @@ const PlayerLiveGameGroupPage = () => {
 
   const getResult = async (roomID) => {
     const { data } = await API.get(`/game/gameresult/${roomID}`);
-    console.log(' data: ', data);
     return data;
   };
   const { username } = useSelector((state) => state.auth);
@@ -47,7 +46,6 @@ const PlayerLiveGameGroupPage = () => {
   const { player } = state;
   const { game } = state;
   const { isHost } = game;
-  console.log('isHost: ', isHost);
   const { questions } = game;
   const numberOfQuestion = questions.length;
   const [openQuestion, setOpenQuestion] = useState(false);
@@ -114,22 +112,15 @@ const PlayerLiveGameGroupPage = () => {
   // }, [currentQuestion]);
 
   const handleEndGame = async () => {
-    console.log('endgame');
     try {
       const res = await getResult(roomID);
       setResultData(res.data);
-      console.log('result game: ', res);
     } catch (error) {
       console.log(error);
     }
   };
 
   useEffect(() => {
-    console.log('state in live: ', state);
-    console.log('player: ', player);
-    console.log('room', roomID);
-    console.log('game: ', game);
-    console.log('isHost: ', isHost);
     // socket.emit('send-nextQuestion', {
     //   room: state.roomId,
     //   msg: -1,
@@ -166,25 +157,19 @@ const PlayerLiveGameGroupPage = () => {
   }, [counter]);
 
   const handleMoveQuestion = () => {
-    // if (currentQuestion < numberOfQuestion - 1) {
-    //   dispatch(nextQuestion({ id: currentQuestion + 1 }));
-    //   setChartData(initChart);
-    // }
     if (i + 1 < numberOfQuestion) {
       setI(i + 1);
+      setIsDisable(false);
       setChartData([...initChart]);
-      // setinfo(i);
-      // setQuestion(questions.current[i]);
-
-      // socket.current.emit('send-nextQuestion', {
-      //   room: gameData.current.roomId,
-      //   msg: i,
-      // });
+      socket.emit('send-nextQuestion', {
+        room: roomID,
+        msg: i + 1,
+      });
     }
-    console.log('handle move');
   };
   const handleFinishGame = () => {
-    console.log('co-owner emit i: ', i + 1);
+    setI(i + 1);
+    handleEndGame();
     socket.emit('send-nextQuestion', {
       room: roomID,
       msg: i + 1,
@@ -243,16 +228,10 @@ const PlayerLiveGameGroupPage = () => {
       msg: i + 1,
     });
     setIsDisable(true);
-    console.log('send anwser: ', ans);
-
-    console.log('counter: ', counter);
-    console.log('questions: ', questions);
-    // console.log('result ans: ', data);
   };
 
   const [api, contextHolder] = notification.useNotification();
   const handleNoti = () => {
-    console.log('has new message');
     openNotification(
       api,
       'New message',

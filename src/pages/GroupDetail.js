@@ -48,7 +48,6 @@ const GroupDetail = () => {
   const [api, contextHolder] = notification.useNotification();
   const getGroupDetail = async () => {
     const data = await getGroupDetailAPI(id);
-    console.log('group data: ', data);
     if (data) {
       setRoleInGroup(data.role);
       const { owner, coOwners, member } = data.data;
@@ -174,7 +173,6 @@ const GroupDetail = () => {
     navigate('/groups');
   };
   const handleRemoveMember = async (username) => {
-    console.log('username: ', username);
     await kickMember({ groupId: id, kickUsername: username });
     await getGroupDetail();
   };
@@ -212,7 +210,6 @@ const GroupDetail = () => {
       const gameListData = res.data;
       const gameList = getNotNullList(gameListData);
       const gameElementListSorted = gameList.sort(compare);
-      console.log('gameListData: ', gameListData);
       const rawElementList = gameElementListSorted.map((item) => ({
         key: item._id,
         name: item.roomId,

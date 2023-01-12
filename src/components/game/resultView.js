@@ -6,7 +6,6 @@ import { getNotNullList } from '../../utils';
 const ResultView = ({ resultData, isHost }) => {
   const [gameDataSource, setGameDataSource] = useState([]);
   const [resultDataSource, setResultDataSource] = useState([]);
-  console.log('data in result view: ', resultData);
   function compare(a, b) {
     if (a.score > b.score) {
       return -1;
@@ -160,7 +159,6 @@ const ResultView = ({ resultData, isHost }) => {
         <p>{player.time}</p>
       )
     }));
-    console.log('gameElelIst: ', gameElementList);
     setResultDataSource([...gameElementList]);
   }, [resultData]);
 

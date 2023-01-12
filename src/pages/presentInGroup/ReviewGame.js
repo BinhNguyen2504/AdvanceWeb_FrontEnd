@@ -32,7 +32,6 @@ const ReviewGamePage = () => {
 
   const getResult = async (roomID) => {
     const { data } = await API.get(`/game/gameresult/${roomID}`);
-    console.log(' data: ', data);
     return data;
   };
   const [resultData, setResultData] = useState({});
@@ -65,56 +64,11 @@ const ReviewGamePage = () => {
   // const [chartData, setChartData] = useState(initChart);
   // const [counter, setCounter] = useState(questions[currentQuestion].time);
 
-  // useEffect(() => {
-  //   document.body.requestFullscreen();
-  //   return () => document.exitFullscreen();
-  // }, []);
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     if (counter > 0) {
-  //       setCounter((prev) => prev - 1);
-  //     }
-  //   }, 1000);
-  //   return () => clearInterval(timer);
-  // }, [counter]);
-  // useEffect(() => {
-  //   // TODO: Gửi message qua student số thứ tự câu hỏi
-  //   socket.emit('student-sender', {
-  //     room: pin,
-  //     msg: currentQuestion
-  //   });
-  //   // TODO: Lắng nghe đáp án student
-  //   socket.on('teacher-receiver', (msg) => {
-  //     const index = chartData.findIndex((item) => item.type === msg.ans);
-  //     const newData = [...chartData];
-  //     if ([0, 1, 2, 3].includes(index)) {
-  //       newData[index].answers = chartData[index].answers + 1;
-  //     }
-  //     setChartData([...newData]);
-  //   });
-  //   setCounter(questions[currentQuestion].time);
-  // }, [currentQuestion]);
-
   const { state } = useLocation();
-  // const questionList = useRef(state.presentation.questions);
-  // const { numberOfQuestion } = state.presentation;
-  // const [i, setI] = useState(0);
-
-  // const handleEndGame = async () => {
-  //   console.log('endgame');
-  //   try {
-  //     const res = await getResult(state.roomId);
-  //     console.log('result game: ', res);
-  //     setResultData(res.data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const getGameData = async () => {
     try {
       const res = await getResult(roomId);
-      console.log('result game: ', res);
       setResultData(res.data);
     } catch (error) {
       console.log(error);
@@ -123,47 +77,7 @@ const ReviewGamePage = () => {
 
   useEffect(() => {
     getGameData();
-    // socket.emit('send-nextQuestion', {
-    //   room: state.roomId,
-    //   msg: -1,
-    // });
-
-    // socket.on('listen-nextQuestion', (msgIndex) => {
-    //   // setinfo(JSON.stringify(msg));
-    //   if (Number(msgIndex) < 0) return;
-    //   setI(msgIndex);
-    //   console.log('mess from server: ', msgIndex);
-    //   if (msgIndex < numberOfQuestion) {
-    //     // setIsDisable(false);
-    //   } else {
-    //     console.log('else case i: ', msgIndex);
-    //     handleEndGame();
-    //   }
-    //   setChartData([...initChart]);
-    // });
-    // socket.on('listen-answer-chart', (ansChartData) => {
-    //   // setMessage(JSON.stringify(msg));
-    //   // setQuestion(questions.current[msg]);
-
-    //   // anwser chart data
-    //   console.log('player anwser: ', ansChartData);
-
-    //   // const index = chartData.findIndex((item) => item.type === msg.ans);
-    //   // const newData = [...chartData];
-    //   // if ([0, 1, 2, 3].includes(index)) {
-    //   //   newData[index].answers = chartData[index].answers + 1;
-    //   // }
-    //   const newChart = [
-    //     { type: 'A', answers: ansChartData.A },
-    //     { type: 'B', answers: ansChartData.B },
-    //     { type: 'C', answers: ansChartData.C },
-    //     { type: 'D', answers: ansChartData.D }
-    //   ];
-    //   setChartData([...newChart]);
-    // });
   }, []);
-
-  // const handleMoveQuestion = () => {
   //   // if (currentQuestion < numberOfQuestion - 1) {
   //   //   dispatch(nextQuestion({ id: currentQuestion + 1 }));
   //   //   setChartData(initChart);

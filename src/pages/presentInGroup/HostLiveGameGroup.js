@@ -32,7 +32,6 @@ const HostLiveGameGroupPage = () => {
 
   const getResult = async (roomID) => {
     const { data } = await API.get(`/game/gameresult/${roomID}`);
-    console.log(' data: ', data);
     return data;
   };
   const [resultData, setResultData] = useState({});
@@ -102,10 +101,8 @@ const HostLiveGameGroupPage = () => {
   const [i, setI] = useState(0);
 
   const handleEndGame = async () => {
-    console.log('endgame');
     try {
       const res = await getResult(state.roomId);
-      console.log('result game: ', res);
       setResultData(res.data);
     } catch (error) {
       console.log(error);
@@ -113,7 +110,6 @@ const HostLiveGameGroupPage = () => {
   };
 
   useEffect(() => {
-    console.log('state in live: ', state);
     socket.emit('send-nextQuestion', {
       room: state.roomId,
       msg: -1,
@@ -123,11 +119,9 @@ const HostLiveGameGroupPage = () => {
       // setinfo(JSON.stringify(msg));
       if (Number(msgIndex) < 0) return;
       setI(msgIndex);
-      console.log('mess from server: ', msgIndex);
       if (msgIndex < numberOfQuestion) {
         // setIsDisable(false);
       } else {
-        console.log('else case i: ', msgIndex);
         handleEndGame();
       }
       setChartData([...initChart]);
@@ -137,7 +131,6 @@ const HostLiveGameGroupPage = () => {
       // setQuestion(questions.current[msg]);
 
       // anwser chart data
-      console.log('player anwser: ', ansChartData);
 
       // const index = chartData.findIndex((item) => item.type === msg.ans);
       // const newData = [...chartData];
@@ -163,7 +156,7 @@ const HostLiveGameGroupPage = () => {
     if (i + 1 < numberOfQuestion) {
       // setinfo(i.current);
       // setQuestion(questions.current[i.current]);
-      console.log('host send next question: ', i + 1);
+      // console.log('host send next question: ', i + 1);
       setI(i + 1);
       setChartData([...initChart]);
       socket.emit('send-nextQuestion', {
@@ -173,7 +166,6 @@ const HostLiveGameGroupPage = () => {
     }
   };
   const handleFinishGame = () => {
-    console.log('host emit i: ', i + 1);
     setI(i + 1);
     handleEndGame();
     socket.emit('send-nextQuestion', {
@@ -219,7 +211,6 @@ const HostLiveGameGroupPage = () => {
   };
   const [api, contextHolder] = notification.useNotification();
   const handleNoti = () => {
-    console.log('has new message');
     openNotification(
       api,
       'New message',
@@ -227,7 +218,6 @@ const HostLiveGameGroupPage = () => {
       <SmileOutlined style={{ color: '#108ee9' }} />
     );
   };
-  console.log('username in live', username);
   return (
     <BasicLayout>
       <section className='courses'>
