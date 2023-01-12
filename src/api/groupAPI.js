@@ -12,11 +12,7 @@ export const api = axios.create({
 });
 
 const createGame = async (body) => {
-  console.log('api: ', api);
-  console.log('token: ', accessToken);
-  console.log('storage: ', localStorage.token);
   const { data } = await api.post('/game/creategame', body);
-  console.log(' data: ', data);
   return data;
 };
 

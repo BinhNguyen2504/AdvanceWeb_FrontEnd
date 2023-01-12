@@ -103,9 +103,12 @@ const PresentEdit = () => {
     setCurrentIndex(formData.questions.length - 1);
   };
   const handleSubmit = async () => {
+    console.log('form data: ', formData);
+    console.log('presentID: ', presentId);
     if (presentId) {
       await updatePresent({ id: presentId, questions: formData.questions });
     } else {
+      console.log('in to create present');
       await createPresent(formData);
     }
     navigate('/presentation');
